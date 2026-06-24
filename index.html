@@ -135,7 +135,7 @@
         .filters .clear-btn:hover {
             background: #b2bec3;
         }
-        .filters .random-btn {
+        .filters {
             background: #0984e3;
             color: white;
             border: none;
@@ -145,7 +145,7 @@
             font-size: 0.95rem;
             transition: background 0.2s;
         }
-        .filters .random-btn:hover {
+        .filters:hover {
             background: #0873c7;
         }
 
@@ -389,7 +389,6 @@
                 </div>
 
                 <button class="clear-btn" onclick="clearFilters()">🗑️ مسح</button>
-                <button class="random-btn" onclick="randomLesson()">🎲 عشوائي</button>
             </div>
         </div>
 
@@ -748,13 +747,6 @@
             document.getElementById('countFilter').value = 'any';
             document.getElementById('sortOrder').value = 'lessons-desc';
             filterResults();
-        }
-
-        // ----- Random lesson -----
-        function randomLesson() {
-            if (allLessons.length === 0) return;
-            const random = allLessons[Math.floor(Math.random() * allLessons.length)];
-            window.open(random.link, '_blank');
         }
 
         // ----- Start -----
