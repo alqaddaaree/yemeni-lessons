@@ -1,0 +1,134 @@
+cat > generate-icons.html << 'EOF'
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Generate PWA Icons</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #1a1a2e; color: white; text-align: center; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .canvas-wrapper { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; margin: 20px 0; }
+        .canvas-wrapper div { background: #2d2d44; padding: 15px; border-radius: 12px; }
+        canvas { border-radius: 12px; }
+        .btn { background: #0984e3; color: white; border: none; padding: 12px 30px; border-radius: 8px; font-size: 1rem; cursor: pointer; margin: 5px; }
+        .btn:hover { background: #0873c7; }
+        .btn-secondary { background: #636e72; }
+        .btn-secondary:hover { background: #4a4a5a; }
+        input { margin: 10px 0; padding: 8px; border-radius: 6px; border: none; }
+        .steps { text-align: right; font-size: 0.95rem; line-height: 1.8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 توليد أيقونات PWA</h1>
+        <p>ارفع شعارك (logo.jpg) لإنشاء الأيقونات المطلوبة</p>
+
+        <input type="file" id="imageInput" accept="image/*">
+
+        <div class="canvas-wrapper" id="canvasWrapper" style="display:none;">
+            <div>
+                <h3>192×192</h3>
+                <canvas id="canvas192" width="192" height="192"></canvas>
+                <br>
+                <button class="btn" onclick="downloadIcon('canvas192', 'icon-192.png')">⬇️ تحميل 192</button>
+            </div>
+            <div>
+                <h3>512×512</h3>
+                <canvas id="canvas512" width="512" height="512"></canvas>
+                <br>
+                <button class="btn" onclick="downloadIcon('canvas512', 'icon-512.png')">⬇️ تحميل 512</button>
+            </div>
+        </div>
+
+        <div style="margin-top:30px; text-align:right; background:#2d2d44; padding:20px; border-radius:12px;">
+            <h3>📝 الخطوات:</h3>
+            <ol class="steps">
+                <li>اضغط على "اختيار ملف" واختر <code>icons/logo.jpg</code></li>
+                <li>بعد التحميل، اضغط على زر التحميل لكل حجم</li>
+                <li>احفظ الملفات في مجلد <code>icons/</code> بهذه الأسماء:
+                    <br><code>icon-192.png</code> و <code>icon-512.png</code>
+                </li>
+                <li>تأكد من وجود هذه الأسطر في <code>manifest.json</code></li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        const input = document.getElementById('imageInput');
+        const wrapper = document.getElementById('canvasWrapper');
+        let img = null;
+
+        input.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                img = new Image();
+                img.onload = function() {
+                    drawIcons(img);
+                    wrapper.style.display = 'flex';
+                };
+                img.src = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function drawIcons(image) {
+            const sizes = [192, 512];
+            sizes.forEach(size => {
+                const canvas = document.getElementById('canvas' + size);
+                const ctx = canvas.getContext('2d');
+
+                // Clear
+                ctx.clearRect(0, 0, size, size);
+
+                // Draw rounded rect background (match manifest bg)
+                const radius = size * 0.2;
+                ctx.fillStyle = '#1a1a2e';
+                ctx.beginPath();
+                ctx.moveTo(radius, 0);
+                ctx.lineTo(size - radius, 0);
+                ctx.quadraticCurveTo(size, 0, size, radius);
+                ctx.lineTo(size, size - radius);
+                ctx.quadraticCurveTo(size, size, size - radius, size);
+                ctx.lineTo(radius, size);
+                ctx.quadraticCurveTo(0, size, 0, size - radius);
+                ctx.lineTo(0, radius);
+                ctx.quadraticCurveTo(0, 0, radius, 0);
+                ctx.closePath();
+                ctx.fill();
+
+                // Draw the image centered and scaled to fit
+                const imgSize = Math.min(size * 0.8, image.width * (size / Math.max(image.width, image.height)));
+                const x = (size - imgSize) / 2;
+                const y = (size - imgSize) / 2;
+
+                // Create a circular clip for the image (optional) – remove for full image
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(size/2, size/2, imgSize/2, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.clip();
+
+                ctx.drawImage(image, x, y, imgSize, imgSize);
+                ctx.restore();
+
+                // Draw border
+                ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+                ctx.lineWidth = size * 0.015;
+                ctx.strokeRect(size * 0.04, size * 0.04, size * 0.92, size * 0.92);
+            });
+        }
+
+        function downloadIcon(canvasId, filename) {
+            const canvas = document.getElementById(canvasId);
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>
+EOF

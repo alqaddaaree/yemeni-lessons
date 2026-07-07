@@ -4,10 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0984e3">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+
     <title>فهرس الدروس - مؤسسة صدى السلفية</title>
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="css/style.css">
+    <!-- Styles (Modular CSS) -->
+    <link rel="stylesheet" href="css/01-theme.css">
+    <link rel="stylesheet" href="css/02-base.css">
+    <link rel="stylesheet" href="css/03-header.css">
+    <link rel="stylesheet" href="css/04-tabs.css">
+    <link rel="stylesheet" href="css/05-search.css">
+    <link rel="stylesheet" href="css/06-filters.css">
+    <link rel="stylesheet" href="css/07-results.css">
+    <link rel="stylesheet" href="css/08-pagination.css">
+    <link rel="stylesheet" href="css/09-books.css">
+    <link rel="stylesheet" href="css/10-guide-about.css">
+    <link rel="stylesheet" href="css/11-bookmarks.css">
+    <link rel="stylesheet" href="css/12-category-checkboxes.css">
+    <link rel="stylesheet" href="css/13-responsive.css">
+    <link rel="stylesheet" href="css/14-toast.css">
+    <link rel="stylesheet" href="css/15-sheikh-page.css">
 
     <!-- Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
@@ -20,16 +42,18 @@
         <header>
             <h1>📚 فهرس الدروس العلمية</h1>
             <p>مؤسسة صدى السلفية لإنتاج الدروس العلمية</p>
-            <div class="stats" id="stats">
-                <div class="stat-box"><strong id="totalLessons">0</strong> درس</div>
-                <div class="stat-box"><strong id="totalSheikhs">0</strong> شيخ</div>
-                <div class="stat-box"><strong id="totalBooks">0</strong> كتاب</div>
-            </div>
-            <!-- Inside <header>, after <p> or before </header> -->
+
+            <!-- Theme Toggle -->
             <div class="theme-toggle-wrapper">
                 <button id="themeToggle" class="theme-btn" onclick="toggleTheme()" aria-label="تبديل الوضع">
                     🌙
                 </button>
+            </div>
+
+            <div class="stats" id="stats">
+                <div class="stat-box"><strong id="totalLessons">0</strong> درس</div>
+                <div class="stat-box"><strong id="totalSheikhs">0</strong> شيخ</div>
+                <div class="stat-box"><strong id="totalBooks">0</strong> كتاب</div>
             </div>
         </header>
 
@@ -46,14 +70,15 @@
         <section class="tab-content active" id="tab-index">
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="🔍 ابحث عن درس أو شيخ..." oninput="onSearchInput()">
-                <!-- In the search-box div, after the input -->
                 <div id="suggestions" class="suggestions" style="display:none;"></div>
 
                 <div class="filters">
+                    <!-- Sheikh filter -->
                     <select id="sheikhFilter" onchange="applyFilters()">
                         <option value="">جميع المشايخ</option>
                     </select>
 
+                    <!-- Category checkboxes -->
                     <div class="filter-group category-checkboxes-wrapper">
                         <label>📚 التصنيفات</label>
                         <div class="category-checkboxes-list" id="categoryCheckboxes">
@@ -61,6 +86,7 @@
                         </div>
                     </div>
 
+                    <!-- Search scope -->
                     <div class="filter-group">
                         <label>🔎 في</label>
                         <select id="searchScope" onchange="applyFilters()">
@@ -70,6 +96,7 @@
                         </select>
                     </div>
 
+                    <!-- Fuzzy toggle -->
                     <div class="filter-group">
                         <label>🎯</label>
                         <select id="fuzzyToggle" onchange="applyFilters()">
@@ -78,6 +105,7 @@
                         </select>
                     </div>
 
+                    <!-- Lesson count filter -->
                     <div class="filter-group">
                         <label>📊</label>
                         <select id="countFilter" onchange="applyFilters()">
@@ -90,6 +118,7 @@
                         </select>
                     </div>
 
+                    <!-- Sorting -->
                     <div class="filter-group">
                         <label>📌</label>
                         <select id="sortOrder" onchange="applyFilters()">
@@ -105,14 +134,21 @@
                     <button class="btn btn-clear" onclick="clearFilters()">🗑️ مسح</button>
                 </div>
             </div>
-            <!-- Inside the search-box, after the filters or before the results -->
+
+            <!-- Sheikh Banner -->
+            <div id="sheikhBanner" class="sheikh-banner-container" style="display:none;"></div>
+
+            <!-- Search hint -->
             <div class="search-hint" style="font-size:0.85rem;color:var(--text-secondary);margin-top:0.8rem;">
                 💡 يمكنك مشاركة نتائج البحث عبر نسخ الرابط من المتصفح
             </div>
+
+            <!-- Results -->
             <div id="results" class="results">
                 <div class="loading">⏳ جاري التحميل...</div>
             </div>
 
+            <!-- Pagination -->
             <div class="pagination" id="pagination">
                 <button class="page-btn" id="prevPage" onclick="goToPage(currentPage - 1)">‹ السابق</button>
                 <span class="page-info" id="pageInfo">صفحة 1 من 1</span>
@@ -155,39 +191,52 @@
             </div>
         </section>
 
+        <!-- ===== TAB: BOOKMARKS ===== -->
+        <section class="tab-content" id="tab-bookmarks">
+            <div class="bookmarks-container">
+                <div class="bookmarks-header">
+                    <h2>⭐ المفضلة</h2>
+                    <div class="bookmarks-actions">
+                        <span id="bookmarksCount" class="bookmarks-count">0 درس محفوظ</span>
+                        <button class="btn btn-export" onclick="exportBookmarks()">📤 تصدير JSON</button>
+                        <button class="btn btn-clear" onclick="clearBookmarks()">🗑️ حذف الكل</button>
+                    </div>
+                </div>
+                <div id="bookmarksList" class="bookmarks-list">
+                    <div class="bookmarks-empty">⭐ لم تقم بحفظ أي درس بعد. ابحث عن درس و اضغط على ⭐ لحفظه.</div>
+                </div>
+            </div>
+        </section>
+
         <!-- ===== TAB: GUIDE ===== -->
         <section class="tab-content" id="tab-guide">
             <div class="guide-content">
                 <h2>📖 دليل استخدام فهرس الدروس</h2>
 
                 <h3>🔍 1. البحث الرئيسي</h3>
-                <p>اكتب أي كلمة في شريط البحث العلوي. يدعم الموقع <strong>البحث الضبابي</strong> (Fuzzy Search) الذي
-                    يتسامح مع الأخطاء الإملائية.</p>
+                <p>اكتب أي كلمة في شريط البحث العلوي. يدعم الموقع <strong>البحث الضبابي</strong> (Fuzzy Search) الذي يتسامح مع الأخطاء الإملائية.</p>
                 <p><em>مثال:</em> اكتب "عقيده" وستجد "عقيدة".</p>
 
                 <h3>🎛️ 2. الفلاتر</h3>
                 <ul>
                     <li><strong>جميع المشايخ</strong> – اختر شيخًا معينًا لعرض دروسه فقط.</li>
-                    <li><strong>جميع التصنيفات</strong> – صفّ حسب الموضوع: فقه، عقيدة، تفسير، حديث، سيرة، لغة، أصول،
-                        عام.</li>
+                    <li><strong>التصنيفات</strong> – اختر واحدًا أو أكثر من التصنيفات (فقه، عقيدة، تفسير، حديث، سيرة، لغة، أصول، عام).</li>
                     <li><strong>🔎 في</strong> – حدد نطاق البحث: الكل، العنوان فقط، أو الشيخ فقط.</li>
                     <li><strong>🎯</strong> – بدّل بين البحث الضبابي والبحث الدقيق الحرفي.</li>
                     <li><strong>📊</strong> – صفّ حسب عدد الدروس: 1-10، 11-50، 51-100، 100+، أو سلسلة.</li>
-                    <li><strong>📌</strong> – رتب النتائج حسب: الأكثر دروساً، الأقل دروساً، الأحدث، الأقدم، أبجديًا، أو
-                        الأكثر تطابقًا.</li>
+                    <li><strong>📌</strong> – رتب النتائج حسب: الأكثر دروساً، الأقل دروساً، الأحدث، الأقدم، أبجديًا، أو الأكثر تطابقًا.</li>
                 </ul>
 
                 <h3>🗑️ 3. مسح الفلاتر</h3>
                 <p>زر <strong>🗑️ مسح</strong> يعيد تعيين جميع الفلاتر ويعرض جميع الدروس.</p>
 
                 <h3>📄 4. عرض النتائج</h3>
-                <p>كل نتيجة تعرض: اسم الشيخ، عنوان الدرس، عدد الدروس (أو "سلسلة" إن لم يكن محددًا)، التصنيف (بلون مميز)،
-                    وتاريخ الإضافة إن وجد.</p>
+                <p>كل نتيجة تعرض: اسم الشيخ، عنوان الدرس، عدد الدروس (أو "سلسلة" إن لم يكن محددًا)، التصنيف (بلون مميز)، وتاريخ الإضافة إن وجد.</p>
+                <p>يمكنك <strong>نسخ الرابط</strong> (📋) لمشاركة الدرس، أو <strong>حفظه في المفضلة</strong> (⭐) للرجوع إليه لاحقًا.</p>
                 <p>زر <strong>فتح 📂</strong> ينقلك مباشرة إلى الدرس على تيليجرام.</p>
 
                 <h3>📑 5. الترقيم الصفحي</h3>
-                <p>يتم عرض النتائج على صفحات، كل صفحة تحتوي على <strong>50 درسًا</strong>. استخدم أزرار
-                    <strong>السابق</strong> و <strong>التالي</strong> للتنقل بين الصفحات.</p>
+                <p>يتم عرض النتائج على صفحات، كل صفحة تحتوي على <strong>50 درسًا</strong>. استخدم أزرار <strong>السابق</strong> و <strong>التالي</strong> للتنقل بين الصفحات.</p>
 
                 <h3>📖 6. تصفح الكتب</h3>
                 <p>في تبويب <strong>📖 تصفح الكتب</strong> يمكنك:</p>
@@ -198,7 +247,19 @@
                     <li>النقر على اسم الشيخ للانتقال مباشرة إلى دروسه في تبويب الفهرس.</li>
                 </ul>
 
-                <h3>🏷️ 7. التصنيفات العلمية</h3>
+                <h3>⭐ 7. المفضلة</h3>
+                <p>يمكنك حفظ أي درس بالضغط على <strong>⭐</strong> بجانب كل نتيجة. ستجد جميع الدروس المحفوظة في تبويب <strong>⭐ المفضلة</strong>. يمكنك تصدير المفضلة كملف JSON أو حذفها كلها دفعة واحدة.</p>
+
+                <h3>🌙 8. الوضع الليلي</h3>
+                <p>اضغط على زر <strong>🌙 / ☀️</strong> في أعلى الصفحة لتبديل المظهر بين النهاري والليلي. يتم حفظ تفضيلك تلقائيًا.</p>
+
+                <h3>🔗 9. مشاركة النتائج</h3>
+                <p>جميع الفلاتر والبحث تنعكس في رابط الصفحة (URL). يمكنك نسخ الرابط ومشاركته مع الآخرين، وسيفتح مع نفس النتائج.</p>
+
+                <h3>📱 10. التطبيق القابل للتثبيت (PWA)</h3>
+                <p>يمكنك تثبيت هذا الموقع على هاتفك أو حاسوبك كتطبيق مستقل. ابحث عن خيار <strong>"تثبيت التطبيق"</strong> أو <strong>"إضافة إلى الشاشة الرئيسية"</strong> في متصفحك.</p>
+
+                <h3>🏷️ 11. التصنيفات العلمية</h3>
                 <table>
                     <thead>
                         <tr>
@@ -240,7 +301,7 @@
                         </tr>
                         <tr>
                             <td>أصول</td>
-                            <td>🩰 وردي</td>
+                            <td>🌸 وردي</td>
                             <td>أصول الفقه، القواعد الفقهية</td>
                         </tr>
                         <tr>
@@ -266,16 +327,20 @@
                 </p>
 
                 <h3>🎯 الهدف</h3>
-                <p>توفير واجهة بحث متقدمة وسهلة الاستخدام للوصول إلى آلاف الدروس العلمية المصنفة حسب <strong>اسم
-                        الشيخ</strong>، <strong>التصنيف العلمي</strong>، و <strong>عدد الدروس</strong>.</p>
+                <p>توفير واجهة بحث متقدمة وسهلة الاستخدام للوصول إلى آلاف الدروس العلمية المصنفة حسب <strong>اسم الشيخ</strong>، <strong>التصنيف العلمي</strong>، و <strong>عدد الدروس</strong>.</p>
 
                 <h3>✨ الميزات</h3>
                 <ul>
                     <li><strong>بحث ضبابي</strong> – يتسامح مع الأخطاء الإملائية.</li>
-                    <li><strong>فلاتر متعددة</strong> – شيخ، تصنيف، عدد الدروس، نطاق البحث.</li>
-                    <li><strong>تصفح الكتب</strong> – رؤية الكتب مرتبة حسب العلوم، ومعرفة المشايخ الذين شرحوا كل كتاب.
-                    </li>
+                    <li><strong>فلاتر متعددة</strong> – شيخ، تصنيفات متعددة، عدد الدروس، نطاق البحث.</li>
+                    <li><strong>اقتراحات البحث</strong> – تظهر أثناء الكتابة لتسهيل الوصول.</li>
+                    <li><strong>نسخ الرابط</strong> – مشاركة الدروس بسهولة.</li>
+                    <li><strong>المفضلة</strong> – حفظ الدروس وتصديرها.</li>
+                    <li><strong>تصفح الكتب</strong> – رؤية الكتب مرتبة حسب العلوم، ومعرفة المشايخ الذين شرحوا كل كتاب.</li>
+                    <li><strong>صفحات المشايخ</strong> – رابط مباشر لدروس كل شيخ (مثال: <code>?sheikh=أبو_عبد_الرحمن_يحيى_بن_علي_الحجوري</code>).</li>
                     <li><strong>ترقيم صفحات</strong> – عرض النتائج على صفحات لتسهيل التصفح.</li>
+                    <li><strong>الوضع الليلي</strong> – مظهر مريح للعين في الليل.</li>
+                    <li><strong>تطبيق قابل للتثبيت (PWA)</strong> – يعمل دون اتصال بالإنترنت بعد التحميل الأول.</li>
                     <li><strong>تصميم متجاوب</strong> – يعمل على جميع الأجهزة.</li>
                 </ul>
 
@@ -293,21 +358,59 @@
                     <li><strong>JavaScript (ES6)</strong> – المنطق والتفاعل</li>
                     <li><strong>Fuse.js</strong> – محرك البحث الضبابي</li>
                     <li><strong>JSON</strong> – تخزين البيانات</li>
+                    <li><strong>PWA (Service Worker + Manifest)</strong> – العمل دون اتصال والتثبيت</li>
                 </ul>
 
                 <h3>📂 هيكل الملفات</h3>
                 <pre>
 /
-├── index.html          # الصفحة الرئيسية
-├── style.css           # التنسيقات
-├── app.js              # الكود البرمجي
-└── flat_lessons.json   # البيانات</pre>
+├── index.html
+├── manifest.json
+├── sw.js
+├── flat_lessons.json
+├── css/
+│   ├── 01-theme.css
+│   ├── 02-base.css
+│   ├── 03-header.css
+│   ├── 04-tabs.css
+│   ├── 05-search.css
+│   ├── 06-filters.css
+│   ├── 07-results.css
+│   ├── 08-pagination.css
+│   ├── 09-books.css
+│   ├── 10-guide-about.css
+│   ├── 11-bookmarks.css
+│   ├── 12-category-checkboxes.css
+│   ├── 13-responsive.css
+│   ├── 14-toast.css
+│   └── 15-sheikh-page.css
+├── js/
+│   ├── 01-config.js
+│   ├── 02-state.js
+│   ├── 03-dom.js
+│   ├── 04-category-helpers.js
+│   ├── 05-book-index.js
+│   ├── 06-filters.js
+│   ├── 07-pagination.js
+│   ├── 08-data-loader.js
+│   ├── 09-tabs.js
+│   ├── 10-dark-mode.js
+│   ├── 11-clipboard.js
+│   ├── 12-suggestions.js
+│   ├── 13-url-params.js
+│   ├── 14-bookmarks.js
+│   ├── 15-category-checkboxes.js
+│   ├── 16-page-title.js
+│   ├── 17-service-worker.js
+│   └── app.js
+└── icons/
+    ├── icon-192.png
+    └── icon-512.png</pre>
 
                 <h3>📝 ملاحظات</h3>
                 <ul>
                     <li>الموقع <strong>لا يتطلب خادمًا</strong> (Serverless)، يعمل بالكامل من جانب المتصفح.</li>
-                    <li>جميع الدروس مستخرجة من قناة <a href="https://t.me/alawe1434" target="_blank">مؤسسة صدى
-                            السلفية</a>.</li>
+                    <li>جميع الدروس مستخرجة من قناة <a href="https://t.me/alawe1434" target="_blank">مؤسسة صدى السلفية</a>.</li>
                     <li>هذا المشروع هو <strong>مبادرة شخصية</strong> لتسهيل الوصول إلى الدروس العلمية.</li>
                     <li>تم تحديث البيانات آخر مرة في: <span id="aboutUpdateDate2">-</span></li>
                 </ul>
@@ -326,24 +429,6 @@
             </div>
         </section>
 
-        <!-- ===== TAB: BOOKMARKS ===== -->
-        <section class="tab-content" id="tab-bookmarks">
-            <div class="bookmarks-container">
-                <div class="bookmarks-header">
-                    <h2>⭐ المفضلة</h2>
-                    <div class="bookmarks-actions">
-                        <span id="bookmarksCount" class="bookmarks-count">0 درس محفوظ</span>
-                        <button class="btn btn-export" onclick="exportBookmarks()">📤 تصدير JSON</button>
-                        <button class="btn btn-clear" onclick="clearBookmarks()">🗑️ حذف الكل</button>
-                    </div>
-                </div>
-                <div id="bookmarksList" class="bookmarks-list">
-                    <div class="bookmarks-empty">⭐ لم تقم بحفظ أي درس بعد. ابحث عن درس و اضغط على ⭐ لحفظه.</div>
-                </div>
-            </div>
-        </section>
-
-
         <!-- ===== FOOTER ===== -->
         <footer>
             بيانات مستخرجة من قناة
@@ -352,7 +437,7 @@
         </footer>
     </div>
 
-    <!-- Application Script -->
+    <!-- Application Scripts -->
     <script src="js/01-config.js"></script>
     <script src="js/02-state.js"></script>
     <script src="js/03-dom.js"></script>
@@ -368,6 +453,8 @@
     <script src="js/13-url-params.js"></script>
     <script src="js/14-bookmarks.js"></script>
     <script src="js/15-category-checkboxes.js"></script>
+    <script src="js/16-page-title.js"></script>
+    <script src="js/17-service-worker.js"></script>
     <script src="js/app.js"></script>
 </body>
 

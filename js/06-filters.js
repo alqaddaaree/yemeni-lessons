@@ -63,12 +63,23 @@ function applyFilters() {
     totalPages = Math.ceil(filteredResults.length / PAGE_SIZE) || 1;
 
     dom.resultCount.textContent = filteredResults.length;
-
+console.log('applyFilters: rendering page with', filteredResults.length, 'results'); // <-- Add this
     renderPage();
     updatePagination();
 
     // --- Update URL ---
     updateURL();
+
+    // --- Update sheikh banner and page title ---
+    const sheikhFromFilter = dom.sheikhFilter.value;
+    if (sheikhFromFilter) {
+        renderSheikhBanner(sheikhFromFilter);
+        updatePageTitle(sheikhFromFilter);
+        updateSheikhLessonCount();
+    } else {
+        renderSheikhBanner(null);
+        updatePageTitle(null);
+    }
 }
 
 /* ============================================

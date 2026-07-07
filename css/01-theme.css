@@ -15,6 +15,7 @@
     --btn-hover: #b2bec3;
     --input-bg: #fafafa;
     --input-focus: #0984e3;
+    --input-focus-dark: #0873c7;
     --result-bg: #f8f9fa;
     --stat-bg: rgba(255, 255, 255, 0.1);
     --tab-bg: #dfe6e9;
@@ -43,6 +44,7 @@
     --btn-hover: #5a5a7a;
     --input-bg: #3d3d5c;
     --input-focus: #5bb8ff;
+    --input-focus-dark: #4a9edb;
     --result-bg: #2d2d44;
     --stat-bg: rgba(255, 255, 255, 0.05);
     --tab-bg: #2d2d44;

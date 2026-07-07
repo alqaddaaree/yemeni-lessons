@@ -105,6 +105,13 @@ async function loadData() {
         renderBooks();
         applyURLParams();
 
+        // --- Render sheikh banner after URL params are applied ---
+        const sheikhFromURL = new URLSearchParams(window.location.search).get('sheikh');
+        if (sheikhFromURL) {
+            renderSheikhBanner(sheikhFromURL);
+            updatePageTitle(sheikhFromURL);
+        }
+
     } catch (err) {
         console.error('Error loading data:', err);
         dom.results.innerHTML =
@@ -113,4 +120,34 @@ async function loadData() {
             dom.booksList.innerHTML = '<div class="books-empty">❌ فشل تحميل البيانات</div>';
         }
     }
+}
+
+/* ============================================
+   SHEIKH BANNER
+   ============================================ */
+function renderSheikhBanner(sheikhName) {
+    const container = document.getElementById('sheikhBanner');
+    if (!container) return;
+
+    if (sheikhName) {
+        container.style.display = 'block';
+        container.innerHTML = `
+            <div class="sheikh-banner">
+                <span class="sheikh-banner-name">${sheikhName}</span>
+                <span class="sheikh-banner-count" id="sheikhLessonCount"></span>
+            </div>
+        `;
+        // Update count after results are rendered
+        updateSheikhLessonCount();
+    } else {
+        container.style.display = 'none';
+        container.innerHTML = '';
+    }
+}
+
+function updateSheikhLessonCount() {
+    const countEl = document.getElementById('sheikhLessonCount');
+    if (!countEl) return;
+    const count = filteredResults.length;
+    countEl.textContent = count + ' درس';
 }

@@ -1,6 +1,31 @@
 /* ============================================
    SUGGESTIONS / AUTOCOMPLETE
    ============================================ */
+
+// --- This function overrides the search input handler ---
+// It's defined here (not using "original" reference)
+
+function onSearchInput() {
+    const query = dom.searchInput.value.trim();
+
+    // Handle suggestions
+    clearTimeout(suggestionTimeout);
+    if (query.length >= 2) {
+        suggestionTimeout = setTimeout(() => {
+            getSuggestions(query);
+        }, 200);
+    } else {
+        hideSuggestions();
+    }
+
+    // Apply filters (debounced)
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+        applyFilters();
+    }, 300);
+}
+
+// --- Suggestion functions ---
 function getSuggestions(query) {
     if (!query || query.length < 2) {
         hideSuggestions();
@@ -132,24 +157,6 @@ function hideSuggestions() {
     }
     currentSuggestions = [];
 }
-
-// Override onSearchInput to use suggestions
-const originalOnSearchInput = onSearchInput;
-onSearchInput = function() {
-    const query = dom.searchInput.value.trim();
-    clearTimeout(suggestionTimeout);
-    if (query.length >= 2) {
-        suggestionTimeout = setTimeout(() => {
-            getSuggestions(query);
-        }, 200);
-    } else {
-        hideSuggestions();
-    }
-    clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(() => {
-        applyFilters();
-    }, 300);
-};
 
 // Close suggestions on Escape or click outside
 document.addEventListener('keydown', function(e) {

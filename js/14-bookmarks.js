@@ -70,6 +70,9 @@ function updateBookmarksUI() {
     if (listEl && document.getElementById('tab-bookmarks').classList.contains('active')) {
         renderBookmarksList(bookmarks);
     }
+
+    // Update sheikh lesson count if banner is visible
+    updateSheikhLessonCount();
 }
 
 function renderBookmarksList(bookmarks) {

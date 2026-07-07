@@ -70,4 +70,11 @@ function applyURLParams() {
             updatePagination();
         }
     }
+
+    // --- Render sheikh banner after filters are applied ---
+    const sheikhFromURL = params.get('sheikh');
+    if (sheikhFromURL) {
+        renderSheikhBanner(sheikhFromURL);
+        updatePageTitle(sheikhFromURL);
+    }
 }

@@ -85,7 +85,7 @@ function renderBooks() {
                 <span class="book-title">${title}</span>
                 <div class="book-meta">
                     <span class="book-category-pill ${categoryClass}">${categoryLabel}</span>
-                    <span class="book-sheikhs-count">👤 ${sheikhCount} شيخ</span>
+                    <span class="book-sheikhs-count">${sheikhCount} شيخ</span>
                     <span class="book-total-lessons">📚 ${totalLessons} درس</span>
                     <span class="book-arrow">‹</span>
                 </div>
