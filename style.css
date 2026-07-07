@@ -1,5 +1,63 @@
 /* ============================================
- *  RESET & BASE
+ *  THEME VARIABLES
+ *  ============================================ */
+:root {
+    --bg-body: #f0f2f5;
+    --bg-card: #ffffff;
+    --bg-header: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    --text-primary: #2d3436;
+    --text-secondary: #636e72;
+    --text-light: #b2bec3;
+    --border-color: #dfe6e9;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    --shadow-hover: 0 4px 14px rgba(0, 0, 0, 0.08);
+    --btn-bg: #dfe6e9;
+    --btn-hover: #b2bec3;
+    --input-bg: #fafafa;
+    --input-focus: #0984e3;
+    --result-bg: #f8f9fa;
+    --stat-bg: rgba(255, 255, 255, 0.1);
+    --tab-bg: #dfe6e9;
+    --tab-active: #ffffff;
+    --tab-text: #636e72;
+    --tab-text-active: #0984e3;
+    --filter-bg: #fafafa;
+    --books-intro-bg: #f8f9fa;
+    --book-item-bg: #f8f9fa;
+    --book-detail-bg: #f8f9fa;
+    --sheikh-item-bg: #ffffff;
+    --transition: 0.3s;
+}
+
+[data-theme="dark"] {
+    --bg-body: #1a1a2e;
+    --bg-card: #2d2d44;
+    --bg-header: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 100%);
+    --text-primary: #e8e8f0;
+    --text-secondary: #a0a0b8;
+    --text-light: #6a6a8a;
+    --border-color: #3d3d5c;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --shadow-hover: 0 4px 14px rgba(0, 0, 0, 0.4);
+    --btn-bg: #3d3d5c;
+    --btn-hover: #5a5a7a;
+    --input-bg: #3d3d5c;
+    --input-focus: #5bb8ff;
+    --result-bg: #2d2d44;
+    --stat-bg: rgba(255, 255, 255, 0.05);
+    --tab-bg: #2d2d44;
+    --tab-active: #3d3d5c;
+    --tab-text: #a0a0b8;
+    --tab-text-active: #5bb8ff;
+    --filter-bg: #3d3d5c;
+    --books-intro-bg: #2d2d44;
+    --book-item-bg: #2d2d44;
+    --book-detail-bg: #2d2d44;
+    --sheikh-item-bg: #3d3d5c;
+}
+
+/* ============================================
+ *  BASE
  *  ============================================ */
 * {
     box-sizing: border-box;
@@ -9,10 +67,11 @@
 
 body {
     font-family: 'Segoe UI', 'Tahoma', system-ui, sans-serif;
-    background: #f0f2f5;
+    background: var(--bg-body);
+    color: var(--text-primary);
     padding: 20px;
-    color: #2d3436;
     line-height: 1.7;
+    transition: background var(--transition), color var(--transition);
 }
 
 .container {
@@ -24,24 +83,55 @@ body {
  *  HEADER
  *  ============================================ */
 header {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: var(--bg-header);
     color: white;
     padding: 2rem 1.5rem;
     border-radius: 16px;
     margin-bottom: 2rem;
     text-align: center;
+    position: relative;
 }
 
 header h1 {
     font-size: 2.2rem;
     font-weight: 700;
-    letter-spacing: 1px;
 }
 
 header p {
     opacity: 0.8;
     font-size: 1.1rem;
     margin-top: 0.3rem;
+}
+
+.theme-toggle-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin: -1.2rem 0 0.5rem 0;
+}
+
+.theme-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    cursor: pointer;
+    transition: all var(--transition);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: rotate(30deg);
+}
+
+[data-theme="dark"] .theme-btn {
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .stats {
@@ -53,7 +143,7 @@ header p {
 }
 
 .stats .stat-box {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--stat-bg);
     backdrop-filter: blur(4px);
     padding: 0.5rem 1.8rem;
     border-radius: 40px;
@@ -72,11 +162,11 @@ header p {
 .tabs {
     display: flex;
     gap: 4px;
-    background: #dfe6e9;
+    background: var(--tab-bg);
     border-radius: 12px 12px 0 0;
     padding: 4px;
-    margin-bottom: 0;
     overflow-x: auto;
+    transition: background var(--transition);
 }
 
 .tab-btn {
@@ -87,7 +177,7 @@ header p {
     font-weight: 600;
     cursor: pointer;
     background: transparent;
-    color: #636e72;
+    color: var(--tab-text);
     transition: all 0.25s;
     font-family: inherit;
     white-space: nowrap;
@@ -95,12 +185,12 @@ header p {
 
 .tab-btn:hover {
     background: rgba(255, 255, 255, 0.5);
-    color: #2d3436;
+    color: var(--text-primary);
 }
 
 .tab-btn.active {
-    background: white;
-    color: #0984e3;
+    background: var(--tab-active);
+    color: var(--tab-text-active);
     box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
 }
 
@@ -109,11 +199,12 @@ header p {
  *  ============================================ */
 .tab-content {
     display: none;
-    background: white;
+    background: var(--bg-card);
     padding: 1.5rem;
     border-radius: 0 0 14px 14px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    box-shadow: var(--shadow);
     margin-bottom: 2rem;
+    transition: background var(--transition);
 }
 
 .tab-content.active {
@@ -131,92 +222,215 @@ header p {
     width: 100%;
     padding: 14px 20px;
     font-size: 1.1rem;
-    border: 2px solid #dfe6e9;
+    border: 2px solid var(--border-color);
     border-radius: 12px;
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, background var(--transition);
     font-family: inherit;
-    background: #fafafa;
+    background: var(--input-bg);
+    color: var(--text-primary);
 }
 
 .search-box input:focus {
-    border-color: #0984e3;
-    background: white;
+    border-color: var(--input-focus);
+    background: var(--bg-card);
 }
 
 /* ============================================
- *  FILTERS
+ *  SUGGESTIONS / AUTOCOMPLETE
+ *  ============================================ */
+.suggestions {
+    position: relative;
+    z-index: 1000;
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    max-height: 300px;
+    overflow-y: auto;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    margin-top: -2px;
+    transition: border-color 0.2s, background var(--transition);
+}
+
+.suggestions .suggestion-item {
+    padding: 10px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border-color);
+    transition: background 0.15s;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+}
+
+.suggestions .suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestions .suggestion-item:hover {
+    background: var(--result-bg);
+}
+
+.suggestions .suggestion-item .suggestion-type {
+    font-size: 0.7rem;
+    padding: 2px 10px;
+    border-radius: 20px;
+    background: var(--btn-bg);
+    color: var(--text-secondary);
+    flex-shrink: 0;
+}
+
+.suggestions .suggestion-item .suggestion-text {
+    flex: 1;
+    word-break: break-word;
+}
+
+.suggestions .suggestion-item .suggestion-text mark {
+    background: #fdcb6e;
+    color: #2d3436;
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+.suggestions .suggestion-item .suggestion-badge {
+    font-size: 0.7rem;
+    padding: 2px 10px;
+    border-radius: 20px;
+    background: var(--input-focus);
+    color: white;
+    flex-shrink: 0;
+}
+
+.suggestions .suggestion-empty {
+    padding: 20px;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+/* Scrollbar styling */
+.suggestions::-webkit-scrollbar {
+    width: 6px;
+}
+.suggestions::-webkit-scrollbar-track {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+.suggestions::-webkit-scrollbar-thumb {
+    background: var(--text-light);
+    border-radius: 3px;
+}
+
+/* ============================================
+ *  FILTERS - FIXED LAYOUT
  *  ============================================ */
 .filters {
     margin-top: 1rem;
     display: flex;
     flex-wrap: wrap;
-    gap: 0.8rem;
+    gap: 0.6rem;
     align-items: center;
 }
 
-.filters select,
-.filters .filter-group {
+.filters select {
     padding: 10px 14px;
-    border: 2px solid #dfe6e9;
+    border: 2px solid var(--border-color);
     border-radius: 10px;
     font-size: 0.95rem;
-    background: white;
+    background: var(--bg-card);
+    color: var(--text-primary);
     font-family: inherit;
     min-width: 140px;
-    flex: 1 0 auto;
+    flex: 1 1 auto;
+    max-width: 100%;
+    transition: border-color 0.2s, background var(--transition);
 }
 
 .filters select:focus {
-    border-color: #0984e3;
+    border-color: var(--input-focus);
 }
 
 .filters .filter-group {
     display: flex;
     align-items: center;
-    gap: 8px;
-    background: #fafafa;
-    border: 2px solid #dfe6e9;
-    padding: 6px 14px;
+    gap: 6px;
+    background: var(--filter-bg);
+    border: 2px solid var(--border-color);
     border-radius: 10px;
+    padding: 6px 12px;
     flex: 0 1 auto;
+    min-width: 120px;
+    transition: border-color 0.2s, background var(--transition);
 }
 
 .filters .filter-group label {
     font-size: 0.85rem;
-    color: #636e72;
+    color: var(--text-secondary);
     white-space: nowrap;
 }
 
 .filters .filter-group select {
     border: none;
-    padding: 4px 8px;
-    min-width: 100px;
+    padding: 4px 4px;
+    min-width: 80px;
     font-size: 0.95rem;
     background: transparent;
+    color: var(--text-primary);
     flex: 1;
 }
 
-/* ============================================
- *  BUTTONS
- *  ============================================ */
-.btn {
-    padding: 10px 20px;
+.filters .btn-clear {
+    background: var(--btn-bg);
+    color: var(--text-primary);
     border: none;
+    padding: 10px 20px;
     border-radius: 10px;
     font-size: 0.95rem;
     cursor: pointer;
     transition: background 0.2s;
     font-family: inherit;
+    flex: 0 0 auto;
 }
 
-.btn-clear {
-    background: #dfe6e9;
-    color: #2d3436;
+.filters .btn-clear:hover {
+    background: var(--btn-hover);
 }
 
-.btn-clear:hover {
-    background: #b2bec3;
+/* ============================================
+ *  TOAST
+ *  ============================================ */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    padding: 14px 28px;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    font-size: 0.95rem;
+    z-index: 9999;
+    opacity: 0;
+    transition: all 0.4s ease;
+    border: 1px solid var(--border-color);
+    max-width: 90%;
+    text-align: center;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.toast.success {
+    border-right: 4px solid #00b894;
+}
+
+.toast.error {
+    border-right: 4px solid #e17055;
 }
 
 /* ============================================
@@ -230,22 +444,22 @@ header p {
 }
 
 .result-item {
-    background: #f8f9fa;
+    background: var(--result-bg);
     padding: 16px 20px;
     border-radius: 12px;
-    border: 1px solid #f1f2f6;
+    border: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    transition: all 0.15s;
     flex-wrap: wrap;
     gap: 10px;
 }
 
 .result-item:hover {
     transform: translateX(-6px);
-    border-color: #0984e3;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    border-color: var(--input-focus);
+    box-shadow: var(--shadow-hover);
 }
 
 .result-info {
@@ -255,11 +469,8 @@ header p {
 
 .result-sheikh {
     font-size: 0.85rem;
-    color: #0984e3;
+    color: var(--input-focus);
     font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 6px;
 }
 
 .result-title {
@@ -277,11 +488,11 @@ header p {
 }
 
 .result-count {
-    background: #dfe6e9;
+    background: var(--btn-bg);
     padding: 0 12px;
     border-radius: 30px;
     font-size: 0.8rem;
-    color: #2d3436;
+    color: var(--text-primary);
     display: inline-block;
 }
 
@@ -297,10 +508,57 @@ header p {
 
 .result-date {
     font-size: 0.75rem;
-    color: #b2bec3;
+    color: var(--text-light);
 }
 
-/* --- Category Pills --- */
+.result-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.result-link a {
+    display: inline-block;
+    background: var(--input-focus);
+    color: white;
+    padding: 8px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.result-link a:hover {
+    background: #0873c7;
+}
+
+/* Copy button */
+.btn-copy {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.btn-copy:hover {
+    border-color: var(--input-focus);
+    color: var(--input-focus);
+    background: var(--result-bg);
+}
+
+.btn-copy.copied {
+    border-color: #00b894;
+    color: #00b894;
+}
+
+/* Category pills */
 .category-pill {
     display: inline-block;
     padding: 1px 14px;
@@ -337,25 +595,7 @@ header p {
     background: #636e72;
 }
 
-/* --- Result Link --- */
-.result-link a {
-    display: inline-block;
-    background: #0984e3;
-    color: white;
-    padding: 8px 18px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.9rem;
-    transition: background 0.2s;
-    white-space: nowrap;
-}
-
-.result-link a:hover {
-    background: #0873c7;
-}
-
-/* --- Fuzzy Badge --- */
+/* Fuzzy badge */
 .fuzzy-badge {
     background: #6c5ce7;
     color: white;
@@ -375,26 +615,27 @@ header p {
     align-items: center;
     gap: 1rem;
     padding: 1.5rem 0 0.5rem;
-    border-top: 1px solid #dfe6e9;
+    border-top: 1px solid var(--border-color);
     margin-top: 0.5rem;
     flex-wrap: wrap;
 }
 
 .page-btn {
     padding: 8px 20px;
-    border: 2px solid #dfe6e9;
+    border: 2px solid var(--border-color);
     border-radius: 8px;
-    background: white;
+    background: var(--bg-card);
     font-size: 0.95rem;
     cursor: pointer;
     transition: all 0.2s;
     font-family: inherit;
     font-weight: 500;
+    color: var(--text-primary);
 }
 
 .page-btn:hover:not(:disabled) {
-    border-color: #0984e3;
-    color: #0984e3;
+    border-color: var(--input-focus);
+    color: var(--input-focus);
 }
 
 .page-btn:disabled {
@@ -404,29 +645,245 @@ header p {
 
 .page-info {
     font-size: 0.95rem;
-    color: #636e72;
+    color: var(--text-secondary);
     min-width: 120px;
     text-align: center;
 }
 
 /* ============================================
- *  EMPTY & LOADING STATES
+ *  EMPTY & LOADING
  *  ============================================ */
-.no-results {
+.no-results,
+.loading,
+.books-empty {
     text-align: center;
     padding: 3rem 1rem;
-    color: #636e72;
+    color: var(--text-secondary);
     font-size: 1.1rem;
 }
 
-.loading {
-    text-align: center;
-    padding: 3rem;
-    color: #636e72;
+/* ============================================
+ *  BOOKS BROWSER
+ *  ============================================ */
+.books-browser {
+    padding: 0.5rem 0;
+}
+
+.books-intro {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    padding: 12px 16px;
+    background: var(--books-intro-bg);
+    border-radius: 10px;
+    border-right: 4px solid var(--input-focus);
+}
+
+.books-filters {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.books-filters select {
+    padding: 10px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-family: inherit;
+    min-width: 180px;
+    transition: border-color 0.2s, background var(--transition);
+}
+
+.books-filters select:focus {
+    border-color: var(--input-focus);
+}
+
+.books-count {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    background: var(--btn-bg);
+    padding: 4px 16px;
+    border-radius: 30px;
+}
+
+.books-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.book-item {
+    background: var(--book-item-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.book-item:hover {
+    border-color: var(--input-focus);
+    transform: translateX(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+.book-item .book-title {
+    font-size: 1.05rem;
+    font-weight: 500;
+    flex: 1;
+}
+
+.book-item .book-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.book-item .book-sheikhs-count {
+    background: var(--btn-bg);
+    padding: 2px 14px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    color: var(--text-primary);
+}
+
+.book-item .book-total-lessons {
+    background: #74b9ff;
+    color: white;
+    padding: 2px 14px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+}
+
+.book-item .book-category-pill {
+    display: inline-block;
+    padding: 1px 12px;
+    border-radius: 30px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: white;
+}
+
+.book-item .book-arrow {
+    color: var(--text-light);
+    font-size: 1.2rem;
+    transition: transform 0.2s;
+}
+
+.book-item:hover .book-arrow {
+    transform: translateX(-4px);
+    color: var(--input-focus);
+}
+
+/* Book detail */
+.book-detail {
+    background: var(--book-detail-bg);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 0.5rem;
+    border: 2px solid var(--border-color);
+}
+
+.book-detail .btn-back {
+    background: var(--btn-bg);
+    color: var(--text-primary);
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    transition: background 0.2s;
+}
+
+.book-detail .btn-back:hover {
+    background: var(--btn-hover);
+}
+
+.book-detail h3 {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin-bottom: 0.3rem;
+}
+
+.book-detail-category {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.book-sheikhs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.book-sheikh-item {
+    background: var(--sheikh-item-bg);
+    padding: 12px 16px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    border: 1px solid var(--border-color);
+    transition: all 0.15s;
+}
+
+.book-sheikh-item:hover {
+    border-color: var(--input-focus);
+}
+
+.book-sheikh-item .sheikh-name {
+    font-weight: 500;
+    color: var(--input-focus);
+    cursor: pointer;
+}
+
+.book-sheikh-item .sheikh-name:hover {
+    text-decoration: underline;
+}
+
+.book-sheikh-item .sheikh-lessons {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    background: var(--btn-bg);
+    padding: 2px 14px;
+    border-radius: 30px;
+}
+
+.book-sheikh-item .sheikh-link {
+    color: var(--input-focus);
+    text-decoration: none;
+    font-size: 0.85rem;
+    padding: 4px 14px;
+    border: 1px solid var(--input-focus);
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.book-sheikh-item .sheikh-link:hover {
+    background: var(--input-focus);
+    color: white;
 }
 
 /* ============================================
- *  GUIDE & ABOUT PAGES
+ *  GUIDE & ABOUT
  *  ============================================ */
 .guide-content,
 .about-content {
@@ -437,16 +894,16 @@ header p {
 
 .guide-content h2,
 .about-content h2 {
-    color: #1a1a2e;
+    color: var(--text-primary);
     font-size: 1.8rem;
     margin-bottom: 1.5rem;
-    border-bottom: 3px solid #0984e3;
+    border-bottom: 3px solid var(--input-focus);
     padding-bottom: 0.5rem;
 }
 
 .guide-content h3,
 .about-content h3 {
-    color: #0984e3;
+    color: var(--input-focus);
     font-size: 1.2rem;
     margin-top: 1.8rem;
     margin-bottom: 0.6rem;
@@ -478,21 +935,22 @@ header p {
 .guide-content th,
 .guide-content td {
     padding: 8px 14px;
-    border: 1px solid #dfe6e9;
+    border: 1px solid var(--border-color);
     text-align: right;
+    color: var(--text-primary);
 }
 
 .guide-content th {
-    background: #f1f2f6;
+    background: var(--btn-bg);
     font-weight: 600;
 }
 
 .guide-content tr:nth-child(even) {
-    background: #fafafa;
+    background: var(--result-bg);
 }
 
 .about-content pre {
-    background: #f1f2f6;
+    background: var(--btn-bg);
     padding: 1rem;
     border-radius: 8px;
     overflow-x: auto;
@@ -500,16 +958,17 @@ header p {
     direction: ltr;
     text-align: left;
     margin: 1rem 0;
+    color: var(--text-primary);
 }
 
 .about-content .dua {
     font-size: 1.2rem;
-    color: #1a1a2e;
+    color: var(--text-primary);
     font-weight: 600;
     text-align: center;
     margin-top: 2rem;
     padding-top: 1.5rem;
-    border-top: 2px solid #dfe6e9;
+    border-top: 2px solid var(--border-color);
 }
 
 /* ============================================
@@ -518,12 +977,12 @@ header p {
 footer {
     text-align: center;
     padding: 1.5rem 0 0.5rem;
-    color: #b2bec3;
+    color: var(--text-light);
     font-size: 0.85rem;
 }
 
 footer a {
-    color: #0984e3;
+    color: var(--input-focus);
     text-decoration: none;
 }
 
@@ -544,6 +1003,11 @@ footer a {
         text-align: left;
     }
 
+    .result-link .btn-copy {
+        margin-left: 0;
+        margin-right: 6px;
+    }
+
     .stats {
         gap: 0.8rem;
     }
@@ -552,11 +1016,12 @@ footer a {
         padding: 0.3rem 1rem;
     }
 
+    /* Fix filters on mobile - wrap nicely */
     .filters select,
-    .filters .filter-group,
-    .filters .filter-group select {
-        min-width: 100%;
+    .filters .filter-group {
         flex: 1 1 100%;
+        min-width: 100%;
+        max-width: 100%;
     }
 
     .filters .filter-group {
@@ -564,7 +1029,13 @@ footer a {
     }
 
     .filters .filter-group select {
-        min-width: 80px;
+        min-width: 60px;
+        flex: 1;
+    }
+
+    .filters .btn-clear {
+        flex: 1 1 100%;
+        text-align: center;
     }
 
     .tabs .tab-btn {
@@ -596,5 +1067,41 @@ footer a {
 
     .about-content pre {
         font-size: 0.7rem;
+    }
+
+    .book-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+    }
+
+    .book-item .book-meta {
+        gap: 8px;
+    }
+
+    .books-filters select {
+        min-width: 100%;
+    }
+
+    .book-detail {
+        padding: 1rem;
+    }
+
+    .book-sheikh-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+    }
+
+    .theme-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 1.1rem;
+    }
+
+    .toast {
+        font-size: 0.85rem;
+        padding: 12px 20px;
+        bottom: 20px;
     }
 }

@@ -13,6 +13,10 @@ let filteredResults = [];
 let currentPage = 1;
 let totalPages = 1;
 
+// Book index
+let bookIndex = {};
+let bookCategories = new Set();
+
 /* ============================================
  * DOM REFS
  * ============================================ */
@@ -28,15 +32,24 @@ const dom = {
     results: $('results'),
     totalLessons: $('totalLessons'),
     totalSheikhs: $('totalSheikhs'),
+    totalBooks: $('totalBooks'),
     resultCount: $('resultCount'),
-    pagination: $('pagination'),
     pageInfo: $('pageInfo'),
     prevPage: $('prevPage'),
     nextPage: $('nextPage'),
     aboutTotalLessons: $('aboutTotalLessons'),
     aboutTotalSheikhs: $('aboutTotalSheikhs'),
+    aboutTotalBooks: $('aboutTotalBooks'),
     aboutUpdateDate: $('aboutUpdateDate'),
     aboutUpdateDate2: $('aboutUpdateDate2'),
+    // Books tab
+    bookCategoryFilter: $('bookCategoryFilter'),
+    booksList: $('booksList'),
+    booksCount: $('booksCount'),
+    bookDetail: $('bookDetail'),
+    bookDetailTitle: $('bookDetailTitle'),
+    bookDetailCategory: $('bookDetailCategory'),
+    bookDetailSheikhs: $('bookDetailSheikhs'),
 };
 
 /* ============================================
@@ -51,6 +64,7 @@ const CATEGORY_KEYWORDS = {
     'لغة': ['نحو', 'صرف', 'بلاغة', 'إعراب', 'آجرومية', 'ألفية', 'ابن مالك', 'قطر', 'الندى', 'ملحة', 'الإعراب', 'متممة', 'تحفة', 'الأطفال', 'الجزرية', 'المدخل', 'الصرف', 'الودود', 'اللطيف', 'التصريف', 'العوامل', 'المئة', 'لامية', 'الأفعال', 'البيقونية', 'مصطلح', 'الحديث', 'نخبة', 'الفكر', 'نزهة', 'النظر'],
     'أصول': ['أصول', 'فقه', 'الورقات', 'الوصول', 'سلم', 'قواعد', 'أصول الفقه', 'مذكرة', 'الشنقيطي', 'الأصول من علم الأصول', 'تسهيل', 'الطرقات', 'نظم الورقات'],
 };
+
 
 function detectCategory(title) {
     const lowerTitle = title.toLowerCase();
@@ -96,23 +110,180 @@ function setupTabs() {
     const buttons = document.querySelectorAll('.tab-btn');
     const contents = {
         index: document.getElementById('tab-index'),
+        books: document.getElementById('tab-books'),
         guide: document.getElementById('tab-guide'),
         about: document.getElementById('tab-about'),
     };
 
     buttons.forEach(btn => {
         btn.addEventListener('click', () => {
-            // Update buttons
             buttons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            // Update content
             const tab = btn.dataset.tab;
             Object.keys(contents).forEach(key => {
                 contents[key].classList.toggle('active', key === tab);
             });
+
+            if (tab === 'books' && Object.keys(bookIndex).length > 0) {
+                renderBooks();
+            }
         });
     });
+}
+
+/* ============================================
+ * BOOK INDEX (Reverse Index)
+ * ============================================ */
+function buildBookIndex() {
+    bookIndex = {};
+    bookCategories = new Set();
+
+    allLessons.forEach(lesson => {
+        const title = lesson.title;
+        const category = lesson.category;
+        const sheikh = lesson.sheikh;
+        const count = lesson.lessons_count;
+        const link = lesson.link;
+
+        if (!bookIndex[title]) {
+            bookIndex[title] = {
+                category: category,
+                sheikhs: [],
+                total_lessons: 0,
+            };
+        }
+
+        const exists = bookIndex[title].sheikhs.some(s => s.name === sheikh);
+        if (!exists) {
+            bookIndex[title].sheikhs.push({
+                name: sheikh,
+                lessons_count: count,
+                link: link,
+            });
+        }
+
+        bookIndex[title].total_lessons += (count || 0);
+        bookCategories.add(category);
+    });
+
+    Object.keys(bookIndex).forEach(title => {
+        bookIndex[title].sheikhs.sort((a, b) => (b.lessons_count || 0) - (a.lessons_count || 0));
+    });
+
+    const totalBooks = Object.keys(bookIndex).length;
+    if (dom.totalBooks) dom.totalBooks.textContent = totalBooks;
+    if (dom.aboutTotalBooks) dom.aboutTotalBooks.textContent = totalBooks;
+}
+
+/* ============================================
+ * RENDER BOOKS
+ * ============================================ */
+function renderBooks() {
+    const categoryFilter = dom.bookCategoryFilter ? dom.bookCategoryFilter.value : '';
+    const container = dom.booksList;
+
+    let filteredBooks = Object.entries(bookIndex);
+
+    if (categoryFilter) {
+        filteredBooks = filteredBooks.filter(([title, data]) => data.category === categoryFilter);
+    }
+
+    filteredBooks.sort((a, b) => {
+        const aSheikhs = a[1].sheikhs.length;
+        const bSheikhs = b[1].sheikhs.length;
+        if (aSheikhs !== bSheikhs) return bSheikhs - aSheikhs;
+        return a[0].localeCompare(b[0], 'ar');
+    });
+
+    if (dom.booksCount) {
+        dom.booksCount.textContent = filteredBooks.length + ' كتاب';
+    }
+
+    if (filteredBooks.length === 0) {
+        container.innerHTML = '<div class="books-empty">📭 لا توجد كتب في هذا التصنيف</div>';
+        return;
+    }
+
+    let html = '';
+    filteredBooks.forEach(([title, data]) => {
+        const category = data.category;
+        const sheikhCount = data.sheikhs.length;
+        const totalLessons = data.total_lessons;
+        const categoryClass = categoryColors[category] || 'category-other';
+        const categoryLabel = categoryLabels[category] || 'عام';
+
+        html += `
+        <div class="book-item" onclick="openBookDetail('${title.replace(/'/g, "\\'")}')">
+        <span class="book-title">${title}</span>
+        <div class="book-meta">
+        <span class="book-category-pill ${categoryClass}">${categoryLabel}</span>
+        <span class="book-sheikhs-count">👤 ${sheikhCount} شيخ</span>
+        <span class="book-total-lessons">📚 ${totalLessons} درس</span>
+        <span class="book-arrow">‹</span>
+        </div>
+        </div>
+        `;
+    });
+
+    container.innerHTML = html;
+}
+
+/* ============================================
+ * OPEN BOOK DETAIL
+ * ============================================ */
+function openBookDetail(title) {
+    const data = bookIndex[title];
+    if (!data) return;
+
+    dom.booksList.style.display = 'none';
+    dom.bookDetail.style.display = 'block';
+
+    dom.bookDetailTitle.textContent = title;
+
+    const categoryLabel = categoryLabels[data.category] || 'عام';
+    dom.bookDetailCategory.textContent = 'التصنيف: ' + categoryLabel;
+
+    let html = '';
+    data.sheikhs.forEach(sheikh => {
+        const count = sheikh.lessons_count;
+        const countText = count ? count + ' درس' : 'سلسلة';
+
+        html += `
+        <div class="book-sheikh-item">
+        <span class="sheikh-name" onclick="switchToSheikh('${sheikh.name.replace(/'/g, "\\'")}')">${sheikh.name}</span>
+        <span class="sheikh-lessons">${countText}</span>
+        <a href="${sheikh.link}" target="_blank" class="sheikh-link" onclick="event.stopPropagation();">فتح 📂</a>
+        </div>
+        `;
+    });
+
+    dom.bookDetailSheikhs.innerHTML = html;
+}
+
+/* ============================================
+ * CLOSE BOOK DETAIL
+ * ============================================ */
+function closeBookDetail() {
+    dom.bookDetail.style.display = 'none';
+    dom.booksList.style.display = 'flex';
+}
+
+/* ============================================
+ * SWITCH TO INDEX TAB WITH SHEIKH FILTER
+ * ============================================ */
+function switchToSheikh(sheikhName) {
+    // Switch to index tab
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('.tab-btn[data-tab="index"]').classList.add('active');
+
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.getElementById('tab-index').classList.add('active');
+
+    dom.sheikhFilter.value = sheikhName;
+    applyFilters();
+
+    window.scrollTo({ top: document.querySelector('.search-box').offsetTop - 20, behavior: 'smooth' });
 }
 
 /* ============================================
@@ -124,34 +295,41 @@ async function loadData() {
         if (!res.ok) throw new Error('Network response was not ok');
         allLessons = await res.json();
 
-        // Add category to each lesson
         allLessons.forEach(l => {
             l.category = detectCategory(l.title);
         });
 
-        // Build sheikh list
         allLessons.forEach(l => sheikhsSet.add(l.sheikh));
         populateSheikhFilter();
 
-        // Initialize Fuse.js
+        buildBookIndex();
         initFuse();
 
-        // Update stats
         const dateStr = new Date().toLocaleDateString('ar-EG');
         dom.totalLessons.textContent = allLessons.length;
         dom.totalSheikhs.textContent = sheikhsSet.size;
+        dom.totalBooks.textContent = Object.keys(bookIndex).length;
         dom.aboutTotalLessons.textContent = allLessons.length;
         dom.aboutTotalSheikhs.textContent = sheikhsSet.size;
+        dom.aboutTotalBooks.textContent = Object.keys(bookIndex).length;
         dom.aboutUpdateDate.textContent = dateStr;
         dom.aboutUpdateDate2.textContent = dateStr;
 
-        // Initial filter
-        applyFilters();
+        // Apply theme
+        applyTheme(getPreferredTheme());
+
+        renderBooks();
+
+        // --- Apply URL parameters ---
+        applyURLParams(); // <-- This replaces applyFilters() on load
 
     } catch (err) {
         console.error('Error loading data:', err);
         dom.results.innerHTML =
-        `<div class="no-results">❌ فشل تحميل البيانات. تأكد من وجود ملف <code>flat_lessons.json</code> في نفس المجلد.</div>`;
+        '<div class="no-results">❌ فشل تحميل البيانات. تأكد من وجود ملف <code>flat_lessons.json</code> في نفس المجلد.</div>';
+        if (dom.booksList) {
+            dom.booksList.innerHTML = '<div class="books-empty">❌ فشل تحميل البيانات</div>';
+        }
     }
 }
 
@@ -194,13 +372,575 @@ function getSearchKeys(scope) {
     return ['title', 'sheikh'];
 }
 
-function getFilterValue(id) {
-    return document.getElementById(id).value;
-}
-
 /* ============================================
  * MAIN FILTER LOGIC
  * ============================================ */
+function applyFilters() {
+    const query = dom.searchInput.value.trim();
+    const sheikhFilter = dom.sheikhFilter.value;
+    const categoryFilter = dom.categoryFilter.value;
+    const scope = dom.searchScope.value;
+    const fuzzyMode = dom.fuzzyToggle.value === 'fuzzy';
+    const countFilter = dom.countFilter.value;
+    const sortOrder = dom.sortOrder.value;
+
+    let filtered = [];
+
+    if (query) {
+        if (fuzzyMode) {
+            const keys = getSearchKeys(scope);
+            const results = fuseInstance.search(query, { keys });
+            filtered = results.map(r => ({ ...r.item, _score: r.score }));
+        } else {
+            const q = query.toLowerCase();
+            filtered = allLessons.filter(l => {
+                if (scope === 'title') return l.title.toLowerCase().includes(q);
+                if (scope === 'sheikh') return l.sheikh.toLowerCase().includes(q);
+                return l.search_text.includes(q);
+            });
+        }
+    } else {
+        filtered = [...allLessons];
+    }
+
+    if (sheikhFilter) {
+        filtered = filtered.filter(l => l.sheikh === sheikhFilter);
+    }
+
+    if (categoryFilter) {
+        filtered = filtered.filter(l => l.category === categoryFilter);
+    }
+
+    if (countFilter !== 'any') {
+        filtered = filtered.filter(l => {
+            const count = l.lessons_count;
+            if (countFilter === 'null') return count === null || count === undefined;
+            if (count === null || count === undefined) return false;
+            if (countFilter === '1-10') return count >= 1 && count <= 10;
+            if (countFilter === '11-50') return count >= 11 && count <= 50;
+            if (countFilter === '51-100') return count >= 51 && count <= 100;
+            if (countFilter === '100+') return count > 100;
+            return true;
+        });
+    }
+
+    filtered = sortLessons(filtered, sortOrder);
+
+    filteredResults = filtered;
+    currentPage = 1;
+    totalPages = Math.ceil(filteredResults.length / PAGE_SIZE) || 1;
+
+    dom.resultCount.textContent = filteredResults.length;
+
+    renderPage();
+    updatePagination();
+}
+
+/* ============================================
+ * SORTING
+ * ============================================ */
+function sortLessons(lessons, order) {
+    const copy = [...lessons];
+    switch (order) {
+        case 'lessons-desc':
+            return copy.sort((a, b) => (b.lessons_count || 0) - (a.lessons_count || 0));
+        case 'lessons-asc':
+            return copy.sort((a, b) => (a.lessons_count || 0) - (b.lessons_count || 0));
+        case 'date-desc':
+            return copy.sort((a, b) => new Date(b.date) - new Date(a.date));
+        case 'date-asc':
+            return copy.sort((a, b) => new Date(a.date) - new Date(b.date));
+        case 'alpha':
+            return copy.sort((a, b) => a.title.localeCompare(b.title, 'ar'));
+        case 'relevance':
+            return copy.sort((a, b) => (a._score || 1) - (b._score || 1));
+        default:
+            return copy;
+    }
+}
+
+/* ============================================
+ * PAGINATION
+ * ============================================ */
+function renderPage() {
+    const container = dom.results;
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const end = Math.min(start + PAGE_SIZE, filteredResults.length);
+    const pageItems = filteredResults.slice(start, end);
+
+    if (pageItems.length === 0) {
+        container.innerHTML = '<div class="no-results">🔍 لا توجد نتائج مطابقة</div>';
+        return;
+    }
+
+    let html = '';
+    pageItems.forEach(lesson => {
+        const count = lesson.lessons_count;
+        let countHtml;
+        if (count === null || count === undefined) {
+            countHtml = '<span class="result-count series">📚 سلسلة</span>';
+        } else {
+            countHtml = '<span class="result-count">' + count + ' درس</span>';
+        }
+
+        let dateDisplay = '';
+        if (lesson.date) {
+            try {
+                const d = new Date(lesson.date);
+                dateDisplay = d.toLocaleDateString('ar-EG');
+            } catch (_) { /* ignore */ }
+        }
+
+        const fuzzyBadge = (lesson._score !== undefined) ? '<span class="fuzzy-badge">🎯</span>' : '';
+        const categoryClass = categoryColors[lesson.category] || 'category-other';
+        const categoryLabel = categoryLabels[lesson.category] || 'عام';
+
+        html += `
+        <div class="result-item">
+        <div class="result-info">
+        <div class="result-sheikh">${lesson.sheikh}</div>
+        <div class="result-title">📖 ${lesson.title} ${fuzzyBadge}</div>
+        <div class="result-meta">
+        ${countHtml}
+        <span class="category-pill ${categoryClass}">${categoryLabel}</span>
+        ${dateDisplay ? '<span class="result-date">📅 ' + dateDisplay + '</span>' : ''}
+        </div>
+        </div>
+        <!-- Inside result-item, in the result-link div -->
+        <div class="result-link">
+            <button class="btn-copy" onclick="copyLink('${lesson.link}')" title="نسخ الرابط">📋</button>
+            <a href="${lesson.link}" target="_blank">فتح 📂</a>
+        </div>
+        </div>
+        `;
+    });
+
+    container.innerHTML = html;
+}
+
+function updatePagination() {
+    dom.pageInfo.textContent = 'صفحة ' + currentPage + ' من ' + totalPages;
+    dom.prevPage.disabled = currentPage <= 1;
+    dom.nextPage.disabled = currentPage >= totalPages;
+}
+
+function goToPage(page) {
+    if (page < 1 || page > totalPages) return;
+    currentPage = page;
+    renderPage();
+    updatePagination();
+    window.scrollTo({ top: document.querySelector('.search-box').offsetTop - 20, behavior: 'smooth' });
+}
+
+/* ============================================
+ * SEARCH INPUT (with debounce)
+ * ============================================ */
+let searchTimeout = null;
+
+function onSearchInput() {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(function() {
+        applyFilters();
+    }, 300);
+}
+
+/* ============================================
+ * CLEAR FILTERS
+ * ============================================ */
+function clearFilters() {
+    dom.searchInput.value = '';
+    dom.sheikhFilter.value = '';
+    dom.categoryFilter.value = '';
+    dom.searchScope.value = 'all';
+    dom.fuzzyToggle.value = 'fuzzy';
+    dom.countFilter.value = 'any';
+    dom.sortOrder.value = 'lessons-desc';
+    applyFilters();
+}
+
+/* ============================================
+ * START
+ * ============================================ */
+document.addEventListener('DOMContentLoaded', function() {
+    setupTabs();
+    loadData();
+});
+
+/* ============================================
+ *  DARK MODE
+ *  ============================================ */
+function getPreferredTheme() {
+    // Check localStorage first
+    const saved = localStorage.getItem('theme');
+    if (saved) return saved;
+    // Check system preference
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+    }
+    return 'light';
+}
+
+function applyTheme(theme) {
+    if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.getElementById('themeToggle').textContent = '☀️';
+    } else {
+        document.documentElement.removeAttribute('data-theme');
+        document.getElementById('themeToggle').textContent = '🌙';
+    }
+    localStorage.setItem('theme', theme);
+}
+
+function toggleTheme() {
+    const current = document.documentElement.getAttribute('data-theme');
+    const newTheme = current === 'dark' ? 'light' : 'dark';
+    applyTheme(newTheme);
+}
+
+// Listen for system theme changes
+if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+        if (!localStorage.getItem('theme')) {
+            applyTheme(e.matches ? 'dark' : 'light');
+        }
+    });
+}
+
+/* ============================================
+ *  COPY LINK
+ *  ============================================ */
+function copyLink(link) {
+    if (!navigator.clipboard) {
+        // Fallback for older browsers
+        fallbackCopyLink(link);
+        return;
+    }
+
+    navigator.clipboard.writeText(link)
+    .then(function() {
+        showToast('✅ تم نسخ الرابط بنجاح!', 'success');
+        // Visual feedback on button
+        const buttons = document.querySelectorAll('.btn-copy');
+        buttons.forEach(function(btn) {
+            if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(link)) {
+                btn.textContent = '✓';
+                btn.classList.add('copied');
+                setTimeout(function() {
+                    btn.textContent = '📋';
+                    btn.classList.remove('copied');
+                }, 2000);
+            }
+        });
+    })
+    .catch(function() {
+        fallbackCopyLink(link);
+    });
+}
+
+function fallbackCopyLink(link) {
+    // Create a temporary textarea
+    const textarea = document.createElement('textarea');
+    textarea.value = link;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+        document.execCommand('copy');
+        showToast('✅ تم نسخ الرابط بنجاح!', 'success');
+    } catch (err) {
+        showToast('❌ فشل نسخ الرابط. الرجاء نسخه يدويًا.', 'error');
+    }
+    document.body.removeChild(textarea);
+}
+
+/* ============================================
+ *  TOAST NOTIFICATION
+ *  ============================================ */
+let toastTimer = null;
+
+function showToast(message, type) {
+    // Remove existing toast
+    const existing = document.querySelector('.toast');
+    if (existing) {
+        existing.remove();
+    }
+
+    const toast = document.createElement('div');
+    toast.className = 'toast ' + (type || 'success');
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    // Trigger animation
+    requestAnimationFrame(function() {
+        toast.classList.add('show');
+    });
+
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() {
+        toast.classList.remove('show');
+        setTimeout(function() {
+            toast.remove();
+        }, 400);
+    }, 2500);
+}
+
+/* ============================================
+ * SUGGESTIONS / AUTOCOMPLETE
+ * ============================================ */
+let suggestionTimeout = null;
+let currentSuggestions = [];
+
+function getSuggestions(query) {
+    if (!query || query.length < 2) {
+        hideSuggestions();
+        return;
+    }
+
+    // Use Fuse.js to search across title and sheikh
+    const results = fuseInstance.search(query, {
+        keys: ['title', 'sheikh'],
+        limit: 10,
+        includeMatches: true,
+    });
+
+    if (results.length === 0) {
+        showEmptySuggestions();
+        return;
+    }
+
+    // Build suggestions list
+    const suggestions = results.map(result => {
+        const item = result.item;
+        // Determine type
+        let type = 'درس';
+        let badge = '';
+        if (item.title.toLowerCase().includes(query.toLowerCase())) {
+            type = 'كتاب';
+        } else if (item.sheikh.toLowerCase().includes(query.toLowerCase())) {
+            type = 'شيخ';
+        } else {
+            // Check category
+            const cat = item.category || 'عام';
+            if (cat !== 'عام') {
+                type = 'تصنيف';
+                badge = cat;
+            }
+        }
+
+        // Highlight matched text
+        let displayTitle = item.title;
+        let displaySheikh = item.sheikh;
+        if (result.matches) {
+            result.matches.forEach(match => {
+                if (match.key === 'title') {
+                    displayTitle = highlightMatch(item.title, match.indices);
+                } else if (match.key === 'sheikh') {
+                    displaySheikh = highlightMatch(item.sheikh, match.indices);
+                }
+            });
+        }
+
+        return {
+            text: `${displayTitle} — ${displaySheikh}`,
+            rawTitle: item.title,
+            rawSheikh: item.sheikh,
+            link: item.link,
+            type: type,
+            badge: badge,
+            // For click action
+            action: function() {
+                dom.searchInput.value = item.title;
+                hideSuggestions();
+                applyFilters();
+            }
+        };
+    });
+
+    // Remove duplicates (by rawTitle + rawSheikh)
+    const seen = new Set();
+    const unique = suggestions.filter(s => {
+        const key = s.rawTitle + '|' + s.rawSheikh;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+    });
+
+    // Limit to 8
+    const final = unique.slice(0, 8);
+
+    if (final.length === 0) {
+        showEmptySuggestions();
+        return;
+    }
+
+    renderSuggestions(final);
+}
+
+function highlightMatch(text, indices) {
+    // indices is array of [start, end] pairs
+    if (!indices || indices.length === 0) return text;
+    let result = '';
+    let lastIdx = 0;
+    const sorted = indices.sort((a, b) => a[0] - b[0]);
+    for (const [start, end] of sorted) {
+        if (start > lastIdx) {
+            result += text.substring(lastIdx, start);
+        }
+        result += `<mark>${text.substring(start, end + 1)}</mark>`;
+        lastIdx = end + 1;
+    }
+    if (lastIdx < text.length) {
+        result += text.substring(lastIdx);
+    }
+    return result;
+}
+
+function renderSuggestions(items) {
+    const container = document.getElementById('suggestions');
+    if (!container) return;
+    container.innerHTML = '';
+    items.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'suggestion-item';
+        div.innerHTML = `
+        <span class="suggestion-text">${item.text}</span>
+        <span class="suggestion-type">${item.type}</span>
+        ${item.badge ? `<span class="suggestion-badge">${item.badge}</span>` : ''}
+        `;
+        div.addEventListener('click', item.action);
+        container.appendChild(div);
+    });
+    container.style.display = 'block';
+    currentSuggestions = items;
+}
+
+function showEmptySuggestions() {
+    const container = document.getElementById('suggestions');
+    if (!container) return;
+    container.innerHTML = `<div class="suggestion-empty">🔍 لا توجد نتائج</div>`;
+    container.style.display = 'block';
+    currentSuggestions = [];
+}
+
+function hideSuggestions() {
+    const container = document.getElementById('suggestions');
+    if (container) {
+        container.style.display = 'none';
+        container.innerHTML = '';
+    }
+    currentSuggestions = [];
+}
+
+// Override onSearchInput to use suggestions
+const originalOnSearchInput = onSearchInput;
+onSearchInput = function() {
+    const query = dom.searchInput.value.trim();
+    clearTimeout(suggestionTimeout);
+    if (query.length >= 2) {
+        suggestionTimeout = setTimeout(() => {
+            getSuggestions(query);
+        }, 200);
+    } else {
+        hideSuggestions();
+    }
+    // Still apply filters (debounced)
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+        applyFilters();
+    }, 300);
+};
+
+// Close suggestions on Escape or click outside
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        hideSuggestions();
+    }
+});
+
+document.addEventListener('click', function(e) {
+    const suggestions = document.getElementById('suggestions');
+    const input = dom.searchInput;
+    if (suggestions && !suggestions.contains(e.target) && e.target !== input) {
+        hideSuggestions();
+    }
+});
+
+/* ============================================
+ *  URL PARAMETERS (Permalink)
+ *  ============================================ */
+
+/**
+ * Get all current filter values
+ */
+function getFilterState() {
+    return {
+        q: dom.searchInput.value.trim(),
+        sheikh: dom.sheikhFilter.value,
+        category: dom.categoryFilter.value,
+        scope: dom.searchScope.value,
+        fuzzy: dom.fuzzyToggle.value,
+        count: dom.countFilter.value,
+        sort: dom.sortOrder.value,
+        page: currentPage.toString()
+    };
+}
+
+/**
+ * Update URL with current filter state
+ */
+function updateURL() {
+    const state = getFilterState();
+    const params = new URLSearchParams();
+
+    // Only add non-default values
+    if (state.q) params.set('q', state.q);
+    if (state.sheikh) params.set('sheikh', state.sheikh);
+    if (state.category) params.set('category', state.category);
+    if (state.scope && state.scope !== 'all') params.set('scope', state.scope);
+    if (state.fuzzy && state.fuzzy !== 'fuzzy') params.set('fuzzy', state.fuzzy);
+    if (state.count && state.count !== 'any') params.set('count', state.count);
+    if (state.sort && state.sort !== 'lessons-desc') params.set('sort', state.sort);
+    if (state.page && state.page !== '1') params.set('page', state.page);
+
+    const url = params.toString() ? '?' + params.toString() : window.location.pathname;
+    window.history.replaceState({ filters: state }, '', url);
+}
+
+/**
+ * Read URL parameters and apply filters
+ */
+function applyURLParams() {
+    const params = new URLSearchParams(window.location.search);
+
+    // Set values from URL
+    if (params.has('q')) dom.searchInput.value = params.get('q');
+    if (params.has('sheikh')) dom.sheikhFilter.value = params.get('sheikh');
+    if (params.has('category')) dom.categoryFilter.value = params.get('category');
+    if (params.has('scope')) dom.searchScope.value = params.get('scope');
+    if (params.has('fuzzy')) dom.fuzzyToggle.value = params.get('fuzzy');
+    if (params.has('count')) dom.countFilter.value = params.get('count');
+    if (params.has('sort')) dom.sortOrder.value = params.get('sort');
+    if (params.has('page')) currentPage = parseInt(params.get('page')) || 1;
+
+    // Apply filters (which will also update URL)
+    applyFilters();
+
+    // If page was set, go to that page after rendering
+    if (params.has('page')) {
+        const page = parseInt(params.get('page')) || 1;
+        if (page !== currentPage) {
+            currentPage = page;
+            renderPage();
+            updatePagination();
+        }
+    }
+}
+
+/**
+ * Override applyFilters to also update URL
+ */
+// Replace your existing applyFilters function with this one
 function applyFilters() {
     const query = dom.searchInput.value.trim();
     const sheikhFilter = dom.sheikhFilter.value;
@@ -266,117 +1006,28 @@ function applyFilters() {
 
     renderPage();
     updatePagination();
+
+    // --- Update URL ---
+    updateURL();
 }
 
-/* ============================================
- * SORTING
- * ============================================ */
-function sortLessons(lessons, order) {
-    const copy = [...lessons];
-    switch (order) {
-        case 'lessons-desc':
-            return copy.sort((a, b) => (b.lessons_count || 0) - (a.lessons_count || 0));
-        case 'lessons-asc':
-            return copy.sort((a, b) => (a.lessons_count || 0) - (b.lessons_count || 0));
-        case 'date-desc':
-            return copy.sort((a, b) => new Date(b.date) - new Date(a.date));
-        case 'date-asc':
-            return copy.sort((a, b) => new Date(a.date) - new Date(b.date));
-        case 'alpha':
-            return copy.sort((a, b) => a.title.localeCompare(b.title, 'ar'));
-        case 'relevance':
-            return copy.sort((a, b) => (a._score || 1) - (b._score || 1));
-        default:
-            return copy;
-    }
-}
-
-/* ============================================
- * PAGINATION
- * ============================================ */
-function renderPage() {
-    const container = dom.results;
-    const start = (currentPage - 1) * PAGE_SIZE;
-    const end = Math.min(start + PAGE_SIZE, filteredResults.length);
-    const pageItems = filteredResults.slice(start, end);
-
-    if (pageItems.length === 0) {
-        container.innerHTML = '<div class="no-results">🔍 لا توجد نتائج مطابقة</div>';
-        return;
-    }
-
-    let html = '';
-    pageItems.forEach(lesson => {
-        const count = lesson.lessons_count;
-        let countHtml;
-        if (count === null || count === undefined) {
-            countHtml = `<span class="result-count series">📚 سلسلة</span>`;
-        } else {
-            countHtml = `<span class="result-count">${count} درس</span>`;
-        }
-
-        let dateDisplay = '';
-        if (lesson.date) {
-            try {
-                const d = new Date(lesson.date);
-                dateDisplay = d.toLocaleDateString('ar-EG');
-            } catch (_) { /* ignore */ }
-        }
-
-        const fuzzyBadge = (lesson._score !== undefined) ? `<span class="fuzzy-badge">🎯</span>` : '';
-        const categoryClass = categoryColors[lesson.category] || 'category-other';
-        const categoryLabel = categoryLabels[lesson.category] || 'عام';
-
-        html += `
-        <div class="result-item">
-        <div class="result-info">
-        <div class="result-sheikh">${lesson.sheikh}</div>
-        <div class="result-title">📖 ${lesson.title} ${fuzzyBadge}</div>
-        <div class="result-meta">
-        ${countHtml}
-        <span class="category-pill ${categoryClass}">${categoryLabel}</span>
-        ${dateDisplay ? `<span class="result-date">📅 ${dateDisplay}</span>` : ''}
-        </div>
-        </div>
-        <div class="result-link">
-        <a href="${lesson.link}" target="_blank">فتح 📂</a>
-        </div>
-        </div>
-        `;
-    });
-
-    container.innerHTML = html;
-}
-
-function updatePagination() {
-    dom.pageInfo.textContent = `صفحة ${currentPage} من ${totalPages}`;
-    dom.prevPage.disabled = currentPage <= 1;
-    dom.nextPage.disabled = currentPage >= totalPages;
-}
-
+/**
+ * Override goToPage to update URL when page changes
+ */
+// Replace your existing goToPage function with this one
 function goToPage(page) {
     if (page < 1 || page > totalPages) return;
     currentPage = page;
     renderPage();
     updatePagination();
+    updateURL(); // <-- Added this
     window.scrollTo({ top: document.querySelector('.search-box').offsetTop - 20, behavior: 'smooth' });
 }
 
-/* ============================================
- * SEARCH INPUT (with debounce)
- * ============================================ */
-let searchTimeout = null;
-
-function onSearchInput() {
-    clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(() => {
-        applyFilters();
-    }, 300);
-}
-
-/* ============================================
- * CLEAR FILTERS
- * ============================================ */
+/**
+ * Override clearFilters to reset URL
+ */
+// Replace your existing clearFilters function with this one
 function clearFilters() {
     dom.searchInput.value = '';
     dom.sheikhFilter.value = '';
@@ -386,12 +1037,5 @@ function clearFilters() {
     dom.countFilter.value = 'any';
     dom.sortOrder.value = 'lessons-desc';
     applyFilters();
+    // URL will be updated by applyFilters
 }
-
-/* ============================================
- * START
- * ============================================ */
-document.addEventListener('DOMContentLoaded', () => {
-    setupTabs();
-    loadData();
-});

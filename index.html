@@ -21,21 +21,30 @@
             <div class="stats" id="stats">
                 <div class="stat-box"><strong id="totalLessons">0</strong> درس</div>
                 <div class="stat-box"><strong id="totalSheikhs">0</strong> شيخ</div>
+                <div class="stat-box"><strong id="totalBooks">0</strong> كتاب</div>
+            </div>
+            <!-- Inside <header>, after <p> or before </header> -->
+            <div class="theme-toggle-wrapper">
+                <button id="themeToggle" class="theme-btn" onclick="toggleTheme()" aria-label="تبديل الوضع">
+                    🌙
+                </button>
             </div>
         </header>
 
         <!-- ===== TABS ===== -->
         <nav class="tabs" id="tabNav">
             <button class="tab-btn active" data-tab="index">📚 الفهرس</button>
+            <button class="tab-btn" data-tab="books">📖 تصفح الكتب</button>
             <button class="tab-btn" data-tab="guide">📖 دليل الاستخدام</button>
             <button class="tab-btn" data-tab="about">ℹ️ عن الموقع</button>
         </nav>
 
-        <!-- ===== TAB: INDEX ===== -->
+        <!-- ===== TAB: INDEX (Search) ===== -->
         <section class="tab-content active" id="tab-index">
-            <!-- Search -->
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="🔍 ابحث عن درس أو شيخ..." oninput="onSearchInput()">
+                <!-- In the search-box div, after the input -->
+<div id="suggestions" class="suggestions" style="display:none;"></div>
 
                 <div class="filters">
                     <select id="sheikhFilter" onchange="applyFilters()">
@@ -98,17 +107,53 @@
                     <button class="btn btn-clear" onclick="clearFilters()">🗑️ مسح</button>
                 </div>
             </div>
-
-            <!-- Results -->
+            <!-- Inside the search-box, after the filters or before the results -->
+            <div class="search-hint" style="font-size:0.85rem;color:var(--text-secondary);margin-top:0.8rem;">
+                💡 يمكنك مشاركة نتائج البحث عبر نسخ الرابط من المتصفح
+            </div>
             <div id="results" class="results">
                 <div class="loading">⏳ جاري التحميل...</div>
             </div>
 
-            <!-- Pagination -->
             <div class="pagination" id="pagination">
                 <button class="page-btn" id="prevPage" onclick="goToPage(currentPage - 1)">‹ السابق</button>
                 <span class="page-info" id="pageInfo">صفحة 1 من 1</span>
                 <button class="page-btn" id="nextPage" onclick="goToPage(currentPage + 1)">التالي ›</button>
+            </div>
+        </section>
+
+        <!-- ===== TAB: BOOKS ===== -->
+        <section class="tab-content" id="tab-books">
+            <div class="books-browser">
+                <p class="books-intro">
+                    تصفح الكتب حسب العلوم الشرعية، واختر كتابًا لترى المشايخ الذين شرحوه.
+                </p>
+
+                <div class="books-filters">
+                    <select id="bookCategoryFilter" onchange="renderBooks()">
+                        <option value="">جميع العلوم</option>
+                        <option value="فقه">فقه</option>
+                        <option value="عقيدة">عقيدة</option>
+                        <option value="تفسير">تفسير</option>
+                        <option value="حديث">حديث</option>
+                        <option value="سيرة">سيرة</option>
+                        <option value="لغة">لغة</option>
+                        <option value="أصول">أصول</option>
+                        <option value="عام">عام</option>
+                    </select>
+                    <span class="books-count" id="booksCount">0 كتاب</span>
+                </div>
+
+                <div id="booksList" class="books-list">
+                    <div class="loading">⏳ جاري التحميل...</div>
+                </div>
+
+                <div id="bookDetail" class="book-detail" style="display:none;">
+                    <button class="btn btn-back" onclick="closeBookDetail()">‹ العودة إلى الكتب</button>
+                    <h3 id="bookDetailTitle"></h3>
+                    <p class="book-detail-category" id="bookDetailCategory"></p>
+                    <div id="bookDetailSheikhs" class="book-sheikhs-list"></div>
+                </div>
             </div>
         </section>
 
@@ -141,7 +186,16 @@
                 <h3>📑 5. الترقيم الصفحي</h3>
                 <p>يتم عرض النتائج على صفحات، كل صفحة تحتوي على <strong>50 درسًا</strong>. استخدم أزرار <strong>السابق</strong> و <strong>التالي</strong> للتنقل بين الصفحات.</p>
 
-                <h3>🏷️ 6. التصنيفات العلمية</h3>
+                <h3>📖 6. تصفح الكتب</h3>
+                <p>في تبويب <strong>📖 تصفح الكتب</strong> يمكنك:</p>
+                <ul>
+                    <li>رؤية جميع الكتب مرتبة حسب العلوم الشرعية (فقه، عقيدة، تفسير، إلخ).</li>
+                    <li>اختيار علم معين لعرض كتبه فقط.</li>
+                    <li>النقر على أي كتاب لترى <strong>جميع المشايخ الذين شرحوه</strong> مع عدد الدروس لكل شيخ.</li>
+                    <li>النقر على اسم الشيخ للانتقال مباشرة إلى دروسه في تبويب الفهرس.</li>
+                </ul>
+
+                <h3>🏷️ 7. التصنيفات العلمية</h3>
                 <table>
                     <thead><tr><th>التصنيف</th><th>اللون</th><th>الأمثلة</th></tr></thead>
                     <tbody>
@@ -151,7 +205,7 @@
                         <tr><td>حديث</td><td>🔴 أحمر</td><td>صحيح البخاري، مسلم، الأربعين النووية</td></tr>
                         <tr><td>سيرة</td><td>🟡 أصفر</td><td>السيرة النبوية، غزوات</td></tr>
                         <tr><td>لغة</td><td>🔵 فيروزي</td><td>نحو، صرف، بلاغة</td></tr>
-                        <tr><td>أصول</td><td>🌸 وردي</td><td>أصول الفقه، القواعد الفقهية</td></tr>
+                        <tr><td>أصول</td><td>🩰 وردي</td><td>أصول الفقه، القواعد الفقهية</td></tr>
                         <tr><td>عام</td><td>⚪ رمادي</td><td>مواد لا تندرج تحت تصنيف محدد</td></tr>
                     </tbody>
                 </table>
@@ -171,15 +225,22 @@
                 </p>
 
                 <h3>🎯 الهدف</h3>
-                <p>
-                    توفير واجهة بحث متقدمة وسهلة الاستخدام للوصول إلى آلاف الدروس العلمية المصنفة حسب
-                    <strong>اسم الشيخ</strong>، <strong>التصنيف العلمي</strong>، و <strong>عدد الدروس</strong>.
-                </p>
+                <p>توفير واجهة بحث متقدمة وسهلة الاستخدام للوصول إلى آلاف الدروس العلمية المصنفة حسب <strong>اسم الشيخ</strong>، <strong>التصنيف العلمي</strong>، و <strong>عدد الدروس</strong>.</p>
+
+                <h3>✨ الميزات</h3>
+                <ul>
+                    <li><strong>بحث ضبابي</strong> – يتسامح مع الأخطاء الإملائية.</li>
+                    <li><strong>فلاتر متعددة</strong> – شيخ، تصنيف، عدد الدروس، نطاق البحث.</li>
+                    <li><strong>تصفح الكتب</strong> – رؤية الكتب مرتبة حسب العلوم، ومعرفة المشايخ الذين شرحوا كل كتاب.</li>
+                    <li><strong>ترقيم صفحات</strong> – عرض النتائج على صفحات لتسهيل التصفح.</li>
+                    <li><strong>تصميم متجاوب</strong> – يعمل على جميع الأجهزة.</li>
+                </ul>
 
                 <h3>📊 الإحصائيات</h3>
                 <ul>
                     <li><strong>إجمالي الدروس:</strong> <span id="aboutTotalLessons">0</span></li>
                     <li><strong>عدد المشايخ:</strong> <span id="aboutTotalSheikhs">0</span></li>
+                    <li><strong>عدد الكتب:</strong> <span id="aboutTotalBooks">0</span></li>
                     <li><strong>آخر تحديث:</strong> <span id="aboutUpdateDate">-</span></li>
                 </ul>
 
@@ -197,13 +258,13 @@
 ├── index.html          # الصفحة الرئيسية
 ├── style.css           # التنسيقات
 ├── app.js              # الكود البرمجي
-└── flat_lessons.json   # البيانات
-                </pre>
+└── flat_lessons.json   # البيانات</pre>
 
                 <h3>📝 ملاحظات</h3>
                 <ul>
                     <li>الموقع <strong>لا يتطلب خادمًا</strong> (Serverless)، يعمل بالكامل من جانب المتصفح.</li>
                     <li>جميع الدروس مستخرجة من قناة <a href="https://t.me/alawe1434" target="_blank">مؤسسة صدى السلفية</a>.</li>
+                    <li>هذا المشروع هو <strong>مبادرة شخصية</strong> لتسهيل الوصول إلى الدروس العلمية.</li>
                     <li>تم تحديث البيانات آخر مرة في: <span id="aboutUpdateDate2">-</span></li>
                 </ul>
 
