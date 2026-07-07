@@ -2,7 +2,7 @@
    SERVICE WORKER - SADA Index
    ============================================ */
 
-const CACHE_NAME = 'sada-index-v2';
+const CACHE_NAME = 'sada-index-v3';
 const ASSETS = [
     '/yemeni-lessons/',
     '/yemeni-lessons/index.html',
