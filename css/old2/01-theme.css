@@ -1,0 +1,122 @@
+/* ============================================
+   FONTS
+   ============================================ */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap');
+
+/* ============================================
+   THEME VARIABLES
+   ============================================ */
+:root {
+    /* ── Core Brand ── */
+    --primary: #0984e3;
+    --primary-rgb: 9, 132, 227;
+    --primary-dark: #0671c7;
+    --primary-light: rgba(9, 132, 227, 0.1);
+    --primary-glow: rgba(9, 132, 227, 0.2);
+
+    /* ── Gold Accent (Islamic warm tone) ── */
+    --accent-gold: #c4963a;
+    --accent-gold-light: rgba(196, 150, 58, 0.12);
+
+    /* ── Surfaces ── */
+    --bg-body: #eef1f6;
+    --bg-card: #ffffff;
+    --bg-elevated: #f7f9fc;
+    --bg-header: linear-gradient(150deg, #1a1a2e 0%, #16213e 50%, #0d3460 100%);
+
+    /* ── Text ── */
+    --text-primary: #1a2332;
+    --text-secondary: #5a6475;
+    --text-light: #9aa0ab;
+
+    /* ── Borders ── */
+    --border-color: #e2e8f0;
+    --border-subtle: #edf2f7;
+
+    /* ── Controls ── */
+    --btn-bg: #edf2f7;
+    --btn-hover: #dde5f0;
+    --input-bg: #f7fafc;
+    --input-focus: var(--primary);
+    --input-focus-dark: var(--primary-dark);
+
+    /* ── Component-specific (kept for JS compatibility) ── */
+    --result-bg: #f7f9fc;
+    --stat-bg: rgba(255, 255, 255, 0.12);
+    --tab-bg: #e4e9f2;
+    --tab-active: #ffffff;
+    --tab-text: #5a6475;
+    --tab-text-active: var(--primary);
+    --filter-bg: #f7f9fc;
+    --books-intro-bg: #f0f4fb;
+    --book-item-bg: #f7f9fc;
+    --book-detail-bg: #f7f9fc;
+    --sheikh-item-bg: #ffffff;
+
+    /* ── Shadows ── */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow: 0 4px 16px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.04);
+    --shadow-hover: 0 8px 28px rgba(0, 0, 0, 0.11), 0 4px 8px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.09);
+    --shadow-lg: 0 14px 40px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.06);
+
+    /* ── Radius ── */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+
+    /* ── Transitions ── */
+    --transition: 0.25s ease;
+    --transition-fast: 0.15s ease;
+}
+
+/* ============================================
+   DARK THEME
+   ============================================ */
+[data-theme="dark"] {
+    --primary: #5bb8ff;
+    --primary-rgb: 91, 184, 255;
+    --primary-dark: #4a9edb;
+    --primary-light: rgba(91, 184, 255, 0.1);
+    --primary-glow: rgba(91, 184, 255, 0.18);
+
+    --accent-gold: #d4a843;
+    --accent-gold-light: rgba(212, 168, 67, 0.12);
+
+    --bg-body: #0f0f1e;
+    --bg-card: #1c1c2e;
+    --bg-elevated: #222238;
+    --bg-header: linear-gradient(150deg, #080814 0%, #0f0f1e 50%, #0a1628 100%);
+
+    --text-primary: #e8e8f4;
+    --text-secondary: #9a9ab8;
+    --text-light: #5e5e80;
+
+    --border-color: #2e2e4a;
+    --border-subtle: #242442;
+
+    --btn-bg: #252542;
+    --btn-hover: #30305a;
+    --input-bg: #252542;
+    --input-focus: #5bb8ff;
+    --input-focus-dark: #4a9edb;
+
+    --result-bg: #1c1c2e;
+    --stat-bg: rgba(255, 255, 255, 0.06);
+    --tab-bg: #1a1a2c;
+    --tab-active: #252542;
+    --tab-text: #9a9ab8;
+    --tab-text-active: #5bb8ff;
+    --filter-bg: #252542;
+    --books-intro-bg: #1c1c2e;
+    --book-item-bg: #1c1c2e;
+    --book-detail-bg: #1c1c2e;
+    --sheikh-item-bg: #252542;
+
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
+    --shadow-hover: 0 8px 28px rgba(0, 0, 0, 0.55), 0 4px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 14px 40px rgba(0, 0, 0, 0.55), 0 4px 12px rgba(0, 0, 0, 0.3);
+}

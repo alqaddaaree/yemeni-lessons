@@ -103,14 +103,7 @@ async function loadData() {
 
         applyTheme(getPreferredTheme());
         renderBooks();
-        applyURLParams();
-
-        // --- Render sheikh banner after URL params are applied ---
-        const sheikhFromURL = new URLSearchParams(window.location.search).get('sheikh');
-        if (sheikhFromURL) {
-            renderSheikhBanner(sheikhFromURL);
-            updatePageTitle(sheikhFromURL);
-        }
+        applyFilters() 
 
     } catch (err) {
         console.error('Error loading data:', err);

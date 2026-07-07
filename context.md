@@ -71,7 +71,6 @@ Provide students of knowledge (طلاب العلم) with an easy-to-use interfac
 │   ├── 10-dark-mode.js           # Dark mode functions
 │   ├── 11-clipboard.js           # Copy link & toast notifications
 │   ├── 12-suggestions.js         # Autocomplete suggestions
-│   ├── 13-url-params.js          # URL parameter handling (permalink)
 │   ├── 14-bookmarks.js           # Bookmark CRUD operations
 │   ├── 15-category-checkboxes.js # Category checkbox logic
 │   ├── 16-page-title.js          # Dynamic page title
@@ -198,16 +197,6 @@ Provide students of knowledge (طلاب العلم) with an easy-to-use interfac
 - `PAGE_SIZE = 50`
 - Client-side slicing: `filteredResults.slice(start, end)`
 - URL parameter: `?page=2`
-
-### URL Parameters
-- `q` – search query
-- `sheikh` – sheikh filter
-- `categories` – comma-separated list
-- `scope` – search scope (all, title, sheikh)
-- `fuzzy` – fuzzy/exact toggle
-- `count` – lesson count filter
-- `sort` – sort order
-- `page` – current page
 
 ---
 
@@ -345,8 +334,8 @@ python3 -m http.server 8000
 
 ---
 
-## 👤 Contact
+## Contact
 
 **Project Maintainer:** alqaddaaree@gmail.com  
 **Source Channel:** https://t.me/alawe1434  
-**Repository:** (GitHub URL)
+**Repository:** [(GitHub URL)](https://github.com/alqaddaaree/yemeni-lessons)

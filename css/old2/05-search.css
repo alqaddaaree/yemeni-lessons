@@ -1,54 +1,67 @@
 /* ============================================
-   SEARCH BOX - FLAT INTEGRATED
+   SEARCH BOX
    ============================================ */
 .search-box {
-    margin-top: -20px;
+    margin-bottom: 0;
     position: relative;
-    z-index: 10;
-    padding: 0 0.5rem;
 }
 
 .search-box input {
     width: 100%;
-    padding: 16px 24px;
-    font-family: var(--font-body);
+    padding: 15px 22px;
     font-size: 1.1rem;
+    font-weight: 500;
+    border: 2px solid var(--border-color);
     border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    background: var(--bg-card);
-    color: var(--text-primary);
     outline: none;
-    transition: all var(--transition);
-    box-shadow: var(--shadow-sm);
-}
-
-.search-box input:focus {
-    border-color: var(--accent-gold);
-    box-shadow: 0 0 0 3px var(--accent-gold-light);
+    transition: border-color 0.2s, box-shadow 0.2s, background var(--transition);
+    font-family: inherit;
+    background: var(--input-bg);
+    color: var(--text-primary);
+    letter-spacing: 0.01em;
 }
 
 .search-box input::placeholder {
     color: var(--text-light);
-    font-weight: 300;
+    font-weight: 400;
+}
+
+.search-box input:focus {
+    border-color: var(--input-focus);
+    background: var(--bg-card);
+    box-shadow: 0 0 0 4px var(--primary-glow);
 }
 
 /* ============================================
-   SUGGESTIONS - FLAT
+   SUGGESTIONS / AUTOCOMPLETE
    ============================================ */
 .suggestions {
+    position: relative;
+    z-index: 1000;
     background: var(--bg-card);
-    border: 1px solid var(--border-color);
+    border: 2px solid var(--border-color);
     border-top: none;
     border-radius: 0 0 var(--radius-md) var(--radius-md);
     max-height: 320px;
     overflow-y: auto;
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-md);
     margin-top: -2px;
     transition: border-color 0.2s, background var(--transition);
 }
 
+.suggestions::-webkit-scrollbar {
+    width: 5px;
+}
+.suggestions::-webkit-scrollbar-track {
+    background: transparent;
+}
+.suggestions::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
 .suggestions .suggestion-item {
-    padding: 10px 16px;
+    padding: 11px 18px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -57,7 +70,6 @@
     transition: background var(--transition-fast);
     color: var(--text-primary);
     font-size: 0.95rem;
-    font-family: var(--font-body);
 }
 
 .suggestions .suggestion-item:last-child {
@@ -65,15 +77,14 @@
 }
 
 .suggestions .suggestion-item:hover {
-    background: var(--accent-gold-subtle);
+    background: var(--primary-light);
 }
 
 .suggestions .suggestion-item .suggestion-type {
-    font-family: var(--font-meta);
-    font-size: 0.65rem;
+    font-size: 0.68rem;
     padding: 2px 10px;
     border-radius: 20px;
-    background: var(--border-subtle);
+    background: var(--btn-bg);
     color: var(--text-secondary);
     flex-shrink: 0;
     font-weight: 600;
@@ -85,7 +96,7 @@
 }
 
 .suggestions .suggestion-item .suggestion-text mark {
-    background: var(--accent-gold-light);
+    background: rgba(196, 150, 58, 0.25);
     color: var(--text-primary);
     padding: 0 2px;
     border-radius: 3px;
@@ -93,20 +104,36 @@
 }
 
 .suggestions .suggestion-item .suggestion-badge {
-    font-size: 0.65rem;
+    font-size: 0.68rem;
     padding: 2px 10px;
     border-radius: 20px;
-    background: var(--accent-gold);
+    background: var(--primary);
     color: white;
     flex-shrink: 0;
     font-weight: 600;
-    font-family: var(--font-meta);
 }
 
 .suggestions .suggestion-empty {
-    padding: 20px;
+    padding: 24px;
     text-align: center;
     color: var(--text-secondary);
     font-size: 0.95rem;
-    font-family: var(--font-body);
+}
+
+/* ── No Results / Loading ── */
+.no-results,
+.loading,
+.books-empty {
+    text-align: center;
+    padding: 3.5rem 1rem;
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+}
+
+.no-results::before {
+    content: '🔍';
+    display: block;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
 }

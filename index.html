@@ -7,14 +7,17 @@
 
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0984e3">
+    <meta name="theme-color" content="#1a2634">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
 
-    <title>فهرس الدروس - مؤسسة صدى السلفية</title>
+    <!-- Google Fonts - Scholarly Arabic -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;800&display=swap"
+        rel="stylesheet">
 
-    <!-- Styles (Modular CSS) -->
+    <!-- Styles -->
     <link rel="stylesheet" href="css/01-theme.css">
     <link rel="stylesheet" href="css/02-base.css">
     <link rel="stylesheet" href="css/03-header.css">
@@ -30,6 +33,8 @@
     <link rel="stylesheet" href="css/13-responsive.css">
     <link rel="stylesheet" href="css/14-toast.css">
     <link rel="stylesheet" href="css/15-sheikh-page.css">
+
+    <title>فهرس الدروس - مؤسسة صدى السلفية</title>
 
     <!-- Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
@@ -71,6 +76,10 @@
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="🔍 ابحث عن درس أو شيخ..." oninput="onSearchInput()">
                 <div id="suggestions" class="suggestions" style="display:none;"></div>
+                <button class="mobile-filter-toggle" onclick="toggleFilters()">
+                    <span>🎛️ تصفية النتائج</span>
+                    <i>+</i>
+                </button>
 
                 <div class="filters">
                     <!-- Sheikh filter -->
@@ -138,11 +147,6 @@
             <!-- Sheikh Banner -->
             <div id="sheikhBanner" class="sheikh-banner-container" style="display:none;"></div>
 
-            <!-- Search hint -->
-            <div class="search-hint" style="font-size:0.85rem;color:var(--text-secondary);margin-top:0.8rem;">
-                💡 يمكنك مشاركة نتائج البحث عبر نسخ الرابط من المتصفح
-            </div>
-
             <!-- Results -->
             <div id="results" class="results">
                 <div class="loading">⏳ جاري التحميل...</div>
@@ -164,6 +168,10 @@
                 </p>
 
                 <div class="books-filters">
+                    <input type="text" id="booksSearchInput" placeholder="🔍 ابحث عن كتاب..."
+                        oninput="renderBooks()"
+                        style="flex:2; min-width:180px; padding:8px 16px; border:1px solid var(--border-color); border-radius:var(--radius-sm); font-family:var(--font-body); background:var(--bg-card); color:var(--text-primary);">
+
                     <select id="bookCategoryFilter" onchange="renderBooks()">
                         <option value="">جميع العلوم</option>
                         <option value="فقه">فقه</option>
@@ -176,6 +184,7 @@
                         <option value="عام">عام</option>
                     </select>
                     <span class="books-count" id="booksCount">0 كتاب</span>
+                    <button class="btn-clear" onclick="clearBooksFilters()" style="padding:6px 14px;">🗑️</button>
                 </div>
 
                 <div id="booksList" class="books-list">
@@ -183,7 +192,7 @@
                 </div>
 
                 <div id="bookDetail" class="book-detail" style="display:none;">
-                    <button class="btn btn-back" onclick="closeBookDetail()">‹ العودة إلى الكتب</button>
+                    <button class="btn-back" onclick="closeBookDetail()">‹ العودة إلى الكتب</button>
                     <h3 id="bookDetailTitle"></h3>
                     <p class="book-detail-category" id="bookDetailCategory"></p>
                     <div id="bookDetailSheikhs" class="book-sheikhs-list"></div>
@@ -214,7 +223,7 @@
                 <h2>📖 دليل استخدام فهرس الدروس</h2>
 
                 <h3>🔍 1. البحث الرئيسي</h3>
-                <p>اكتب أي كلمة في شريط البحث العلوي. يدعم الموقع <strong>البحث الضبابي</strong> (Fuzzy Search) الذي يتسامح مع الأخطاء الإملائية.</p>
+                <p>اكتب أي كلمة في شريط البحث العلوي. يدعم الموقع <strong>البحث الضبابي</strong> الذي يتسامح مع الأخطاء الإملائية.</p>
                 <p><em>مثال:</em> اكتب "عقيده" وستجد "عقيدة".</p>
 
                 <h3>🎛️ 2. الفلاتر</h3>
@@ -253,13 +262,10 @@
                 <h3>🌙 8. الوضع الليلي</h3>
                 <p>اضغط على زر <strong>🌙 / ☀️</strong> في أعلى الصفحة لتبديل المظهر بين النهاري والليلي. يتم حفظ تفضيلك تلقائيًا.</p>
 
-                <h3>🔗 9. مشاركة النتائج</h3>
-                <p>جميع الفلاتر والبحث تنعكس في رابط الصفحة (URL). يمكنك نسخ الرابط ومشاركته مع الآخرين، وسيفتح مع نفس النتائج.</p>
-
-                <h3>📱 10. التطبيق القابل للتثبيت (PWA)</h3>
+                <h3>📱 9. التطبيق القابل للتثبيت (PWA)</h3>
                 <p>يمكنك تثبيت هذا الموقع على هاتفك أو حاسوبك كتطبيق مستقل. ابحث عن خيار <strong>"تثبيت التطبيق"</strong> أو <strong>"إضافة إلى الشاشة الرئيسية"</strong> في متصفحك.</p>
 
-                <h3>🏷️ 11. التصنيفات العلمية</h3>
+                <h3>🏷️ 10. التصنيفات العلمية</h3>
                 <table>
                     <thead>
                         <tr>
@@ -337,7 +343,7 @@
                     <li><strong>نسخ الرابط</strong> – مشاركة الدروس بسهولة.</li>
                     <li><strong>المفضلة</strong> – حفظ الدروس وتصديرها.</li>
                     <li><strong>تصفح الكتب</strong> – رؤية الكتب مرتبة حسب العلوم، ومعرفة المشايخ الذين شرحوا كل كتاب.</li>
-                    <li><strong>صفحات المشايخ</strong> – رابط مباشر لدروس كل شيخ (مثال: <code>?sheikh=أبو_عبد_الرحمن_يحيى_بن_علي_الحجوري</code>).</li>
+                    <li><strong>صفحات المشايخ</strong> – عرض دروس كل شيخ عند اختياره من القائمة المنسدلة.</li>
                     <li><strong>ترقيم صفحات</strong> – عرض النتائج على صفحات لتسهيل التصفح.</li>
                     <li><strong>الوضع الليلي</strong> – مظهر مريح للعين في الليل.</li>
                     <li><strong>تطبيق قابل للتثبيت (PWA)</strong> – يعمل دون اتصال بالإنترنت بعد التحميل الأول.</li>
@@ -397,7 +403,6 @@
 │   ├── 10-dark-mode.js
 │   ├── 11-clipboard.js
 │   ├── 12-suggestions.js
-│   ├── 13-url-params.js
 │   ├── 14-bookmarks.js
 │   ├── 15-category-checkboxes.js
 │   ├── 16-page-title.js
@@ -420,7 +425,8 @@
                     إذا وجدت خطأ في التصنيف أو لديك اقتراح لتحسين الموقع،
                     يسعدني سماع رأيك عبر البريد الإلكتروني:
                     <br>
-                    <a href="mailto:alqaddaaree@gmail.com" style="font-size:1.1rem; font-weight:600; color:#0984e3;">
+                    <a href="mailto:alqaddaaree@gmail.com"
+                        style="font-size:1.1rem; font-weight:600; color:#0984e3;">
                         alqaddaaree@gmail.com
                     </a>
                 </p>
@@ -450,7 +456,6 @@
     <script src="js/10-dark-mode.js"></script>
     <script src="js/11-clipboard.js"></script>
     <script src="js/12-suggestions.js"></script>
-    <script src="js/13-url-params.js"></script>
     <script src="js/14-bookmarks.js"></script>
     <script src="js/15-category-checkboxes.js"></script>
     <script src="js/16-page-title.js"></script>

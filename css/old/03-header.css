@@ -1,0 +1,76 @@
+/* ============================================
+   HEADER
+   ============================================ */
+header {
+    background: var(--bg-header);
+    color: white;
+    padding: 2rem 1.5rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    text-align: center;
+    position: relative;
+}
+
+header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+}
+
+header p {
+    opacity: 0.8;
+    font-size: 1.1rem;
+    margin-top: 0.3rem;
+}
+
+.theme-toggle-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin: -1.2rem 0 0.5rem 0;
+}
+
+.theme-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    cursor: pointer;
+    transition: all var(--transition);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: rotate(30deg);
+}
+
+[data-theme="dark"] .theme-btn {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1.2rem;
+    flex-wrap: wrap;
+}
+
+.stats .stat-box {
+    background: var(--stat-bg);
+    backdrop-filter: blur(4px);
+    padding: 0.5rem 1.8rem;
+    border-radius: 40px;
+    font-size: 0.95rem;
+}
+
+.stats .stat-box strong {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+}

@@ -1,0 +1,63 @@
+/* ============================================
+   SHEIKH PAGE / BANNER
+   ============================================ */
+.sheikh-banner-container {
+    margin: 0.75rem 0 1.5rem;
+}
+
+.sheikh-banner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 16px 24px;
+    border-radius: var(--radius-md);
+    flex-wrap: wrap;
+    box-shadow: 0 6px 20px rgba(var(--primary-rgb), 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle geometric overlay on banner */
+.sheikh-banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 5 L40 20 L55 20 L43 30 L47 45 L30 35 L13 45 L17 30 L5 20 L20 20 Z' fill='none' stroke='rgba(255,255,255,0.06)' stroke-width='1'/%3E%3C/svg%3E");
+    background-size: 60px 60px;
+    pointer-events: none;
+}
+
+[data-theme="dark"] .sheikh-banner {
+    box-shadow: 0 6px 20px rgba(var(--primary-rgb), 0.2);
+}
+
+.sheikh-banner-icon {
+    font-size: 1.7rem;
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+}
+
+.sheikh-banner-name {
+    font-size: 1.25rem;
+    font-weight: 800;
+    flex: 1;
+    position: relative;
+    z-index: 1;
+    letter-spacing: -0.01em;
+}
+
+.sheikh-banner-count {
+    font-size: 0.88rem;
+    font-weight: 600;
+    opacity: 0.92;
+    background: rgba(255, 255, 255, 0.18);
+    padding: 4px 16px;
+    border-radius: 30px;
+    position: relative;
+    z-index: 1;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(4px);
+}

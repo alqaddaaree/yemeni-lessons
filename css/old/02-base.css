@@ -1,0 +1,22 @@
+/* ============================================
+   BASE
+   ============================================ */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', 'Tahoma', system-ui, sans-serif;
+    background: var(--bg-body);
+    color: var(--text-primary);
+    padding: 20px;
+    line-height: 1.7;
+    transition: background var(--transition), color var(--transition);
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+}

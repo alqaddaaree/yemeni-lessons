@@ -1,48 +1,41 @@
 /* ============================================
-   SEARCH BOX - FLAT INTEGRATED
+   SEARCH BOX
    ============================================ */
 .search-box {
-    margin-top: -20px;
-    position: relative;
-    z-index: 10;
-    padding: 0 0.5rem;
+    margin-bottom: 0;
 }
 
 .search-box input {
     width: 100%;
-    padding: 16px 24px;
-    font-family: var(--font-body);
+    padding: 14px 20px;
     font-size: 1.1rem;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    background: var(--bg-card);
-    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
     outline: none;
-    transition: all var(--transition);
-    box-shadow: var(--shadow-sm);
+    transition: border-color 0.2s, background var(--transition);
+    font-family: inherit;
+    background: var(--input-bg);
+    color: var(--text-primary);
 }
 
 .search-box input:focus {
-    border-color: var(--accent-gold);
-    box-shadow: 0 0 0 3px var(--accent-gold-light);
-}
-
-.search-box input::placeholder {
-    color: var(--text-light);
-    font-weight: 300;
+    border-color: var(--input-focus);
+    background: var(--bg-card);
 }
 
 /* ============================================
-   SUGGESTIONS - FLAT
+   SUGGESTIONS / AUTOCOMPLETE
    ============================================ */
 .suggestions {
+    position: relative;
+    z-index: 1000;
     background: var(--bg-card);
-    border: 1px solid var(--border-color);
+    border: 2px solid var(--border-color);
     border-top: none;
-    border-radius: 0 0 var(--radius-md) var(--radius-md);
-    max-height: 320px;
+    border-radius: 0 0 12px 12px;
+    max-height: 300px;
     overflow-y: auto;
-    box-shadow: var(--shadow);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
     margin-top: -2px;
     transition: border-color 0.2s, background var(--transition);
 }
@@ -52,12 +45,11 @@
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 10px;
-    border-bottom: 1px solid var(--border-subtle);
-    transition: background var(--transition-fast);
+    gap: 8px;
+    border-bottom: 1px solid var(--border-color);
+    transition: background 0.15s;
     color: var(--text-primary);
     font-size: 0.95rem;
-    font-family: var(--font-body);
 }
 
 .suggestions .suggestion-item:last-child {
@@ -65,18 +57,16 @@
 }
 
 .suggestions .suggestion-item:hover {
-    background: var(--accent-gold-subtle);
+    background: var(--result-bg);
 }
 
 .suggestions .suggestion-item .suggestion-type {
-    font-family: var(--font-meta);
-    font-size: 0.65rem;
+    font-size: 0.7rem;
     padding: 2px 10px;
     border-radius: 20px;
-    background: var(--border-subtle);
+    background: var(--btn-bg);
     color: var(--text-secondary);
     flex-shrink: 0;
-    font-weight: 600;
 }
 
 .suggestions .suggestion-item .suggestion-text {
@@ -85,22 +75,19 @@
 }
 
 .suggestions .suggestion-item .suggestion-text mark {
-    background: var(--accent-gold-light);
-    color: var(--text-primary);
+    background: #fdcb6e;
+    color: #2d3436;
     padding: 0 2px;
-    border-radius: 3px;
-    font-weight: 700;
+    border-radius: 2px;
 }
 
 .suggestions .suggestion-item .suggestion-badge {
-    font-size: 0.65rem;
+    font-size: 0.7rem;
     padding: 2px 10px;
     border-radius: 20px;
-    background: var(--accent-gold);
+    background: var(--input-focus);
     color: white;
     flex-shrink: 0;
-    font-weight: 600;
-    font-family: var(--font-meta);
 }
 
 .suggestions .suggestion-empty {
@@ -108,5 +95,16 @@
     text-align: center;
     color: var(--text-secondary);
     font-size: 0.95rem;
-    font-family: var(--font-body);
+}
+
+.suggestions::-webkit-scrollbar {
+    width: 6px;
+}
+.suggestions::-webkit-scrollbar-track {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+.suggestions::-webkit-scrollbar-thumb {
+    background: var(--text-light);
+    border-radius: 3px;
 }

@@ -1,0 +1,74 @@
+/* ============================================
+   FILTERS
+   ============================================ */
+.filters {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+}
+
+.filters select {
+    padding: 10px 14px;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-family: inherit;
+    min-width: 140px;
+    flex: 1 1 auto;
+    max-width: 100%;
+    transition: border-color 0.2s, background var(--transition);
+}
+
+.filters select:focus {
+    border-color: var(--input-focus);
+}
+
+.filters .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--filter-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    padding: 6px 12px;
+    flex: 0 1 auto;
+    min-width: 120px;
+    transition: border-color 0.2s, background var(--transition);
+}
+
+.filters .filter-group label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.filters .filter-group select {
+    border: none;
+    padding: 4px 4px;
+    min-width: 80px;
+    font-size: 0.95rem;
+    background: transparent;
+    color: var(--text-primary);
+    flex: 1;
+}
+
+.filters .btn-clear {
+    background: var(--btn-bg);
+    color: var(--text-primary);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: inherit;
+    flex: 0 0 auto;
+}
+
+.filters .btn-clear:hover {
+    background: var(--btn-hover);
+}

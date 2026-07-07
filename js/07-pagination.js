@@ -2,7 +2,6 @@
    RENDER PAGE
    ============================================ */
 function renderPage() {
-    console.log('renderPage called, filteredResults length:', filteredResults.length); // <-- Add this
     const container = dom.results;
     const start = (currentPage - 1) * PAGE_SIZE;
     const end = Math.min(start + PAGE_SIZE, filteredResults.length);
@@ -80,6 +79,5 @@ function goToPage(page) {
     currentPage = page;
     renderPage();
     updatePagination();
-    updateURL();
     window.scrollTo({ top: document.querySelector('.search-box').offsetTop - 20, behavior: 'smooth' });
 }

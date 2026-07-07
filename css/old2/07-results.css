@@ -1,0 +1,234 @@
+/* ============================================
+   RESULTS
+   ============================================ */
+.results {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 1.5rem 0;
+}
+
+.result-item {
+    background: var(--bg-card);
+    padding: 14px 18px;
+    border-radius: var(--radius-md);
+    border: 1.5px solid var(--border-color);
+    border-right: 3px solid transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+    flex-wrap: wrap;
+    gap: 10px;
+    animation: fadeInUp 0.25s ease both;
+    position: relative;
+}
+
+/* Stagger animation for result items */
+.result-item:nth-child(1)  { animation-delay: 0.02s; }
+.result-item:nth-child(2)  { animation-delay: 0.04s; }
+.result-item:nth-child(3)  { animation-delay: 0.06s; }
+.result-item:nth-child(4)  { animation-delay: 0.08s; }
+.result-item:nth-child(5)  { animation-delay: 0.10s; }
+.result-item:nth-child(6)  { animation-delay: 0.12s; }
+.result-item:nth-child(7)  { animation-delay: 0.14s; }
+.result-item:nth-child(8)  { animation-delay: 0.16s; }
+.result-item:nth-child(9)  { animation-delay: 0.18s; }
+.result-item:nth-child(10) { animation-delay: 0.20s; }
+
+.result-item:hover {
+    border-color: var(--border-color);
+    border-right-color: var(--primary);
+    box-shadow: var(--shadow-hover);
+    background: var(--bg-elevated);
+}
+
+/* ── Info ── */
+.result-info {
+    flex: 1;
+    min-width: 200px;
+}
+
+.result-sheikh {
+    font-size: 0.78rem;
+    color: var(--primary);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.result-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 3px 0 5px;
+    word-break: break-word;
+    line-height: 1.45;
+    color: var(--text-primary);
+}
+
+.result-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 2px;
+}
+
+/* ── Badges ── */
+.result-count {
+    background: var(--btn-bg);
+    padding: 2px 12px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: inline-block;
+}
+
+.result-count.unknown {
+    background: rgba(253, 203, 110, 0.18);
+    color: #b8860b;
+}
+
+[data-theme="dark"] .result-count.unknown {
+    background: rgba(253, 203, 110, 0.12);
+    color: #fdcb6e;
+}
+
+.result-count.series {
+    background: rgba(116, 185, 255, 0.18);
+    color: #0984e3;
+}
+
+[data-theme="dark"] .result-count.series {
+    background: rgba(116, 185, 255, 0.12);
+    color: #74b9ff;
+}
+
+.result-date {
+    font-size: 0.72rem;
+    color: var(--text-light);
+}
+
+/* ── Action Buttons ── */
+.result-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.result-link a {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(var(--primary-rgb), 0.3);
+}
+
+.result-link a:hover {
+    background: var(--primary-dark);
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.4);
+    transform: translateY(-1px);
+}
+
+/* Copy button */
+.btn-copy {
+    background: transparent;
+    border: 1.5px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 7px 11px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    font-family: inherit;
+    min-width: 36px;
+    text-align: center;
+}
+
+.btn-copy:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-light);
+}
+
+.btn-copy.copied {
+    border-color: #00b894;
+    color: #00b894;
+    background: rgba(0, 184, 148, 0.08);
+}
+
+/* Category pills */
+.category-pill {
+    display: inline-block;
+    padding: 2px 12px;
+    border-radius: 30px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.3px;
+}
+
+.category-fiqh    { background: #0984e3; }
+.category-aqeedah { background: #6c5ce7; }
+.category-tafsir  { background: #00b894; }
+.category-hadith  { background: #e17055; }
+.category-sirah   { background: #fdcb6e; color: #5a3d00; }
+.category-lughah  { background: #00cec9; }
+.category-usul    { background: #fd79a8; }
+.category-other   { background: #636e72; }
+
+/* Fuzzy badge */
+.fuzzy-badge {
+    background: rgba(108, 92, 231, 0.15);
+    color: #6c5ce7;
+    font-size: 0.6rem;
+    padding: 2px 8px;
+    border-radius: 20px;
+    display: inline-block;
+    font-weight: 700;
+}
+
+[data-theme="dark"] .fuzzy-badge {
+    background: rgba(108, 92, 231, 0.2);
+    color: #a29bfe;
+}
+
+/* Bookmark button in results */
+.btn-bookmark {
+    background: transparent;
+    border: 1.5px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 7px 11px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s;
+    font-family: inherit;
+    min-width: 36px;
+    text-align: center;
+}
+
+.btn-bookmark:hover {
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
+    background: var(--accent-gold-light);
+}
+
+.btn-bookmark.bookmarked {
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
+    background: var(--accent-gold-light);
+}
+
+.btn-bookmark.bookmarked:hover {
+    background: rgba(196, 150, 58, 0.2);
+    transform: scale(1.08);
+}

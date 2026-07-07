@@ -47,11 +47,9 @@ self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
-                console.log('[SW] Caching assets...');
                 return cache.addAll(ASSETS);
             })
             .then(() => {
-                console.log('[SW] Assets cached successfully');
                 return self.skipWaiting();
             })
     );
@@ -65,14 +63,12 @@ self.addEventListener('activate', event => {
                 return Promise.all(
                     cacheNames.map(cache => {
                         if (cache !== CACHE_NAME) {
-                            console.log('[SW] Removing old cache:', cache);
                             return caches.delete(cache);
                         }
                     })
                 );
             })
             .then(() => {
-                console.log('[SW] New service worker activated');
                 return self.clients.claim();
             })
     );

@@ -1,0 +1,55 @@
+/* ============================================
+   PAGINATION
+   ============================================ */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1.5rem 0 0.5rem;
+    border-top: 1.5px solid var(--border-subtle);
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.page-btn {
+    padding: 8px 18px;
+    border: 1.5px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    font-weight: 600;
+    color: var(--text-primary);
+    min-width: 38px;
+    text-align: center;
+}
+
+.page-btn:hover:not(:disabled) {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-light);
+    transform: translateY(-1px);
+}
+
+.page-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.page-btn.active-page {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    box-shadow: 0 2px 8px rgba(var(--primary-rgb), 0.35);
+}
+
+.page-info {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    min-width: 120px;
+    text-align: center;
+    font-weight: 500;
+}

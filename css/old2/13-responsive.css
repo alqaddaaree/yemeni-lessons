@@ -1,0 +1,260 @@
+/* ============================================
+   RESPONSIVE — Mobile First
+   ============================================ */
+
+/* ── Tablet (max 768px) ── */
+@media (max-width: 768px) {
+    body {
+        padding: 12px;
+    }
+
+    header {
+        padding: 1.8rem 1.25rem 1.5rem;
+        border-radius: var(--radius-lg);
+        margin-bottom: 1rem;
+    }
+
+    header h1 {
+        font-size: 1.9rem;
+    }
+
+    .tab-content {
+        padding: 1.25rem;
+    }
+
+    .results {
+        gap: 6px;
+    }
+
+    .books-list {
+        gap: 8px;
+    }
+}
+
+/* ── Mobile (max 640px) ── */
+@media (max-width: 640px) {
+    body {
+        padding: 10px;
+    }
+
+    /* Header */
+    header {
+        padding: 1.6rem 1rem 1.2rem;
+        border-radius: var(--radius-lg);
+    }
+
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    header p {
+        font-size: 0.9rem;
+    }
+
+    .theme-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 1.1rem;
+    }
+
+    .stats {
+        gap: 0.6rem;
+        margin-top: 1.2rem;
+    }
+
+    .stats .stat-box {
+        padding: 0.45rem 1rem;
+        min-width: 75px;
+    }
+
+    .stats .stat-box strong {
+        font-size: 1.5rem;
+    }
+
+    /* Tabs */
+    .tabs .tab-btn {
+        padding: 9px 14px;
+        font-size: 0.82rem;
+    }
+
+    .tab-content {
+        padding: 1rem;
+    }
+
+    /* Results */
+    .result-item {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 12px 14px;
+    }
+
+    .result-link {
+        justify-content: flex-start;
+    }
+
+    /* Filters */
+    .filters {
+        padding: 0.75rem;
+    }
+
+    .filters select,
+    .filters .filter-group {
+        flex: 1 1 100%;
+        min-width: 100%;
+        max-width: 100%;
+    }
+
+    .filters .filter-group {
+        flex-wrap: wrap;
+    }
+
+    .filters .filter-group select {
+        min-width: 60px;
+        flex: 1;
+    }
+
+    .filters .btn-clear {
+        flex: 1 1 100%;
+        text-align: center;
+    }
+
+    /* Pagination */
+    .pagination {
+        gap: 4px;
+        padding: 1.2rem 0 0.5rem;
+    }
+
+    .page-btn {
+        padding: 7px 12px;
+        font-size: 0.82rem;
+        min-width: 34px;
+    }
+
+    .page-info {
+        min-width: 90px;
+        font-size: 0.82rem;
+    }
+
+    /* Books */
+    .book-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        padding: 13px 14px;
+    }
+
+    .book-item .book-meta {
+        gap: 6px;
+    }
+
+    .book-item .book-arrow {
+        display: none;
+    }
+
+    .books-filters select {
+        min-width: 100%;
+    }
+
+    .book-detail {
+        padding: 1rem;
+    }
+
+    .book-sheikh-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    /* Guide */
+    .guide-content table {
+        font-size: 0.78rem;
+    }
+
+    .guide-content th,
+    .guide-content td {
+        padding: 6px 10px;
+    }
+
+    .about-content pre {
+        font-size: 0.72rem;
+        padding: 0.9rem;
+    }
+
+    /* Bookmarks */
+    .bookmarks-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+
+    .bookmarks-actions {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .bookmark-item {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 12px 14px;
+    }
+
+    .bookmark-actions {
+        justify-content: flex-start;
+    }
+
+    /* Category checkboxes */
+    .category-checkboxes-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        padding: 10px 12px;
+    }
+
+    .category-checkboxes-list {
+        gap: 4px;
+    }
+
+    .category-checkbox {
+        padding: 3px 9px;
+        font-size: 0.7rem;
+    }
+
+    /* Toast */
+    .toast {
+        font-size: 0.82rem;
+        padding: 11px 18px;
+        bottom: 16px;
+        max-width: calc(100vw - 24px);
+    }
+
+    /* Sheikh banner */
+    .sheikh-banner {
+        padding: 11px 14px;
+        gap: 8px;
+    }
+
+    .sheikh-banner-name {
+        font-size: 1rem;
+    }
+
+    .sheikh-banner-icon {
+        font-size: 1.3rem;
+    }
+
+    .sheikh-banner-count {
+        font-size: 0.78rem;
+        padding: 2px 10px;
+    }
+}
+
+/* ── Very small (max 360px) ── */
+@media (max-width: 360px) {
+    header h1 {
+        font-size: 1.3rem;
+    }
+
+    .tabs .tab-btn {
+        padding: 8px 10px;
+        font-size: 0.78rem;
+    }
+}

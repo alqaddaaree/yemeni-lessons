@@ -1,0 +1,54 @@
+/* ============================================
+   TABS
+   ============================================ */
+.tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--tab-bg);
+    border-radius: 12px 12px 0 0;
+    padding: 4px;
+    overflow-x: auto;
+    transition: background var(--transition);
+}
+
+.tab-btn {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 10px 10px 0 0;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: transparent;
+    color: var(--tab-text);
+    transition: all 0.25s;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.tab-btn:hover {
+    background: rgba(255, 255, 255, 0.5);
+    color: var(--text-primary);
+}
+
+.tab-btn.active {
+    background: var(--tab-active);
+    color: var(--tab-text-active);
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* ============================================
+   TAB CONTENT
+   ============================================ */
+.tab-content {
+    display: none;
+    background: var(--bg-card);
+    padding: 1.5rem;
+    border-radius: 0 0 14px 14px;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+    transition: background var(--transition);
+}
+
+.tab-content.active {
+    display: block;
+}

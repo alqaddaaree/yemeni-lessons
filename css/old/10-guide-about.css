@@ -1,46 +1,39 @@
 /* ============================================
-   GUIDE & ABOUT - FLAT
+   GUIDE & ABOUT
    ============================================ */
 .guide-content,
 .about-content {
     max-width: 800px;
     margin: 0 auto;
+    padding: 0.5rem 0;
 }
 
 .guide-content h2,
 .about-content h2 {
-    font-family: var(--font-heading);
-    font-size: 1.6rem;
-    font-weight: 800;
     color: var(--text-primary);
-    margin-bottom: 1.2rem;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 3px solid var(--input-focus);
     padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--border-subtle);
 }
 
 .guide-content h3,
 .about-content h3 {
-    font-family: var(--font-heading);
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--accent-gold);
+    color: var(--input-focus);
+    font-size: 1.2rem;
     margin-top: 1.8rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.6rem;
 }
 
 .guide-content p,
 .about-content p {
-    font-family: var(--font-body);
-    color: var(--text-secondary);
     margin-bottom: 0.8rem;
-    font-size: 1rem;
 }
 
 .guide-content ul,
 .about-content ul {
     padding-right: 1.5rem;
     margin-bottom: 1rem;
-    color: var(--text-secondary);
 }
 
 .guide-content li,
@@ -52,50 +45,59 @@
     width: 100%;
     border-collapse: collapse;
     margin: 1rem 0;
-    font-family: var(--font-meta);
-    font-size: 0.85rem;
+    font-size: 0.95rem;
 }
 
 .guide-content th,
 .guide-content td {
-    padding: 8px 12px;
+    padding: 8px 14px;
     border: 1px solid var(--border-color);
     text-align: right;
     color: var(--text-primary);
 }
 
 .guide-content th {
-    background: var(--border-subtle);
+    background: var(--btn-bg);
     font-weight: 600;
 }
 
+.guide-content tr:nth-child(even) {
+    background: var(--result-bg);
+}
+
+.about-content pre {
+    background: var(--btn-bg);
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    direction: ltr;
+    text-align: left;
+    margin: 1rem 0;
+    color: var(--text-primary);
+}
+
 .about-content .dua {
-    font-family: var(--font-body);
     font-size: 1.2rem;
     color: var(--text-primary);
+    font-weight: 600;
     text-align: center;
     margin-top: 2rem;
     padding-top: 1.5rem;
-    border-top: 1px solid var(--border-subtle);
+    border-top: 2px solid var(--border-color);
 }
 
-/* ── Footer ── */
+/* ============================================
+   FOOTER
+   ============================================ */
 footer {
     text-align: center;
     padding: 1.5rem 0 0.5rem;
     color: var(--text-light);
-    font-family: var(--font-meta);
-    font-size: 0.8rem;
-    border-top: 1px solid var(--border-subtle);
-    margin-top: 1.5rem;
+    font-size: 0.85rem;
 }
 
 footer a {
-    color: var(--accent-gold);
+    color: var(--input-focus);
     text-decoration: none;
-    transition: opacity var(--transition);
-}
-
-footer a:hover {
-    opacity: 0.7;
 }

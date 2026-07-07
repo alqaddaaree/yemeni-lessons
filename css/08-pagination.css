@@ -1,55 +1,44 @@
 /* ============================================
-   PAGINATION
+   PAGINATION - FLAT
    ============================================ */
 .pagination {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
-    padding: 1.5rem 0 0.5rem;
-    border-top: 1px solid var(--border-color);
-    margin-top: 0.5rem;
+    gap: 0.5rem;
+    padding: 1.2rem 0 0.5rem;
+    border-top: 1px solid var(--border-subtle);
+    margin-top: 1rem;
     flex-wrap: wrap;
 }
 
 .page-btn {
-    padding: 8px 20px;
-    border: 2px solid var(--border-color);
-    border-radius: 8px;
-    background: var(--bg-card);
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: inherit;
+    font-family: var(--font-meta);
+    padding: 6px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
     font-weight: 500;
-    color: var(--text-primary);
+    cursor: pointer;
+    transition: all var(--transition);
 }
 
 .page-btn:hover:not(:disabled) {
-    border-color: var(--input-focus);
-    color: var(--input-focus);
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
 }
 
 .page-btn:disabled {
-    opacity: 0.4;
+    opacity: 0.3;
     cursor: not-allowed;
 }
 
 .page-info {
-    font-size: 0.95rem;
-    color: var(--text-secondary);
-    min-width: 120px;
+    font-family: var(--font-meta);
+    font-size: 0.85rem;
+    color: var(--text-light);
+    min-width: 100px;
     text-align: center;
-}
-
-/* ============================================
-   EMPTY & LOADING
-   ============================================ */
-.no-results,
-.loading,
-.books-empty {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: var(--text-secondary);
-    font-size: 1.1rem;
 }

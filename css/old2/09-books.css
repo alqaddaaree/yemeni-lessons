@@ -1,0 +1,270 @@
+/* ============================================
+   BOOKS BROWSER
+   ============================================ */
+.books-browser {
+    padding: 0.25rem 0;
+}
+
+.books-intro {
+    color: var(--text-secondary);
+    font-size: 0.92rem;
+    margin-bottom: 1.5rem;
+    padding: 12px 16px 12px 14px;
+    background: var(--primary-light);
+    border-radius: var(--radius-sm);
+    border-right: 3px solid var(--primary);
+    font-weight: 500;
+}
+
+[data-theme="dark"] .books-intro {
+    background: rgba(var(--primary-rgb), 0.08);
+}
+
+/* ── Books Filters ── */
+.books-filters {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.books-filters select {
+    padding: 10px 36px 10px 16px;
+    border: 1.5px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 0.92rem;
+    font-weight: 500;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-family: inherit;
+    min-width: 180px;
+    transition: border-color 0.2s, box-shadow 0.2s, background var(--transition);
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239aa0ab' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: left 12px center;
+}
+
+.books-filters select:focus {
+    border-color: var(--input-focus);
+    box-shadow: 0 0 0 3px var(--primary-glow);
+    outline: none;
+}
+
+.books-count {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    background: var(--btn-bg);
+    padding: 5px 16px;
+    border-radius: 30px;
+    font-weight: 600;
+}
+
+/* ── Books List ── */
+.books-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.book-item {
+    background: var(--bg-card);
+    border: 1.5px solid var(--border-color);
+    border-right: 3px solid transparent;
+    border-radius: var(--radius-md);
+    padding: 15px 18px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    animation: fadeIn 0.2s ease;
+}
+
+.book-item:hover {
+    border-color: var(--border-color);
+    border-right-color: var(--primary);
+    box-shadow: var(--shadow-hover);
+    background: var(--bg-elevated);
+}
+
+.book-item .book-title {
+    font-size: 1rem;
+    font-weight: 600;
+    flex: 1;
+    color: var(--text-primary);
+    line-height: 1.4;
+}
+
+.book-item .book-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.book-item .book-sheikhs-count {
+    background: var(--btn-bg);
+    padding: 3px 12px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.book-item .book-total-lessons {
+    background: rgba(116, 185, 255, 0.18);
+    color: #0984e3;
+    padding: 3px 12px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+[data-theme="dark"] .book-item .book-total-lessons {
+    background: rgba(116, 185, 255, 0.1);
+    color: #74b9ff;
+}
+
+.book-item .book-category-pill {
+    display: inline-block;
+    padding: 2px 12px;
+    border-radius: 30px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: white;
+}
+
+.book-item .book-arrow {
+    color: var(--text-light);
+    font-size: 1.1rem;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.book-item:hover .book-arrow {
+    transform: translateX(-4px);
+    color: var(--primary);
+}
+
+/* ── Book Detail View ── */
+.book-detail {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    margin-top: 0.5rem;
+    border: 1.5px solid var(--border-color);
+    box-shadow: var(--shadow);
+    animation: fadeInUp 0.2s ease;
+}
+
+.book-detail .btn-back {
+    background: var(--btn-bg);
+    color: var(--text-secondary);
+    border: 1.5px solid var(--border-color);
+    padding: 7px 16px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.88rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.book-detail .btn-back:hover {
+    background: var(--btn-hover);
+    color: var(--text-primary);
+    border-color: var(--text-light);
+}
+
+.book-detail h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.3rem;
+    line-height: 1.3;
+}
+
+.book-detail-category {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 1.3rem;
+    padding-bottom: 1rem;
+    border-bottom: 1.5px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* ── Sheikh list inside book detail ── */
+.book-sheikhs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.book-sheikh-item {
+    background: var(--bg-elevated);
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    border: 1.5px solid var(--border-subtle);
+    transition: all 0.18s;
+}
+
+.book-sheikh-item:hover {
+    border-color: var(--primary);
+    background: var(--primary-light);
+}
+
+.book-sheikh-item .sheikh-name {
+    font-weight: 600;
+    color: var(--primary);
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: opacity var(--transition-fast);
+}
+
+.book-sheikh-item .sheikh-name:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+}
+
+.book-sheikh-item .sheikh-lessons {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    background: var(--btn-bg);
+    padding: 3px 12px;
+    border-radius: 30px;
+    font-weight: 600;
+}
+
+.book-sheikh-item .sheikh-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 5px 14px;
+    border: 1.5px solid var(--primary);
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+}
+
+.book-sheikh-item .sheikh-link:hover {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 2px 8px rgba(var(--primary-rgb), 0.3);
+}

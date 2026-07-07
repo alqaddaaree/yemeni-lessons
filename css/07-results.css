@@ -1,185 +1,224 @@
 /* ============================================
-   RESULTS
+   RESULTS - FLAT CARDS
    ============================================ */
 .results {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin: 1.5rem 0;
+    gap: 8px;
+    margin-top: 1.2rem;
 }
 
 .result-item {
-    background: var(--result-bg);
-    padding: 16px 20px;
-    border-radius: 12px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+        "sheikh actions"
+        "title actions"
+        "meta actions";
+    align-items: start;
+    padding: 14px 18px;
+    background: var(--bg-card);
     border: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: all 0.15s;
-    flex-wrap: wrap;
-    gap: 10px;
+    border-right: 3px solid transparent;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition);
 }
 
 .result-item:hover {
-    transform: translateX(-6px);
-    border-color: var(--input-focus);
-    box-shadow: var(--shadow-hover);
-}
-
-.result-info {
-    flex: 1;
-    min-width: 200px;
+    border-color: var(--border-color);
+    border-right-color: var(--accent-gold);
+    background: var(--bg-elevated);
 }
 
 .result-sheikh {
-    font-size: 0.85rem;
-    color: var(--input-focus);
+    grid-area: sheikh;
+    font-family: var(--font-meta);
+    font-size: 0.75rem;
     font-weight: 600;
+    color: var(--accent-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
 }
 
 .result-title {
-    font-size: 1.05rem;
-    margin: 2px 0;
-    word-break: break-word;
+    grid-area: title;
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    line-height: 1.5;
 }
 
 .result-meta {
+    grid-area: meta;
     display: flex;
-    align-items: center;
     gap: 8px;
     flex-wrap: wrap;
-    margin-top: 4px;
+    align-items: center;
 }
 
 .result-count {
-    background: var(--btn-bg);
-    padding: 0 12px;
+    font-family: var(--font-meta);
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: var(--border-subtle);
+    padding: 1px 10px;
     border-radius: 30px;
-    font-size: 0.8rem;
-    color: var(--text-primary);
-    display: inline-block;
-}
-
-.result-count.unknown {
-    background: #fdcb6e;
-    color: #2d3436;
 }
 
 .result-count.series {
-    background: #74b9ff;
-    color: white;
+    color: var(--accent-gold);
+    background: var(--accent-gold-light);
 }
 
 .result-date {
-    font-size: 0.75rem;
+    font-family: var(--font-meta);
+    font-size: 0.68rem;
     color: var(--text-light);
 }
 
 .result-link {
+    grid-area: actions;
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 6px;
+    align-items: flex-end;
+    opacity: 0.4;
+    transition: opacity var(--transition);
+}
+
+.result-item:hover .result-link,
+.result-item:focus-within .result-link {
+    opacity: 1;
 }
 
 .result-link a {
+    font-family: var(--font-meta);
     display: inline-block;
-    background: var(--input-focus);
-    color: white;
-    padding: 8px 18px;
-    border-radius: 8px;
+    padding: 6px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
     text-decoration: none;
+    font-size: 0.78rem;
     font-weight: 500;
-    font-size: 0.9rem;
-    transition: background 0.2s;
-    white-space: nowrap;
+    transition: all var(--transition);
+    background: transparent;
 }
 
 .result-link a:hover {
-    background: #0873c7;
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
+    background: var(--accent-gold-light);
 }
 
-/* Copy button */
-.btn-copy {
+.btn-copy,
+.btn-bookmark {
+    font-family: var(--font-meta);
     background: transparent;
     border: 1px solid var(--border-color);
-    color: var(--text-secondary);
-    padding: 8px 12px;
-    border-radius: 8px;
+    color: var(--text-light);
+    padding: 5px 10px;
+    border-radius: var(--radius-sm);
     cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.2s;
-    font-family: inherit;
+    font-size: 0.78rem;
+    transition: all var(--transition);
+    min-width: 32px;
+    text-align: center;
 }
 
 .btn-copy:hover {
-    border-color: var(--input-focus);
-    color: var(--input-focus);
-    background: var(--result-bg);
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
 }
 
-.btn-copy.copied {
-    border-color: #00b894;
-    color: #00b894;
+.btn-bookmark:hover {
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
+}
+
+.btn-bookmark.bookmarked {
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
+    background: var(--accent-gold-light);
 }
 
 /* Category pills */
 .category-pill {
+    font-family: var(--font-meta);
     display: inline-block;
-    padding: 1px 14px;
+    padding: 1px 10px;
     border-radius: 30px;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-weight: 600;
     color: white;
     letter-spacing: 0.3px;
+    border: none;
 }
 
-.category-fiqh { background: #0984e3; }
-.category-aqeedah { background: #6c5ce7; }
-.category-tafsir { background: #00b894; }
-.category-hadith { background: #e17055; }
-.category-sirah { background: #fdcb6e; color: #2d3436; }
-.category-lughah { background: #00cec9; }
-.category-usul { background: #fd79a8; }
-.category-other { background: #636e72; }
+.category-fiqh    { background: #2d6a9f; }
+.category-aqeedah { background: #6b4c8a; }
+.category-tafsir  { background: #2a7a6a; }
+.category-hadith  { background: #b25a4a; }
+.category-sirah   { background: #b8860b; color: white; }
+.category-lughah  { background: #3a8a8a; }
+.category-usul    { background: #b06a7a; }
+.category-other   { background: #7a7a7a; }
 
-/* Fuzzy badge */
 .fuzzy-badge {
-    background: #6c5ce7;
-    color: white;
-    font-size: 0.6rem;
-    padding: 2px 8px;
+    font-family: var(--font-meta);
+    font-size: 0.55rem;
+    font-weight: 600;
+    color: var(--accent-gold);
+    background: var(--accent-gold-light);
+    padding: 1px 8px;
     border-radius: 30px;
     display: inline-block;
-    margin-right: 4px;
+    border: 1px solid var(--accent-gold-light);
 }
 
-/* Bookmark button in results */
-.btn-bookmark {
-    background: transparent;
-    border: 1px solid var(--border-color);
+/* ── Empty States ── */
+.no-results,
+.bookmarks-empty,
+.books-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    text-align: center;
     color: var(--text-secondary);
-    padding: 8px 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1.1rem;
-    transition: all 0.2s;
-    font-family: inherit;
-    min-width: 38px;
+    font-family: var(--font-body);
+    font-size: 1rem;
 }
 
-.btn-bookmark:hover {
-    border-color: #fdcb6e;
-    background: rgba(253, 203, 110, 0.1);
+.no-results::before {
+    content: '📿';
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
 }
 
-.btn-bookmark.bookmarked {
-    border-color: #fdcb6e;
-    color: #fdcb6e;
-    background: rgba(253, 203, 110, 0.1);
+.bookmarks-empty::before {
+    content: '📖';
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
 }
 
-.btn-bookmark.bookmarked:hover {
-    background: rgba(253, 203, 110, 0.2);
-    transform: scale(1.1);
+.books-empty::before {
+    content: '📚';
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.loading {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+    font-family: var(--font-body);
 }

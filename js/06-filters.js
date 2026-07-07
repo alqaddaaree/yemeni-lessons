@@ -63,12 +63,8 @@ function applyFilters() {
     totalPages = Math.ceil(filteredResults.length / PAGE_SIZE) || 1;
 
     dom.resultCount.textContent = filteredResults.length;
-console.log('applyFilters: rendering page with', filteredResults.length, 'results'); // <-- Add this
     renderPage();
     updatePagination();
-
-    // --- Update URL ---
-    updateURL();
 
     // --- Update sheikh banner and page title ---
     const sheikhFromFilter = dom.sheikhFilter.value;
@@ -117,4 +113,19 @@ function clearFilters() {
     dom.countFilter.value = 'any';
     dom.sortOrder.value = 'lessons-desc';
     applyFilters();
+}
+
+/* ============================================
+   FILTER TOGGLE (Mobile)
+   ============================================ */
+let filtersVisible = false;
+
+function toggleFilters() {
+    const container = document.getElementById('filterContainer');
+    const btn = document.querySelector('.mobile-filter-toggle');
+    if (!container || !btn) return;
+    filtersVisible = !filtersVisible;
+    container.classList.toggle('expanded', filtersVisible);
+    const icon = btn.querySelector('i');
+    if (icon) icon.textContent = filtersVisible ? '−' : '+';
 }

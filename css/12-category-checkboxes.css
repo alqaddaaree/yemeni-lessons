@@ -1,23 +1,31 @@
 /* ============================================
-   CATEGORY CHECKBOXES (Multi-Select)
+   CATEGORY CHECKBOXES - FLAT PILLS
    ============================================ */
 .category-checkboxes-wrapper {
     display: flex;
     align-items: center;
     gap: 10px;
     flex-wrap: wrap;
-    background: var(--filter-bg);
-    border: 2px solid var(--border-color);
-    border-radius: 10px;
-    padding: 8px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 6px 12px;
     flex: 1 1 auto;
     min-width: 200px;
-    transition: border-color 0.2s, background var(--transition);
+    transition: border-color var(--transition);
+}
+
+.category-checkboxes-wrapper:focus-within {
+    border-color: var(--accent-gold);
 }
 
 .category-checkboxes-wrapper label {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
+    font-family: var(--font-meta);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
     white-space: nowrap;
 }
 
@@ -33,20 +41,21 @@
     align-items: center;
     gap: 3px;
     padding: 2px 10px;
-    border-radius: 20px;
-    font-size: 0.75rem;
+    border-radius: 30px;
+    font-family: var(--font-meta);
+    font-size: 0.7rem;
+    font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s;
-    background: var(--btn-bg);
+    transition: all var(--transition);
+    background: var(--border-subtle);
     color: var(--text-secondary);
-    border: 2px solid transparent;
+    border: 1px solid transparent;
     user-select: none;
     white-space: nowrap;
 }
 
 .category-checkbox:hover {
-    transform: scale(1.05);
-    opacity: 0.8;
+    transform: scale(1.04);
 }
 
 .category-checkbox input[type="checkbox"] {
@@ -54,66 +63,58 @@
 }
 
 .category-checkbox .category-label {
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .category-checkbox .category-count {
     font-size: 0.6rem;
     opacity: 0.7;
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.06);
     padding: 0 6px;
     border-radius: 10px;
+    font-weight: 700;
 }
 
 /* Checked state */
 .category-checkbox.checked,
 .category-checkbox:has(input:checked) {
-    border-color: var(--input-focus);
+    border-color: var(--primary);
     color: white;
-    background: var(--input-focus);
+    background: var(--primary);
 }
 
 .category-checkbox.checked .category-count,
 .category-checkbox:has(input:checked) .category-count {
     background: rgba(255, 255, 255, 0.2);
     color: white;
+    opacity: 1;
 }
 
 /* Color-specific checked states */
-.category-checkbox.category-fiqh:has(input:checked) {
-    background: #0984e3;
-    border-color: #0984e3;
-}
-.category-checkbox.category-aqeedah:has(input:checked) {
-    background: #6c5ce7;
-    border-color: #6c5ce7;
-}
-.category-checkbox.category-tafsir:has(input:checked) {
-    background: #00b894;
-    border-color: #00b894;
-}
-.category-checkbox.category-hadith:has(input:checked) {
-    background: #e17055;
-    border-color: #e17055;
-}
+.category-checkbox.category-fiqh:has(input:checked)    { background: #2d6a9f; border-color: #2d6a9f; }
+.category-checkbox.category-aqeedah:has(input:checked) { background: #6b4c8a; border-color: #6b4c8a; }
+.category-checkbox.category-tafsir:has(input:checked)  { background: #2a7a6a; border-color: #2a7a6a; }
+.category-checkbox.category-hadith:has(input:checked)  { background: #b25a4a; border-color: #b25a4a; }
+.category-checkbox.category-lughah:has(input:checked)  { background: #3a8a8a; border-color: #3a8a8a; }
+.category-checkbox.category-usul:has(input:checked)    { background: #b06a7a; border-color: #b06a7a; }
+.category-checkbox.category-other:has(input:checked)   { background: #7a7a7a; border-color: #7a7a7a; }
+
+/* Sirah needs dark text */
 .category-checkbox.category-sirah:has(input:checked) {
-    background: #fdcb6e;
-    border-color: #fdcb6e;
-    color: #2d3436;
+    background: #b8860b;
+    border-color: #b8860b;
+    color: white;
 }
 .category-checkbox.category-sirah:has(input:checked) .category-count {
-    background: rgba(0, 0, 0, 0.15);
-    color: #2d3436;
+    background: rgba(255, 255, 255, 0.2);
 }
-.category-checkbox.category-lughah:has(input:checked) {
-    background: #00cec9;
-    border-color: #00cec9;
-}
-.category-checkbox.category-usul:has(input:checked) {
-    background: #fd79a8;
-    border-color: #fd79a8;
-}
-.category-checkbox.category-other:has(input:checked) {
-    background: #636e72;
-    border-color: #636e72;
-}
+
+/* JS-driven checked class (fallback) */
+.category-checkbox.checked.category-fiqh    { background: #2d6a9f; border-color: #2d6a9f; }
+.category-checkbox.checked.category-aqeedah { background: #6b4c8a; border-color: #6b4c8a; }
+.category-checkbox.checked.category-tafsir  { background: #2a7a6a; border-color: #2a7a6a; }
+.category-checkbox.checked.category-hadith  { background: #b25a4a; border-color: #b25a4a; }
+.category-checkbox.checked.category-lughah  { background: #3a8a8a; border-color: #3a8a8a; }
+.category-checkbox.checked.category-usul    { background: #b06a7a; border-color: #b06a7a; }
+.category-checkbox.checked.category-other   { background: #7a7a7a; border-color: #7a7a7a; }
+.category-checkbox.checked.category-sirah   { background: #b8860b; border-color: #b8860b; color: white; }

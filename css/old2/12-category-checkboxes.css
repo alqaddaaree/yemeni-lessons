@@ -1,0 +1,135 @@
+/* ============================================
+   CATEGORY CHECKBOXES (Multi-Select Pills)
+   ============================================ */
+.category-checkboxes-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    background: var(--bg-card);
+    border: 1.5px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 9px 14px;
+    flex: 1 1 auto;
+    min-width: 200px;
+    transition: border-color 0.2s, background var(--transition);
+}
+
+.category-checkboxes-wrapper:focus-within {
+    border-color: var(--input-focus);
+    box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+.category-checkboxes-wrapper label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.category-checkboxes-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    flex: 1;
+}
+
+/* ── Base pill style ── */
+.category-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 11px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    background: var(--btn-bg);
+    color: var(--text-secondary);
+    border: 1.5px solid transparent;
+    user-select: none;
+    white-space: nowrap;
+    font-weight: 600;
+}
+
+.category-checkbox:hover {
+    transform: scale(1.04);
+    filter: brightness(0.95);
+}
+
+[data-theme="dark"] .category-checkbox:hover {
+    filter: brightness(1.1);
+}
+
+.category-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.category-checkbox .category-label {
+    font-weight: 600;
+}
+
+.category-checkbox .category-count {
+    font-size: 0.62rem;
+    opacity: 0.7;
+    background: rgba(0, 0, 0, 0.1);
+    padding: 1px 6px;
+    border-radius: 10px;
+    font-weight: 700;
+}
+
+/* ── Checked state (default: primary color) ── */
+.category-checkbox.checked,
+.category-checkbox:has(input:checked) {
+    border-color: var(--primary);
+    color: white;
+    background: var(--primary);
+}
+
+.category-checkbox.checked .category-count,
+.category-checkbox:has(input:checked) .category-count {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    opacity: 1;
+}
+
+/* ── Per-category checked colors ── */
+.category-checkbox.category-fiqh:has(input:checked)    { background: #0984e3; border-color: #0984e3; }
+.category-checkbox.category-aqeedah:has(input:checked) { background: #6c5ce7; border-color: #6c5ce7; }
+.category-checkbox.category-tafsir:has(input:checked)  { background: #00b894; border-color: #00b894; }
+.category-checkbox.category-hadith:has(input:checked)  { background: #e17055; border-color: #e17055; }
+.category-checkbox.category-lughah:has(input:checked)  { background: #00cec9; border-color: #00cec9; }
+.category-checkbox.category-usul:has(input:checked)    { background: #fd79a8; border-color: #fd79a8; }
+.category-checkbox.category-other:has(input:checked)   { background: #636e72; border-color: #636e72; }
+
+/* Sirah needs dark text */
+.category-checkbox.category-sirah:has(input:checked) {
+    background: #fdcb6e;
+    border-color: #fdcb6e;
+    color: #5a3d00;
+}
+.category-checkbox.category-sirah:has(input:checked) .category-count {
+    background: rgba(0, 0, 0, 0.12);
+    color: #5a3d00;
+}
+
+/* ── JS-driven checked class (fallback for :has-unsupported browsers) ── */
+.category-checkbox.checked.category-fiqh    { background: #0984e3; border-color: #0984e3; }
+.category-checkbox.checked.category-aqeedah { background: #6c5ce7; border-color: #6c5ce7; }
+.category-checkbox.checked.category-tafsir  { background: #00b894; border-color: #00b894; }
+.category-checkbox.checked.category-hadith  { background: #e17055; border-color: #e17055; }
+.category-checkbox.checked.category-lughah  { background: #00cec9; border-color: #00cec9; }
+.category-checkbox.checked.category-usul    { background: #fd79a8; border-color: #fd79a8; }
+.category-checkbox.checked.category-other   { background: #636e72; border-color: #636e72; }
+
+.category-checkbox.checked.category-sirah {
+    background: #fdcb6e;
+    border-color: #fdcb6e;
+    color: #5a3d00;
+}
+.category-checkbox.checked.category-sirah .category-count {
+    background: rgba(0, 0, 0, 0.12);
+    color: #5a3d00;
+}
