@@ -1,6 +1,6 @@
 /* ============================================
-   RESET & BASE
-   ============================================ */
+ *  RESET & BASE
+ *  ============================================ */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -12,7 +12,7 @@ body {
     background: #f0f2f5;
     padding: 20px;
     color: #2d3436;
-    line-height: 1.6;
+    line-height: 1.7;
 }
 
 .container {
@@ -21,8 +21,8 @@ body {
 }
 
 /* ============================================
-   HEADER
-   ============================================ */
+ *  HEADER
+ *  ============================================ */
 header {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
     color: white;
@@ -67,14 +67,64 @@ header p {
 }
 
 /* ============================================
-   SEARCH BOX
-   ============================================ */
-.search-box {
+ *  TABS
+ *  ============================================ */
+.tabs {
+    display: flex;
+    gap: 4px;
+    background: #dfe6e9;
+    border-radius: 12px 12px 0 0;
+    padding: 4px;
+    margin-bottom: 0;
+    overflow-x: auto;
+}
+
+.tab-btn {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 10px 10px 0 0;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: transparent;
+    color: #636e72;
+    transition: all 0.25s;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.tab-btn:hover {
+    background: rgba(255, 255, 255, 0.5);
+    color: #2d3436;
+}
+
+.tab-btn.active {
+    background: white;
+    color: #0984e3;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* ============================================
+ *  TAB CONTENT
+ *  ============================================ */
+.tab-content {
+    display: none;
     background: white;
     padding: 1.5rem;
-    border-radius: 14px;
+    border-radius: 0 0 14px 14px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     margin-bottom: 2rem;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* ============================================
+ *  SEARCH BOX
+ *  ============================================ */
+.search-box {
+    margin-bottom: 0;
 }
 
 .search-box input {
@@ -95,8 +145,8 @@ header p {
 }
 
 /* ============================================
-   FILTERS
-   ============================================ */
+ *  FILTERS
+ *  ============================================ */
 .filters {
     margin-top: 1rem;
     display: flex;
@@ -148,8 +198,8 @@ header p {
 }
 
 /* ============================================
-   BUTTONS
-   ============================================ */
+ *  BUTTONS
+ *  ============================================ */
 .btn {
     padding: 10px 20px;
     border: none;
@@ -170,30 +220,32 @@ header p {
 }
 
 /* ============================================
-   RESULTS
-   ============================================ */
+ *  RESULTS
+ *  ============================================ */
 .results {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    margin: 1.5rem 0;
 }
 
 .result-item {
-    background: white;
+    background: #f8f9fa;
     padding: 16px 20px;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid #f1f2f6;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: transform 0.15s, box-shadow 0.15s;
+    transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
     flex-wrap: wrap;
     gap: 10px;
 }
 
 .result-item:hover {
     transform: translateX(-6px);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    border-color: #0984e3;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
 }
 
 .result-info {
@@ -315,8 +367,51 @@ header p {
 }
 
 /* ============================================
-   EMPTY & LOADING STATES
-   ============================================ */
+ *  PAGINATION
+ *  ============================================ */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 0 0.5rem;
+    border-top: 1px solid #dfe6e9;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.page-btn {
+    padding: 8px 20px;
+    border: 2px solid #dfe6e9;
+    border-radius: 8px;
+    background: white;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    font-weight: 500;
+}
+
+.page-btn:hover:not(:disabled) {
+    border-color: #0984e3;
+    color: #0984e3;
+}
+
+.page-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.page-info {
+    font-size: 0.95rem;
+    color: #636e72;
+    min-width: 120px;
+    text-align: center;
+}
+
+/* ============================================
+ *  EMPTY & LOADING STATES
+ *  ============================================ */
 .no-results {
     text-align: center;
     padding: 3rem 1rem;
@@ -330,23 +425,101 @@ header p {
     color: #636e72;
 }
 
-.loading-more {
+/* ============================================
+ *  GUIDE & ABOUT PAGES
+ *  ============================================ */
+.guide-content,
+.about-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0.5rem 0;
+}
+
+.guide-content h2,
+.about-content h2 {
+    color: #1a1a2e;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 3px solid #0984e3;
+    padding-bottom: 0.5rem;
+}
+
+.guide-content h3,
+.about-content h3 {
+    color: #0984e3;
+    font-size: 1.2rem;
+    margin-top: 1.8rem;
+    margin-bottom: 0.6rem;
+}
+
+.guide-content p,
+.about-content p {
+    margin-bottom: 0.8rem;
+}
+
+.guide-content ul,
+.about-content ul {
+    padding-right: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.guide-content li,
+.about-content li {
+    margin-bottom: 0.3rem;
+}
+
+.guide-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.95rem;
+}
+
+.guide-content th,
+.guide-content td {
+    padding: 8px 14px;
+    border: 1px solid #dfe6e9;
+    text-align: right;
+}
+
+.guide-content th {
+    background: #f1f2f6;
+    font-weight: 600;
+}
+
+.guide-content tr:nth-child(even) {
+    background: #fafafa;
+}
+
+.about-content pre {
+    background: #f1f2f6;
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    direction: ltr;
+    text-align: left;
+    margin: 1rem 0;
+}
+
+.about-content .dua {
+    font-size: 1.2rem;
+    color: #1a1a2e;
+    font-weight: 600;
     text-align: center;
-    padding: 1.5rem;
-    color: #636e72;
-    font-size: 0.9rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid #dfe6e9;
 }
 
 /* ============================================
-   FOOTER
-   ============================================ */
+ *  FOOTER
+ *  ============================================ */
 footer {
     text-align: center;
-    padding: 2rem 0 1rem;
+    padding: 1.5rem 0 0.5rem;
     color: #b2bec3;
     font-size: 0.85rem;
-    border-top: 1px solid #dfe6e9;
-    margin-top: 2rem;
 }
 
 footer a {
@@ -355,8 +528,8 @@ footer a {
 }
 
 /* ============================================
-   RESPONSIVE
-   ============================================ */
+ *  RESPONSIVE
+ *  ============================================ */
 @media (max-width: 640px) {
     header h1 {
         font-size: 1.6rem;
@@ -392,5 +565,36 @@ footer a {
 
     .filters .filter-group select {
         min-width: 80px;
+    }
+
+    .tabs .tab-btn {
+        padding: 10px 16px;
+        font-size: 0.85rem;
+    }
+
+    .pagination {
+        gap: 0.5rem;
+    }
+
+    .page-btn {
+        padding: 6px 14px;
+        font-size: 0.85rem;
+    }
+
+    .guide-content table {
+        font-size: 0.8rem;
+    }
+
+    .guide-content th,
+    .guide-content td {
+        padding: 4px 8px;
+    }
+
+    .tab-content {
+        padding: 1rem;
+    }
+
+    .about-content pre {
+        font-size: 0.7rem;
     }
 }

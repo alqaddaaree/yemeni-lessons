@@ -13,7 +13,8 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
+
+        <!-- ===== HEADER ===== -->
         <header>
             <h1>📚 فهرس الدروس العلمية</h1>
             <p>مؤسسة صدى السلفية لإنتاج الدروس العلمية</p>
@@ -23,88 +24,207 @@
             </div>
         </header>
 
-        <!-- Search & Filters -->
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="🔍 ابحث عن درس أو شيخ (يدعم البحث الضبابي)..." oninput="filterResults()">
+        <!-- ===== TABS ===== -->
+        <nav class="tabs" id="tabNav">
+            <button class="tab-btn active" data-tab="index">📚 الفهرس</button>
+            <button class="tab-btn" data-tab="guide">📖 دليل الاستخدام</button>
+            <button class="tab-btn" data-tab="about">ℹ️ عن الموقع</button>
+        </nav>
 
-            <div class="filters">
-                <!-- Sheikh filter -->
-                <select id="sheikhFilter" onchange="filterResults()">
-                    <option value="">جميع المشايخ</option>
-                </select>
+        <!-- ===== TAB: INDEX ===== -->
+        <section class="tab-content active" id="tab-index">
+            <!-- Search -->
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 ابحث عن درس أو شيخ..." oninput="onSearchInput()">
 
-                <!-- Category filter -->
-                <select id="categoryFilter" onchange="filterResults()">
-                    <option value="">جميع التصنيفات</option>
-                    <option value="فقه">فقه</option>
-                    <option value="عقيدة">عقيدة</option>
-                    <option value="تفسير">تفسير</option>
-                    <option value="حديث">حديث</option>
-                    <option value="سيرة">سيرة</option>
-                    <option value="لغة">لغة</option>
-                    <option value="أصول">أصول</option>
-                    <option value="عام">عام</option>
-                </select>
-
-                <!-- Search scope -->
-                <div class="filter-group">
-                    <label>🔎 في</label>
-                    <select id="searchScope" onchange="filterResults()">
-                        <option value="all">الكل</option>
-                        <option value="title">العنوان فقط</option>
-                        <option value="sheikh">الشيخ فقط</option>
+                <div class="filters">
+                    <select id="sheikhFilter" onchange="applyFilters()">
+                        <option value="">جميع المشايخ</option>
                     </select>
-                </div>
 
-                <!-- Fuzzy toggle -->
-                <div class="filter-group">
-                    <label>🎯</label>
-                    <select id="fuzzyToggle" onchange="filterResults()">
-                        <option value="fuzzy">بحث ضبابي</option>
-                        <option value="exact">بحث دقيق</option>
+                    <select id="categoryFilter" onchange="applyFilters()">
+                        <option value="">جميع التصنيفات</option>
+                        <option value="فقه">فقه</option>
+                        <option value="عقيدة">عقيدة</option>
+                        <option value="تفسير">تفسير</option>
+                        <option value="حديث">حديث</option>
+                        <option value="سيرة">سيرة</option>
+                        <option value="لغة">لغة</option>
+                        <option value="أصول">أصول</option>
+                        <option value="عام">عام</option>
                     </select>
-                </div>
 
-                <!-- Lesson count filter -->
-                <div class="filter-group">
-                    <label>📊</label>
-                    <select id="countFilter" onchange="filterResults()">
-                        <option value="any">الكل</option>
-                        <option value="1-10">1 – 10</option>
-                        <option value="11-50">11 – 50</option>
-                        <option value="51-100">51 – 100</option>
-                        <option value="100+">100+</option>
-                        <option value="null">سلسلة</option>
-                    </select>
-                </div>
+                    <div class="filter-group">
+                        <label>🔎 في</label>
+                        <select id="searchScope" onchange="applyFilters()">
+                            <option value="all">الكل</option>
+                            <option value="title">العنوان فقط</option>
+                            <option value="sheikh">الشيخ فقط</option>
+                        </select>
+                    </div>
 
-                <!-- Sorting -->
-                <div class="filter-group">
-                    <label>📌</label>
-                    <select id="sortOrder" onchange="filterResults()">
-                        <option value="lessons-desc">الأكثر دروساً</option>
-                        <option value="lessons-asc">الأقل دروساً</option>
-                        <option value="date-desc">الأحدث</option>
-                        <option value="date-asc">الأقدم</option>
-                        <option value="alpha">أبجدياً</option>
-                        <option value="relevance">الأكثر تطابقاً</option>
-                    </select>
-                </div>
+                    <div class="filter-group">
+                        <label>🎯</label>
+                        <select id="fuzzyToggle" onchange="applyFilters()">
+                            <option value="fuzzy">بحث ضبابي</option>
+                            <option value="exact">بحث دقيق</option>
+                        </select>
+                    </div>
 
-                <button class="btn btn-clear" onclick="clearFilters()">🗑️ مسح</button>
+                    <div class="filter-group">
+                        <label>📊</label>
+                        <select id="countFilter" onchange="applyFilters()">
+                            <option value="any">الكل</option>
+                            <option value="1-10">1 – 10</option>
+                            <option value="11-50">11 – 50</option>
+                            <option value="51-100">51 – 100</option>
+                            <option value="100+">100+</option>
+                            <option value="null">سلسلة</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>📌</label>
+                        <select id="sortOrder" onchange="applyFilters()">
+                            <option value="lessons-desc">الأكثر دروساً</option>
+                            <option value="lessons-asc">الأقل دروساً</option>
+                            <option value="date-desc">الأحدث</option>
+                            <option value="date-asc">الأقدم</option>
+                            <option value="alpha">أبجدياً</option>
+                            <option value="relevance">الأكثر تطابقاً</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-clear" onclick="clearFilters()">🗑️ مسح</button>
+                </div>
             </div>
-        </div>
 
-        <!-- Results -->
-        <div id="results" class="results">
-            <div class="loading">⏳ جاري التحميل...</div>
-        </div>
+            <!-- Results -->
+            <div id="results" class="results">
+                <div class="loading">⏳ جاري التحميل...</div>
+            </div>
 
-        <!-- Footer -->
+            <!-- Pagination -->
+            <div class="pagination" id="pagination">
+                <button class="page-btn" id="prevPage" onclick="goToPage(currentPage - 1)">‹ السابق</button>
+                <span class="page-info" id="pageInfo">صفحة 1 من 1</span>
+                <button class="page-btn" id="nextPage" onclick="goToPage(currentPage + 1)">التالي ›</button>
+            </div>
+        </section>
+
+        <!-- ===== TAB: GUIDE ===== -->
+        <section class="tab-content" id="tab-guide">
+            <div class="guide-content">
+                <h2>📖 دليل استخدام فهرس الدروس</h2>
+
+                <h3>🔍 1. البحث الرئيسي</h3>
+                <p>اكتب أي كلمة في شريط البحث العلوي. يدعم الموقع <strong>البحث الضبابي</strong> (Fuzzy Search) الذي يتسامح مع الأخطاء الإملائية.</p>
+                <p><em>مثال:</em> اكتب "عقيده" وستجد "عقيدة".</p>
+
+                <h3>🎛️ 2. الفلاتر</h3>
+                <ul>
+                    <li><strong>جميع المشايخ</strong> – اختر شيخًا معينًا لعرض دروسه فقط.</li>
+                    <li><strong>جميع التصنيفات</strong> – صفّ حسب الموضوع: فقه، عقيدة، تفسير، حديث، سيرة، لغة، أصول، عام.</li>
+                    <li><strong>🔎 في</strong> – حدد نطاق البحث: الكل، العنوان فقط، أو الشيخ فقط.</li>
+                    <li><strong>🎯</strong> – بدّل بين البحث الضبابي والبحث الدقيق الحرفي.</li>
+                    <li><strong>📊</strong> – صفّ حسب عدد الدروس: 1-10، 11-50، 51-100، 100+، أو سلسلة.</li>
+                    <li><strong>📌</strong> – رتب النتائج حسب: الأكثر دروساً، الأقل دروساً، الأحدث، الأقدم، أبجديًا، أو الأكثر تطابقًا.</li>
+                </ul>
+
+                <h3>🗑️ 3. مسح الفلاتر</h3>
+                <p>زر <strong>🗑️ مسح</strong> يعيد تعيين جميع الفلاتر ويعرض جميع الدروس.</p>
+
+                <h3>📄 4. عرض النتائج</h3>
+                <p>كل نتيجة تعرض: اسم الشيخ، عنوان الدرس، عدد الدروس (أو "سلسلة" إن لم يكن محددًا)، التصنيف (بلون مميز)، وتاريخ الإضافة إن وجد.</p>
+                <p>زر <strong>فتح 📂</strong> ينقلك مباشرة إلى الدرس على تيليجرام.</p>
+
+                <h3>📑 5. الترقيم الصفحي</h3>
+                <p>يتم عرض النتائج على صفحات، كل صفحة تحتوي على <strong>50 درسًا</strong>. استخدم أزرار <strong>السابق</strong> و <strong>التالي</strong> للتنقل بين الصفحات.</p>
+
+                <h3>🏷️ 6. التصنيفات العلمية</h3>
+                <table>
+                    <thead><tr><th>التصنيف</th><th>اللون</th><th>الأمثلة</th></tr></thead>
+                    <tbody>
+                        <tr><td>فقه</td><td>🔵 أزرق</td><td>صلاة، صيام، زكاة، حج، طهارة</td></tr>
+                        <tr><td>عقيدة</td><td>🟣 بنفسجي</td><td>توحيد، إيمان، أسماء وصفات</td></tr>
+                        <tr><td>تفسير</td><td>🟢 أخضر</td><td>سور القرآن، تفسير السعدي</td></tr>
+                        <tr><td>حديث</td><td>🔴 أحمر</td><td>صحيح البخاري، مسلم، الأربعين النووية</td></tr>
+                        <tr><td>سيرة</td><td>🟡 أصفر</td><td>السيرة النبوية، غزوات</td></tr>
+                        <tr><td>لغة</td><td>🔵 فيروزي</td><td>نحو، صرف، بلاغة</td></tr>
+                        <tr><td>أصول</td><td>🌸 وردي</td><td>أصول الفقه، القواعد الفقهية</td></tr>
+                        <tr><td>عام</td><td>⚪ رمادي</td><td>مواد لا تندرج تحت تصنيف محدد</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ===== TAB: ABOUT ===== -->
+        <section class="tab-content" id="tab-about">
+            <div class="about-content">
+                <h2>ℹ️ عن الموقع</h2>
+
+                <p>
+                    هذا الموقع هو <strong>فهرس تفاعلي للدروس العلمية الصوتية</strong> لمشايخ أهل السنة،
+                    تم استخراجه من قناة
+                    <a href="https://t.me/alawe1434" target="_blank">الفهرس لمؤسسة صدى SADA السلفية</a>
+                    على تيليجرام.
+                </p>
+
+                <h3>🎯 الهدف</h3>
+                <p>
+                    توفير واجهة بحث متقدمة وسهلة الاستخدام للوصول إلى آلاف الدروس العلمية المصنفة حسب
+                    <strong>اسم الشيخ</strong>، <strong>التصنيف العلمي</strong>، و <strong>عدد الدروس</strong>.
+                </p>
+
+                <h3>📊 الإحصائيات</h3>
+                <ul>
+                    <li><strong>إجمالي الدروس:</strong> <span id="aboutTotalLessons">0</span></li>
+                    <li><strong>عدد المشايخ:</strong> <span id="aboutTotalSheikhs">0</span></li>
+                    <li><strong>آخر تحديث:</strong> <span id="aboutUpdateDate">-</span></li>
+                </ul>
+
+                <h3>🛠️ التقنيات المستخدمة</h3>
+                <ul>
+                    <li><strong>HTML5 + CSS3</strong> – الهيكل والتصميم</li>
+                    <li><strong>JavaScript (ES6)</strong> – المنطق والتفاعل</li>
+                    <li><strong>Fuse.js</strong> – محرك البحث الضبابي</li>
+                    <li><strong>JSON</strong> – تخزين البيانات</li>
+                </ul>
+
+                <h3>📂 هيكل الملفات</h3>
+                <pre>
+/
+├── index.html          # الصفحة الرئيسية
+├── style.css           # التنسيقات
+├── app.js              # الكود البرمجي
+└── flat_lessons.json   # البيانات
+                </pre>
+
+                <h3>📝 ملاحظات</h3>
+                <ul>
+                    <li>الموقع <strong>لا يتطلب خادمًا</strong> (Serverless)، يعمل بالكامل من جانب المتصفح.</li>
+                    <li>جميع الدروس مستخرجة من قناة <a href="https://t.me/alawe1434" target="_blank">مؤسسة صدى السلفية</a>.</li>
+                    <li>تم تحديث البيانات آخر مرة في: <span id="aboutUpdateDate2">-</span></li>
+                </ul>
+
+                <h3>🤝 دعوة للمشاركة</h3>
+                <p>
+                    إذا وجدت خطأ في التصنيف أو لديك اقتراح لتحسين الموقع،
+                    يسعدني سماع رأيك عبر البريد الإلكتروني:
+                    <br>
+                    <a href="mailto:alqaddaaree@gmail.com" style="font-size:1.1rem; font-weight:600; color:#0984e3;">
+                        alqaddaaree@gmail.com
+                    </a>
+                </p>
+
+                <p class="dua">بارك الله فيكم، ونفع الله بكم.</p>
+            </div>
+        </section>
+
+        <!-- ===== FOOTER ===== -->
         <footer>
             بيانات مستخرجة من قناة
             <a href="https://t.me/alawe1434" target="_blank">الفهرس لمؤسسة صدى SADA السلفية</a>
-            &bull; تم التحديث: <span id="updateDate"></span>
             &bull; <span id="resultCount">0</span> نتيجة
         </footer>
     </div>

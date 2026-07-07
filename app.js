@@ -1,23 +1,21 @@
 /* ============================================
-   CONFIGURATION
-   ============================================ */
+ * CONFIGURATION
+ * ============================================ */
 const PAGE_SIZE = 50;
 
 /* ============================================
-   STATE
-   ============================================ */
+ * STATE
+ * ============================================ */
 let allLessons = [];
 let sheikhsSet = new Set();
-let categoriesSet = new Set();
 let fuseInstance = null;
 let filteredResults = [];
-let currentPage = 0;
-let isLoadingMore = false;
-let hasMore = true;
+let currentPage = 1;
+let totalPages = 1;
 
 /* ============================================
-   DOM REFS (cached for performance)
-   ============================================ */
+ * DOM REFS
+ * ============================================ */
 const $ = (id) => document.getElementById(id);
 const dom = {
     searchInput: $('searchInput'),
@@ -31,12 +29,19 @@ const dom = {
     totalLessons: $('totalLessons'),
     totalSheikhs: $('totalSheikhs'),
     resultCount: $('resultCount'),
-    updateDate: $('updateDate'),
+    pagination: $('pagination'),
+    pageInfo: $('pageInfo'),
+    prevPage: $('prevPage'),
+    nextPage: $('nextPage'),
+    aboutTotalLessons: $('aboutTotalLessons'),
+    aboutTotalSheikhs: $('aboutTotalSheikhs'),
+    aboutUpdateDate: $('aboutUpdateDate'),
+    aboutUpdateDate2: $('aboutUpdateDate2'),
 };
 
 /* ============================================
-   CATEGORY DETECTION
-   ============================================ */
+ * CATEGORY DETECTION
+ * ============================================ */
 const CATEGORY_KEYWORDS = {
     'فقه': ['فقه', 'صلاة', 'صيام', 'زكاة', 'حج', 'عمرة', 'طهارة', 'جنائز', 'أضاحي', 'بيع', 'ربا', 'نكاح', 'طلاق', 'حدود', 'قصاص', 'ديات', 'أيمان', 'نذور', 'أطعمة', 'أشربة', 'لباس', 'جهاد', 'سير', 'أحكام'],
     'عقيدة': ['عقيدة', 'توحيد', 'إيمان', 'شرك', 'كفر', 'نفاق', 'أسماء', 'صفات', 'قدر', 'إله', 'ربوبية', 'ألوهية', 'واسطية', 'طحاوية', 'تدمرية', 'حموية', 'لمعة', 'الاعتقاد'],
@@ -60,8 +65,8 @@ function detectCategory(title) {
 }
 
 /* ============================================
-   CATEGORY UI HELPERS
-   ============================================ */
+ * CATEGORY UI HELPERS
+ * ============================================ */
 const categoryColors = {
     'فقه': 'category-fiqh',
     'عقيدة': 'category-aqeedah',
@@ -85,8 +90,34 @@ const categoryLabels = {
 };
 
 /* ============================================
-   DATA LOADING
-   ============================================ */
+ * TABS
+ * ============================================ */
+function setupTabs() {
+    const buttons = document.querySelectorAll('.tab-btn');
+    const contents = {
+        index: document.getElementById('tab-index'),
+        guide: document.getElementById('tab-guide'),
+        about: document.getElementById('tab-about'),
+    };
+
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Update buttons
+            buttons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Update content
+            const tab = btn.dataset.tab;
+            Object.keys(contents).forEach(key => {
+                contents[key].classList.toggle('active', key === tab);
+            });
+        });
+    });
+}
+
+/* ============================================
+ * DATA LOADING
+ * ============================================ */
 async function loadData() {
     try {
         const res = await fetch('flat_lessons.json');
@@ -96,7 +127,6 @@ async function loadData() {
         // Add category to each lesson
         allLessons.forEach(l => {
             l.category = detectCategory(l.title);
-            categoriesSet.add(l.category);
         });
 
         // Build sheikh list
@@ -107,25 +137,27 @@ async function loadData() {
         initFuse();
 
         // Update stats
+        const dateStr = new Date().toLocaleDateString('ar-EG');
         dom.totalLessons.textContent = allLessons.length;
         dom.totalSheikhs.textContent = sheikhsSet.size;
-        dom.updateDate.textContent = new Date().toLocaleDateString('ar-EG');
+        dom.aboutTotalLessons.textContent = allLessons.length;
+        dom.aboutTotalSheikhs.textContent = sheikhsSet.size;
+        dom.aboutUpdateDate.textContent = dateStr;
+        dom.aboutUpdateDate2.textContent = dateStr;
 
         // Initial filter
-        filterResults();
+        applyFilters();
 
-        // Setup scroll listener
-        setupScrollListener();
     } catch (err) {
         console.error('Error loading data:', err);
         dom.results.innerHTML =
-            `<div class="no-results">❌ فشل تحميل البيانات. تأكد من وجود ملف <code>flat_lessons.json</code> في نفس المجلد.</div>`;
+        `<div class="no-results">❌ فشل تحميل البيانات. تأكد من وجود ملف <code>flat_lessons.json</code> في نفس المجلد.</div>`;
     }
 }
 
 /* ============================================
-   FUSE.JS INIT
-   ============================================ */
+ * FUSE.JS INIT
+ * ============================================ */
 function initFuse() {
     const fuseOptions = {
         keys: ['title', 'sheikh'],
@@ -140,11 +172,10 @@ function initFuse() {
 }
 
 /* ============================================
-   UI HELPERS
-   ============================================ */
+ * UI HELPERS
+ * ============================================ */
 function populateSheikhFilter() {
     const select = dom.sheikhFilter;
-    // Clear existing options (except the first one)
     while (select.options.length > 1) {
         select.remove(1);
     }
@@ -168,9 +199,9 @@ function getFilterValue(id) {
 }
 
 /* ============================================
-   MAIN FILTER LOGIC
-   ============================================ */
-function filterResults() {
+ * MAIN FILTER LOGIC
+ * ============================================ */
+function applyFilters() {
     const query = dom.searchInput.value.trim();
     const sheikhFilter = dom.sheikhFilter.value;
     const categoryFilter = dom.categoryFilter.value;
@@ -228,16 +259,18 @@ function filterResults() {
 
     // --- Store & reset pagination ---
     filteredResults = filtered;
-    currentPage = 0;
-    hasMore = true;
+    currentPage = 1;
+    totalPages = Math.ceil(filteredResults.length / PAGE_SIZE) || 1;
+
     dom.resultCount.textContent = filteredResults.length;
 
-    renderBatch();
+    renderPage();
+    updatePagination();
 }
 
 /* ============================================
-   SORTING
-   ============================================ */
+ * SORTING
+ * ============================================ */
 function sortLessons(lessons, order) {
     const copy = [...lessons];
     switch (order) {
@@ -259,29 +292,21 @@ function sortLessons(lessons, order) {
 }
 
 /* ============================================
-   RENDER BATCH (Lazy Loading)
-   ============================================ */
-function renderBatch() {
+ * PAGINATION
+ * ============================================ */
+function renderPage() {
     const container = dom.results;
-    const start = currentPage * PAGE_SIZE;
+    const start = (currentPage - 1) * PAGE_SIZE;
     const end = Math.min(start + PAGE_SIZE, filteredResults.length);
-    const batch = filteredResults.slice(start, end);
+    const pageItems = filteredResults.slice(start, end);
 
-    if (batch.length === 0) {
-        hasMore = false;
-        if (currentPage === 0) {
-            container.innerHTML = '<div class="no-results">🔍 لا توجد نتائج مطابقة</div>';
-        }
+    if (pageItems.length === 0) {
+        container.innerHTML = '<div class="no-results">🔍 لا توجد نتائج مطابقة</div>';
         return;
     }
 
-    // Clear on first page
-    if (currentPage === 0) {
-        container.innerHTML = '';
-    }
-
     let html = '';
-    batch.forEach(lesson => {
+    pageItems.forEach(lesson => {
         const count = lesson.lessons_count;
         let countHtml;
         if (count === null || count === undefined) {
@@ -303,70 +328,55 @@ function renderBatch() {
         const categoryLabel = categoryLabels[lesson.category] || 'عام';
 
         html += `
-            <div class="result-item">
-                <div class="result-info">
-                    <div class="result-sheikh">${lesson.sheikh}</div>
-                    <div class="result-title">📖 ${lesson.title} ${fuzzyBadge}</div>
-                    <div class="result-meta">
-                        ${countHtml}
-                        <span class="category-pill ${categoryClass}">${categoryLabel}</span>
-                        ${dateDisplay ? `<span class="result-date">📅 ${dateDisplay}</span>` : ''}
-                    </div>
-                </div>
-                <div class="result-link">
-                    <a href="${lesson.link}" target="_blank">فتح 📂</a>
-                </div>
-            </div>
+        <div class="result-item">
+        <div class="result-info">
+        <div class="result-sheikh">${lesson.sheikh}</div>
+        <div class="result-title">📖 ${lesson.title} ${fuzzyBadge}</div>
+        <div class="result-meta">
+        ${countHtml}
+        <span class="category-pill ${categoryClass}">${categoryLabel}</span>
+        ${dateDisplay ? `<span class="result-date">📅 ${dateDisplay}</span>` : ''}
+        </div>
+        </div>
+        <div class="result-link">
+        <a href="${lesson.link}" target="_blank">فتح 📂</a>
+        </div>
+        </div>
         `;
     });
 
-    container.insertAdjacentHTML('beforeend', html);
+    container.innerHTML = html;
+}
 
-    currentPage++;
-    hasMore = end < filteredResults.length;
+function updatePagination() {
+    dom.pageInfo.textContent = `صفحة ${currentPage} من ${totalPages}`;
+    dom.prevPage.disabled = currentPage <= 1;
+    dom.nextPage.disabled = currentPage >= totalPages;
+}
 
-    // Clean up loader
-    const loader = document.querySelector('.loading-more');
-    if (loader) loader.remove();
+function goToPage(page) {
+    if (page < 1 || page > totalPages) return;
+    currentPage = page;
+    renderPage();
+    updatePagination();
+    window.scrollTo({ top: document.querySelector('.search-box').offsetTop - 20, behavior: 'smooth' });
 }
 
 /* ============================================
-   INFINITE SCROLL
-   ============================================ */
-function setupScrollListener() {
-    let ticking = false;
-    window.addEventListener('scroll', () => {
-        if (!ticking) {
-            window.requestAnimationFrame(() => {
-                if (!hasMore || isLoadingMore) {
-                    ticking = false;
-                    return;
-                }
-                const scrollY = window.scrollY;
-                const windowHeight = window.innerHeight;
-                const documentHeight = document.documentElement.scrollHeight;
-                if (scrollY + windowHeight >= documentHeight - 200) {
-                    loadMore();
-                }
-                ticking = false;
-            });
-            ticking = true;
-        }
-    });
-}
+ * SEARCH INPUT (with debounce)
+ * ============================================ */
+let searchTimeout = null;
 
-function loadMore() {
-    if (isLoadingMore || !hasMore) return;
-    isLoadingMore = true;
-    setTimeout(() => {
-        renderBatch();
-        isLoadingMore = false;
-    }, 100);
+function onSearchInput() {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+        applyFilters();
+    }, 300);
 }
 
 /* ============================================
-   CLEAR FILTERS
-   ============================================ */
+ * CLEAR FILTERS
+ * ============================================ */
 function clearFilters() {
     dom.searchInput.value = '';
     dom.sheikhFilter.value = '';
@@ -375,10 +385,13 @@ function clearFilters() {
     dom.fuzzyToggle.value = 'fuzzy';
     dom.countFilter.value = 'any';
     dom.sortOrder.value = 'lessons-desc';
-    filterResults();
+    applyFilters();
 }
 
 /* ============================================
-   START
-   ============================================ */
-document.addEventListener('DOMContentLoaded', loadData);
+ * START
+ * ============================================ */
+document.addEventListener('DOMContentLoaded', () => {
+    setupTabs();
+    loadData();
+});
