@@ -24,7 +24,6 @@ const $ = (id) => document.getElementById(id);
 const dom = {
     searchInput: $('searchInput'),
     sheikhFilter: $('sheikhFilter'),
-    categoryFilter: $('categoryFilter'),
     searchScope: $('searchScope'),
     fuzzyToggle: $('fuzzyToggle'),
     countFilter: $('countFilter'),
@@ -111,6 +110,7 @@ function setupTabs() {
     const contents = {
         index: document.getElementById('tab-index'),
         books: document.getElementById('tab-books'),
+        bookmarks: document.getElementById('tab-bookmarks'), // <-- Added
         guide: document.getElementById('tab-guide'),
         about: document.getElementById('tab-about'),
     };
@@ -127,6 +127,11 @@ function setupTabs() {
 
             if (tab === 'books' && Object.keys(bookIndex).length > 0) {
                 renderBooks();
+            }
+
+            // Update bookmarks UI when switching to bookmarks tab
+            if (tab === 'bookmarks') {
+                updateBookmarksUI();
             }
         });
     });
@@ -185,8 +190,10 @@ function renderBooks() {
 
     let filteredBooks = Object.entries(bookIndex);
 
-    if (categoryFilter) {
-        filteredBooks = filteredBooks.filter(([title, data]) => data.category === categoryFilter);
+    // --- Category filter (multi-select) ---
+    const selectedCategories = getSelectedCategories();
+    if (selectedCategories.length > 0) {
+        filtered = filtered.filter(l => selectedCategories.includes(l.category));
     }
 
     filteredBooks.sort((a, b) => {
@@ -303,6 +310,8 @@ async function loadData() {
         populateSheikhFilter();
 
         buildBookIndex();
+        // After building bookIndex and categoriesSet
+        populateCategoryCheckboxes();
         initFuse();
 
         const dateStr = new Date().toLocaleDateString('ar-EG');
@@ -378,7 +387,7 @@ function getSearchKeys(scope) {
 function applyFilters() {
     const query = dom.searchInput.value.trim();
     const sheikhFilter = dom.sheikhFilter.value;
-    const categoryFilter = dom.categoryFilter.value;
+    // categoryFilter removed - using checkboxes instead
     const scope = dom.searchScope.value;
     const fuzzyMode = dom.fuzzyToggle.value === 'fuzzy';
     const countFilter = dom.countFilter.value;
@@ -386,6 +395,7 @@ function applyFilters() {
 
     let filtered = [];
 
+    // --- Search ---
     if (query) {
         if (fuzzyMode) {
             const keys = getSearchKeys(scope);
@@ -403,14 +413,18 @@ function applyFilters() {
         filtered = [...allLessons];
     }
 
+    // --- Sheikh filter ---
     if (sheikhFilter) {
         filtered = filtered.filter(l => l.sheikh === sheikhFilter);
     }
 
-    if (categoryFilter) {
-        filtered = filtered.filter(l => l.category === categoryFilter);
+    // --- Category filter (multi-select) ---
+    const selectedCategories = getSelectedCategories();
+    if (selectedCategories.length > 0) {
+        filtered = filtered.filter(l => selectedCategories.includes(l.category));
     }
 
+    // --- Count filter ---
     if (countFilter !== 'any') {
         filtered = filtered.filter(l => {
             const count = l.lessons_count;
@@ -424,8 +438,10 @@ function applyFilters() {
         });
     }
 
+    // --- Sorting ---
     filtered = sortLessons(filtered, sortOrder);
 
+    // --- Store & reset pagination ---
     filteredResults = filtered;
     currentPage = 1;
     totalPages = Math.ceil(filteredResults.length / PAGE_SIZE) || 1;
@@ -434,6 +450,9 @@ function applyFilters() {
 
     renderPage();
     updatePagination();
+
+    // --- Update URL ---
+    updateURL();
 }
 
 /* ============================================
@@ -495,6 +514,15 @@ function renderPage() {
         const categoryClass = categoryColors[lesson.category] || 'category-other';
         const categoryLabel = categoryLabels[lesson.category] || 'عام';
 
+        // Inside renderPage(), in the html += section, add:
+        const isSaved = isBookmarked(lesson.link);
+        const bookmarkBtn = `<button class="btn-bookmark ${isSaved ? 'bookmarked' : ''}"
+        data-link="${lesson.link}"
+        onclick="toggleBookmark('${lesson.link}', '${lesson.title.replace(/'/g, "\\'")}', '${lesson.sheikh.replace(/'/g, "\\'")}')"
+        title="${isSaved ? 'إزالة من المفضلة' : 'حفظ في المفضلة'}">
+        ${isSaved ? '⭐' : '☆'}
+        </button>`;
+
         html += `
         <div class="result-item">
         <div class="result-info">
@@ -506,10 +534,15 @@ function renderPage() {
         ${dateDisplay ? '<span class="result-date">📅 ' + dateDisplay + '</span>' : ''}
         </div>
         </div>
-        <!-- Inside result-item, in the result-link div -->
         <div class="result-link">
-            <button class="btn-copy" onclick="copyLink('${lesson.link}')" title="نسخ الرابط">📋</button>
-            <a href="${lesson.link}" target="_blank">فتح 📂</a>
+        <button class="btn-bookmark ${isSaved ? 'bookmarked' : ''}"
+        data-link="${lesson.link}"
+        onclick="toggleBookmark('${lesson.link}', '${lesson.title.replace(/'/g, "\\'")}', '${lesson.sheikh.replace(/'/g, "\\'")}')"
+        title="${isSaved ? 'إزالة من المفضلة' : 'حفظ في المفضلة'}">
+        ${isSaved ? '⭐' : '☆'}
+        </button>
+        <button class="btn-copy" onclick="copyLink('${lesson.link}')" title="نسخ الرابط">📋</button>
+        <a href="${lesson.link}" target="_blank">فتح 📂</a>
         </div>
         </div>
         `;
@@ -550,7 +583,7 @@ function onSearchInput() {
 function clearFilters() {
     dom.searchInput.value = '';
     dom.sheikhFilter.value = '';
-    dom.categoryFilter.value = '';
+    clearCategoryCheckboxes(); // <-- Added
     dom.searchScope.value = 'all';
     dom.fuzzyToggle.value = 'fuzzy';
     dom.countFilter.value = 'any';
@@ -874,10 +907,11 @@ document.addEventListener('click', function(e) {
  * Get all current filter values
  */
 function getFilterState() {
+    const selectedCategories = getSelectedCategories();
     return {
         q: dom.searchInput.value.trim(),
         sheikh: dom.sheikhFilter.value,
-        category: dom.categoryFilter.value,
+        categories: selectedCategories.join(','),
         scope: dom.searchScope.value,
         fuzzy: dom.fuzzyToggle.value,
         count: dom.countFilter.value,
@@ -893,10 +927,15 @@ function updateURL() {
     const state = getFilterState();
     const params = new URLSearchParams();
 
-    // Only add non-default values
     if (state.q) params.set('q', state.q);
     if (state.sheikh) params.set('sheikh', state.sheikh);
-    if (state.category) params.set('category', state.category);
+
+    // Handle multiple categories
+    const selectedCategories = getSelectedCategories();
+    if (selectedCategories.length > 0) {
+        params.set('categories', selectedCategories.join(','));
+    }
+
     if (state.scope && state.scope !== 'all') params.set('scope', state.scope);
     if (state.fuzzy && state.fuzzy !== 'fuzzy') params.set('fuzzy', state.fuzzy);
     if (state.count && state.count !== 'any') params.set('count', state.count);
@@ -913,20 +952,29 @@ function updateURL() {
 function applyURLParams() {
     const params = new URLSearchParams(window.location.search);
 
-    // Set values from URL
     if (params.has('q')) dom.searchInput.value = params.get('q');
     if (params.has('sheikh')) dom.sheikhFilter.value = params.get('sheikh');
-    if (params.has('category')) dom.categoryFilter.value = params.get('category');
+
+    // Handle multiple categories
+    if (params.has('categories')) {
+        const categories = params.get('categories').split(',');
+        const container = document.getElementById('categoryCheckboxes');
+        if (container) {
+            const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                cb.checked = categories.includes(cb.value);
+            });
+        }
+    }
+
     if (params.has('scope')) dom.searchScope.value = params.get('scope');
     if (params.has('fuzzy')) dom.fuzzyToggle.value = params.get('fuzzy');
     if (params.has('count')) dom.countFilter.value = params.get('count');
     if (params.has('sort')) dom.sortOrder.value = params.get('sort');
     if (params.has('page')) currentPage = parseInt(params.get('page')) || 1;
 
-    // Apply filters (which will also update URL)
     applyFilters();
 
-    // If page was set, go to that page after rendering
     if (params.has('page')) {
         const page = parseInt(params.get('page')) || 1;
         if (page !== currentPage) {
@@ -944,7 +992,6 @@ function applyURLParams() {
 function applyFilters() {
     const query = dom.searchInput.value.trim();
     const sheikhFilter = dom.sheikhFilter.value;
-    const categoryFilter = dom.categoryFilter.value;
     const scope = dom.searchScope.value;
     const fuzzyMode = dom.fuzzyToggle.value === 'fuzzy';
     const countFilter = dom.countFilter.value;
@@ -976,8 +1023,10 @@ function applyFilters() {
     }
 
     // --- Category filter ---
-    if (categoryFilter) {
-        filtered = filtered.filter(l => l.category === categoryFilter);
+    // --- Category filter (multi-select) ---
+    const selectedCategories = getSelectedCategories();
+    if (selectedCategories.length > 0) {
+        filtered = filtered.filter(l => selectedCategories.includes(l.category));
     }
 
     // --- Count filter ---
@@ -1038,4 +1087,330 @@ function clearFilters() {
     dom.sortOrder.value = 'lessons-desc';
     applyFilters();
     // URL will be updated by applyFilters
+}
+
+
+/* ============================================
+ *  BOOKMARKS (Save/Load from localStorage)
+ *  ============================================ */
+const BOOKMARKS_KEY = 'sada_bookmarks';
+
+/**
+ * Get all bookmarks from localStorage
+ */
+function getBookmarks() {
+    try {
+        const data = localStorage.getItem(BOOKMARKS_KEY);
+        return data ? JSON.parse(data) : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+/**
+ * Save bookmarks to localStorage
+ */
+function saveBookmarks(bookmarks) {
+    try {
+        localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(bookmarks));
+    } catch (e) {
+        console.error('Error saving bookmarks:', e);
+    }
+}
+
+/**
+ * Check if a lesson is bookmarked
+ */
+function isBookmarked(link) {
+    const bookmarks = getBookmarks();
+    return bookmarks.some(b => b.link === link);
+}
+
+/**
+ * Toggle bookmark for a lesson
+ */
+function toggleBookmark(link, title, sheikh) {
+    let bookmarks = getBookmarks();
+    const existing = bookmarks.findIndex(b => b.link === link);
+
+    if (existing !== -1) {
+        // Remove bookmark
+        bookmarks.splice(existing, 1);
+        saveBookmarks(bookmarks);
+        showToast('🗑️ تم إزالة الدرس من المفضلة', 'success');
+        // Update button
+        updateBookmarkButton(link, false);
+    } else {
+        // Add bookmark
+        const bookmark = {
+            link: link,
+            title: title,
+            sheikh: sheikh,
+            saved_at: new Date().toISOString(),
+        };
+        bookmarks.push(bookmark);
+        saveBookmarks(bookmarks);
+        showToast('⭐ تم حفظ الدرس في المفضلة', 'success');
+        // Update button
+        updateBookmarkButton(link, true);
+    }
+
+    // Update bookmarks count and list if on bookmarks tab
+    updateBookmarksUI();
+}
+
+/**
+ * Update bookmark button state
+ */
+function updateBookmarkButton(link, isBookmarked) {
+    const buttons = document.querySelectorAll('.btn-bookmark');
+    buttons.forEach(btn => {
+        if (btn.dataset.link === link) {
+            btn.textContent = isBookmarked ? '⭐' : '☆';
+            btn.classList.toggle('bookmarked', isBookmarked);
+        }
+    });
+}
+
+/**
+ * Update bookmarks UI (count + list)
+ */
+function updateBookmarksUI() {
+    const bookmarks = getBookmarks();
+
+    // Update count
+    const countEl = document.getElementById('bookmarksCount');
+    if (countEl) {
+        countEl.textContent = bookmarks.length + ' درس محفوظ';
+    }
+
+    // Update list if on bookmarks tab
+    const listEl = document.getElementById('bookmarksList');
+    if (listEl && document.getElementById('tab-bookmarks').classList.contains('active')) {
+        renderBookmarksList(bookmarks);
+    }
+}
+
+/**
+ * Render bookmarks list
+ */
+function renderBookmarksList(bookmarks) {
+    const container = document.getElementById('bookmarksList');
+    if (!container) return;
+
+    if (bookmarks.length === 0) {
+        container.innerHTML = '<div class="bookmarks-empty">⭐ لم تقم بحفظ أي درس بعد. ابحث عن درس و اضغط على ⭐ لحفظه.</div>';
+        return;
+    }
+
+    let html = '';
+    bookmarks.forEach(bookmark => {
+        const date = new Date(bookmark.saved_at);
+        const dateStr = date.toLocaleDateString('ar-EG');
+
+        html += `
+        <div class="bookmark-item">
+        <div class="bookmark-info">
+        <div class="bookmark-sheikh">${bookmark.sheikh}</div>
+        <div class="bookmark-title">📖 ${bookmark.title}</div>
+        <div class="bookmark-meta">
+        <span class="bookmark-date">📅 ${dateStr}</span>
+        </div>
+        </div>
+        <div class="bookmark-actions">
+        <button class="btn btn-remove" onclick="removeBookmark('${bookmark.link}')" title="إزالة من المفضلة">🗑️</button>
+        <a href="${bookmark.link}" target="_blank" class="btn-link">فتح 📂</a>
+        </div>
+        </div>
+        `;
+    });
+
+    container.innerHTML = html;
+}
+
+/**
+ * Remove a single bookmark
+ */
+function removeBookmark(link) {
+    let bookmarks = getBookmarks();
+    bookmarks = bookmarks.filter(b => b.link !== link);
+    saveBookmarks(bookmarks);
+    updateBookmarksUI();
+    // Update button if it exists in current view
+    updateBookmarkButton(link, false);
+    showToast('🗑️ تم إزالة الدرس من المفضلة', 'success');
+}
+
+/**
+ * Clear all bookmarks
+ */
+function clearBookmarks() {
+    if (confirm('هل أنت متأكد من حذف جميع الدروس من المفضلة؟')) {
+        saveBookmarks([]);
+        updateBookmarksUI();
+        // Update all bookmark buttons
+        document.querySelectorAll('.btn-bookmark').forEach(btn => {
+            btn.textContent = '☆';
+            btn.classList.remove('bookmarked');
+        });
+        showToast('🗑️ تم حذف جميع الدروس من المفضلة', 'success');
+    }
+}
+
+/**
+ * Export bookmarks as JSON
+ */
+function exportBookmarks() {
+    const bookmarks = getBookmarks();
+    if (bookmarks.length === 0) {
+        showToast('⚠️ لا توجد دروس محفوظة للتصدير', 'error');
+        return;
+    }
+
+    const data = {
+        exported_at: new Date().toISOString(),
+        total: bookmarks.length,
+        bookmarks: bookmarks,
+    };
+
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'sada_bookmarks.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    showToast('✅ تم تصدير المفضلة بنجاح', 'success');
+}
+
+/**
+ * Import bookmarks from JSON (optional)
+ */
+function importBookmarks() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            try {
+                const data = JSON.parse(ev.target.result);
+                const bookmarks = data.bookmarks || data;
+                if (!Array.isArray(bookmarks)) {
+                    showToast('❌ ملف غير صالح', 'error');
+                    return;
+                }
+                const existing = getBookmarks();
+                const merged = [...existing, ...bookmarks];
+                // Remove duplicates by link
+                const unique = merged.filter((item, index, self) =>
+                index === self.findIndex(b => b.link === item.link)
+                );
+                saveBookmarks(unique);
+                updateBookmarksUI();
+                // Refresh bookmark buttons
+                document.querySelectorAll('.btn-bookmark').forEach(btn => {
+                    const isSaved = unique.some(b => b.link === btn.dataset.link);
+                    btn.textContent = isSaved ? '⭐' : '☆';
+                    btn.classList.toggle('bookmarked', isSaved);
+                });
+                showToast(`✅ تم استيراد ${bookmarks.length} درس بنجاح`, 'success');
+            } catch (err) {
+                showToast('❌ ملف غير صالح', 'error');
+            }
+        };
+        reader.readAsText(file);
+    };
+    input.click();
+}
+
+/* ============================================
+ *  CATEGORY CHECKBOXES
+ *  ============================================ */
+function populateCategoryCheckboxes() {
+    const container = document.getElementById('categoryCheckboxes');
+    if (!container) return;
+
+    // Get category counts from bookIndex or allLessons
+    const categoryCounts = {};
+    allLessons.forEach(l => {
+        const cat = l.category || 'عام';
+        categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+    });
+
+    // Sort categories by count (descending) then alphabetically
+    const sortedCategories = Object.keys(categoryCounts).sort((a, b) => {
+        if (categoryCounts[a] !== categoryCounts[b]) {
+            return categoryCounts[b] - categoryCounts[a];
+        }
+        return a.localeCompare(b, 'ar');
+    });
+
+    // Category colors mapping
+    const categoryColors = {
+        'فقه': 'category-fiqh',
+        'عقيدة': 'category-aqeedah',
+        'تفسير': 'category-tafsir',
+        'حديث': 'category-hadith',
+        'سيرة': 'category-sirah',
+        'لغة': 'category-lughah',
+        'أصول': 'category-usul',
+        'عام': 'category-other'
+    };
+
+    // Get selected categories from URL or stored state
+    const selectedCategories = getSelectedCategories();
+
+    let html = '';
+    sortedCategories.forEach(cat => {
+        const count = categoryCounts[cat] || 0;
+        const colorClass = categoryColors[cat] || 'category-other';
+        const isChecked = selectedCategories.includes(cat) ? 'checked' : '';
+
+        html += `
+        <label class="category-checkbox ${colorClass}">
+        <input type="checkbox"
+        value="${cat}"
+        ${isChecked}
+        onchange="onCategoryCheckboxChange()">
+        <span class="category-label">${cat}</span>
+        <span class="category-count">${count}</span>
+        </label>
+        `;
+    });
+
+    container.innerHTML = html;
+}
+
+/**
+ * Get selected categories from checkboxes
+ */
+function getSelectedCategories() {
+    const container = document.getElementById('categoryCheckboxes');
+    if (!container) return [];
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]:checked');
+    return Array.from(checkboxes).map(cb => cb.value);
+}
+
+/**
+ * Handle category checkbox change
+ */
+function onCategoryCheckboxChange() {
+    applyFilters();
+}
+
+/**
+ * Clear category checkboxes
+ */
+function clearCategoryCheckboxes() {
+    const container = document.getElementById('categoryCheckboxes');
+    if (!container) return;
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(cb => cb.checked = false);
 }

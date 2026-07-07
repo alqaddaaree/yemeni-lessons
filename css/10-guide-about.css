@@ -1,0 +1,103 @@
+/* ============================================
+   GUIDE & ABOUT
+   ============================================ */
+.guide-content,
+.about-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0.5rem 0;
+}
+
+.guide-content h2,
+.about-content h2 {
+    color: var(--text-primary);
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 3px solid var(--input-focus);
+    padding-bottom: 0.5rem;
+}
+
+.guide-content h3,
+.about-content h3 {
+    color: var(--input-focus);
+    font-size: 1.2rem;
+    margin-top: 1.8rem;
+    margin-bottom: 0.6rem;
+}
+
+.guide-content p,
+.about-content p {
+    margin-bottom: 0.8rem;
+}
+
+.guide-content ul,
+.about-content ul {
+    padding-right: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.guide-content li,
+.about-content li {
+    margin-bottom: 0.3rem;
+}
+
+.guide-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.95rem;
+}
+
+.guide-content th,
+.guide-content td {
+    padding: 8px 14px;
+    border: 1px solid var(--border-color);
+    text-align: right;
+    color: var(--text-primary);
+}
+
+.guide-content th {
+    background: var(--btn-bg);
+    font-weight: 600;
+}
+
+.guide-content tr:nth-child(even) {
+    background: var(--result-bg);
+}
+
+.about-content pre {
+    background: var(--btn-bg);
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    direction: ltr;
+    text-align: left;
+    margin: 1rem 0;
+    color: var(--text-primary);
+}
+
+.about-content .dua {
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    font-weight: 600;
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--border-color);
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+footer {
+    text-align: center;
+    padding: 1.5rem 0 0.5rem;
+    color: var(--text-light);
+    font-size: 0.85rem;
+}
+
+footer a {
+    color: var(--input-focus);
+    text-decoration: none;
+}

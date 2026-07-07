@@ -1,0 +1,110 @@
+/* ============================================
+   SEARCH BOX
+   ============================================ */
+.search-box {
+    margin-bottom: 0;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 1.1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    outline: none;
+    transition: border-color 0.2s, background var(--transition);
+    font-family: inherit;
+    background: var(--input-bg);
+    color: var(--text-primary);
+}
+
+.search-box input:focus {
+    border-color: var(--input-focus);
+    background: var(--bg-card);
+}
+
+/* ============================================
+   SUGGESTIONS / AUTOCOMPLETE
+   ============================================ */
+.suggestions {
+    position: relative;
+    z-index: 1000;
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    max-height: 300px;
+    overflow-y: auto;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    margin-top: -2px;
+    transition: border-color 0.2s, background var(--transition);
+}
+
+.suggestions .suggestion-item {
+    padding: 10px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border-color);
+    transition: background 0.15s;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+}
+
+.suggestions .suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestions .suggestion-item:hover {
+    background: var(--result-bg);
+}
+
+.suggestions .suggestion-item .suggestion-type {
+    font-size: 0.7rem;
+    padding: 2px 10px;
+    border-radius: 20px;
+    background: var(--btn-bg);
+    color: var(--text-secondary);
+    flex-shrink: 0;
+}
+
+.suggestions .suggestion-item .suggestion-text {
+    flex: 1;
+    word-break: break-word;
+}
+
+.suggestions .suggestion-item .suggestion-text mark {
+    background: #fdcb6e;
+    color: #2d3436;
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+.suggestions .suggestion-item .suggestion-badge {
+    font-size: 0.7rem;
+    padding: 2px 10px;
+    border-radius: 20px;
+    background: var(--input-focus);
+    color: white;
+    flex-shrink: 0;
+}
+
+.suggestions .suggestion-empty {
+    padding: 20px;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+.suggestions::-webkit-scrollbar {
+    width: 6px;
+}
+.suggestions::-webkit-scrollbar-track {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+.suggestions::-webkit-scrollbar-thumb {
+    background: var(--text-light);
+    border-radius: 3px;
+}

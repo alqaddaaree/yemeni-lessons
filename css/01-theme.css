@@ -1,0 +1,57 @@
+/* ============================================
+   THEME VARIABLES
+   ============================================ */
+:root {
+    --bg-body: #f0f2f5;
+    --bg-card: #ffffff;
+    --bg-header: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    --text-primary: #2d3436;
+    --text-secondary: #636e72;
+    --text-light: #b2bec3;
+    --border-color: #dfe6e9;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    --shadow-hover: 0 4px 14px rgba(0, 0, 0, 0.08);
+    --btn-bg: #dfe6e9;
+    --btn-hover: #b2bec3;
+    --input-bg: #fafafa;
+    --input-focus: #0984e3;
+    --result-bg: #f8f9fa;
+    --stat-bg: rgba(255, 255, 255, 0.1);
+    --tab-bg: #dfe6e9;
+    --tab-active: #ffffff;
+    --tab-text: #636e72;
+    --tab-text-active: #0984e3;
+    --filter-bg: #fafafa;
+    --books-intro-bg: #f8f9fa;
+    --book-item-bg: #f8f9fa;
+    --book-detail-bg: #f8f9fa;
+    --sheikh-item-bg: #ffffff;
+    --transition: 0.3s;
+}
+
+[data-theme="dark"] {
+    --bg-body: #1a1a2e;
+    --bg-card: #2d2d44;
+    --bg-header: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 100%);
+    --text-primary: #e8e8f0;
+    --text-secondary: #a0a0b8;
+    --text-light: #6a6a8a;
+    --border-color: #3d3d5c;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --shadow-hover: 0 4px 14px rgba(0, 0, 0, 0.4);
+    --btn-bg: #3d3d5c;
+    --btn-hover: #5a5a7a;
+    --input-bg: #3d3d5c;
+    --input-focus: #5bb8ff;
+    --result-bg: #2d2d44;
+    --stat-bg: rgba(255, 255, 255, 0.05);
+    --tab-bg: #2d2d44;
+    --tab-active: #3d3d5c;
+    --tab-text: #a0a0b8;
+    --tab-text-active: #5bb8ff;
+    --filter-bg: #3d3d5c;
+    --books-intro-bg: #2d2d44;
+    --book-item-bg: #2d2d44;
+    --book-detail-bg: #2d2d44;
+    --sheikh-item-bg: #3d3d5c;
+}

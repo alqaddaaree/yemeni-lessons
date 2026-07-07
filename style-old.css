@@ -1105,3 +1105,372 @@ footer a {
         bottom: 20px;
     }
 }
+
+/* ============================================
+ *  BOOKMARKS
+ *  ============================================ */
+
+/* Bookmark button in results */
+.btn-bookmark {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: all 0.2s;
+    font-family: inherit;
+    min-width: 38px;
+}
+
+.btn-bookmark:hover {
+    border-color: #fdcb6e;
+    background: rgba(253, 203, 110, 0.1);
+}
+
+.btn-bookmark.bookmarked {
+    border-color: #fdcb6e;
+    color: #fdcb6e;
+    background: rgba(253, 203, 110, 0.1);
+}
+
+.btn-bookmark.bookmarked:hover {
+    background: rgba(253, 203, 110, 0.2);
+    transform: scale(1.1);
+}
+
+/* Bookmark tab */
+.bookmarks-container {
+    padding: 0.5rem 0;
+}
+
+.bookmarks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.bookmarks-header h2 {
+    font-size: 1.6rem;
+    color: var(--text-primary);
+}
+
+.bookmarks-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.bookmarks-count {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    background: var(--btn-bg);
+    padding: 4px 16px;
+    border-radius: 30px;
+}
+
+.btn-export {
+    background: #00b894;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background 0.2s;
+    font-family: inherit;
+}
+
+.btn-export:hover {
+    background: #00a381;
+}
+
+.btn-import {
+    background: #0984e3;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background 0.2s;
+    font-family: inherit;
+}
+
+.btn-import:hover {
+    background: #0873c7;
+}
+
+/* Bookmark list */
+.bookmarks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.bookmarks-empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+.bookmark-item {
+    background: var(--result-bg);
+    padding: 16px 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    transition: all 0.15s;
+}
+
+.bookmark-item:hover {
+    border-color: #fdcb6e;
+    box-shadow: var(--shadow-hover);
+}
+
+.bookmark-info {
+    flex: 1;
+    min-width: 200px;
+}
+
+.bookmark-sheikh {
+    font-size: 0.85rem;
+    color: var(--input-focus);
+    font-weight: 600;
+}
+
+.bookmark-title {
+    font-size: 1.05rem;
+    margin: 2px 0;
+    word-break: break-word;
+}
+
+.bookmark-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+.bookmark-date {
+    font-size: 0.75rem;
+    color: var(--text-light);
+}
+
+.bookmark-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-remove {
+    background: transparent;
+    border: 1px solid #e17055;
+    color: #e17055;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.btn-remove:hover {
+    background: #e17055;
+    color: white;
+}
+
+.btn-link {
+    display: inline-block;
+    background: var(--input-focus);
+    color: white;
+    padding: 8px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+
+.btn-link:hover {
+    background: #0873c7;
+}
+
+/* Responsive bookmarks */
+@media (max-width: 640px) {
+    .bookmarks-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.8rem;
+    }
+
+    .bookmarks-actions {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .bookmark-item {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .bookmark-actions {
+        justify-content: flex-start;
+    }
+}
+
+/* ============================================
+ *  CATEGORY CHECKBOXES (Multi-Select)
+ *  ============================================ */
+.category-checkboxes-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    background: var(--filter-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    padding: 8px 14px;
+    flex: 1 1 auto;
+    min-width: 200px;
+    transition: border-color 0.2s, background var(--transition);
+}
+
+.category-checkboxes-wrapper label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.category-checkboxes-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    flex: 1;
+}
+
+.category-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--btn-bg);
+    color: var(--text-secondary);
+    border: 2px solid transparent;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.category-checkbox:hover {
+    transform: scale(1.05);
+    opacity: 0.8;
+}
+
+.category-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.category-checkbox .category-label {
+    font-weight: 500;
+}
+
+.category-checkbox .category-count {
+    font-size: 0.6rem;
+    opacity: 0.7;
+    background: rgba(0, 0, 0, 0.1);
+    padding: 0 6px;
+    border-radius: 10px;
+}
+
+/* Checked state */
+.category-checkbox.checked,
+.category-checkbox:has(input:checked) {
+    border-color: var(--input-focus);
+    color: white;
+    background: var(--input-focus);
+}
+
+.category-checkbox.checked .category-count,
+.category-checkbox:has(input:checked) .category-count {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+/* Color-specific checked states */
+.category-checkbox.category-fiqh:has(input:checked) {
+    background: #0984e3;
+    border-color: #0984e3;
+}
+.category-checkbox.category-aqeedah:has(input:checked) {
+    background: #6c5ce7;
+    border-color: #6c5ce7;
+}
+.category-checkbox.category-tafsir:has(input:checked) {
+    background: #00b894;
+    border-color: #00b894;
+}
+.category-checkbox.category-hadith:has(input:checked) {
+    background: #e17055;
+    border-color: #e17055;
+}
+.category-checkbox.category-sirah:has(input:checked) {
+    background: #fdcb6e;
+    border-color: #fdcb6e;
+    color: #2d3436;
+}
+.category-checkbox.category-sirah:has(input:checked) .category-count {
+    background: rgba(0, 0, 0, 0.15);
+    color: #2d3436;
+}
+.category-checkbox.category-lughah:has(input:checked) {
+    background: #00cec9;
+    border-color: #00cec9;
+}
+.category-checkbox.category-usul:has(input:checked) {
+    background: #fd79a8;
+    border-color: #fd79a8;
+}
+.category-checkbox.category-other:has(input:checked) {
+    background: #636e72;
+    border-color: #636e72;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .category-checkboxes-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+        padding: 10px;
+    }
+
+    .category-checkboxes-wrapper label {
+        font-size: 0.8rem;
+    }
+
+    .category-checkboxes-list {
+        gap: 4px;
+    }
+
+    .category-checkbox {
+        padding: 2px 8px;
+        font-size: 0.7rem;
+    }
+}

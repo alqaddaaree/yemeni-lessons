@@ -1,0 +1,55 @@
+/* ============================================
+   PAGINATION
+   ============================================ */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 0 0.5rem;
+    border-top: 1px solid var(--border-color);
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.page-btn {
+    padding: 8px 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-card);
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.page-btn:hover:not(:disabled) {
+    border-color: var(--input-focus);
+    color: var(--input-focus);
+}
+
+.page-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.page-info {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    min-width: 120px;
+    text-align: center;
+}
+
+/* ============================================
+   EMPTY & LOADING
+   ============================================ */
+.no-results,
+.loading,
+.books-empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
