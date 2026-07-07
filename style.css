@@ -1,0 +1,396 @@
+/* ============================================
+   RESET & BASE
+   ============================================ */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', 'Tahoma', system-ui, sans-serif;
+    background: #f0f2f5;
+    padding: 20px;
+    color: #2d3436;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: white;
+    padding: 2rem 1.5rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+header p {
+    opacity: 0.8;
+    font-size: 1.1rem;
+    margin-top: 0.3rem;
+}
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1.2rem;
+    flex-wrap: wrap;
+}
+
+.stats .stat-box {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+    padding: 0.5rem 1.8rem;
+    border-radius: 40px;
+    font-size: 0.95rem;
+}
+
+.stats .stat-box strong {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+/* ============================================
+   SEARCH BOX
+   ============================================ */
+.search-box {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    margin-bottom: 2rem;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 1.1rem;
+    border: 2px solid #dfe6e9;
+    border-radius: 12px;
+    outline: none;
+    transition: border-color 0.2s;
+    font-family: inherit;
+    background: #fafafa;
+}
+
+.search-box input:focus {
+    border-color: #0984e3;
+    background: white;
+}
+
+/* ============================================
+   FILTERS
+   ============================================ */
+.filters {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    align-items: center;
+}
+
+.filters select,
+.filters .filter-group {
+    padding: 10px 14px;
+    border: 2px solid #dfe6e9;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    background: white;
+    font-family: inherit;
+    min-width: 140px;
+    flex: 1 0 auto;
+}
+
+.filters select:focus {
+    border-color: #0984e3;
+}
+
+.filters .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fafafa;
+    border: 2px solid #dfe6e9;
+    padding: 6px 14px;
+    border-radius: 10px;
+    flex: 0 1 auto;
+}
+
+.filters .filter-group label {
+    font-size: 0.85rem;
+    color: #636e72;
+    white-space: nowrap;
+}
+
+.filters .filter-group select {
+    border: none;
+    padding: 4px 8px;
+    min-width: 100px;
+    font-size: 0.95rem;
+    background: transparent;
+    flex: 1;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: inherit;
+}
+
+.btn-clear {
+    background: #dfe6e9;
+    color: #2d3436;
+}
+
+.btn-clear:hover {
+    background: #b2bec3;
+}
+
+/* ============================================
+   RESULTS
+   ============================================ */
+.results {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.result-item {
+    background: white;
+    padding: 16px 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.15s, box-shadow 0.15s;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.result-item:hover {
+    transform: translateX(-6px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.result-info {
+    flex: 1;
+    min-width: 200px;
+}
+
+.result-sheikh {
+    font-size: 0.85rem;
+    color: #0984e3;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.result-title {
+    font-size: 1.05rem;
+    margin: 2px 0;
+    word-break: break-word;
+}
+
+.result-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+.result-count {
+    background: #dfe6e9;
+    padding: 0 12px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    color: #2d3436;
+    display: inline-block;
+}
+
+.result-count.unknown {
+    background: #fdcb6e;
+    color: #2d3436;
+}
+
+.result-count.series {
+    background: #74b9ff;
+    color: white;
+}
+
+.result-date {
+    font-size: 0.75rem;
+    color: #b2bec3;
+}
+
+/* --- Category Pills --- */
+.category-pill {
+    display: inline-block;
+    padding: 1px 14px;
+    border-radius: 30px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: white;
+    letter-spacing: 0.3px;
+}
+
+.category-fiqh {
+    background: #0984e3;
+}
+.category-aqeedah {
+    background: #6c5ce7;
+}
+.category-tafsir {
+    background: #00b894;
+}
+.category-hadith {
+    background: #e17055;
+}
+.category-sirah {
+    background: #fdcb6e;
+    color: #2d3436;
+}
+.category-lughah {
+    background: #00cec9;
+}
+.category-usul {
+    background: #fd79a8;
+}
+.category-other {
+    background: #636e72;
+}
+
+/* --- Result Link --- */
+.result-link a {
+    display: inline-block;
+    background: #0984e3;
+    color: white;
+    padding: 8px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.result-link a:hover {
+    background: #0873c7;
+}
+
+/* --- Fuzzy Badge --- */
+.fuzzy-badge {
+    background: #6c5ce7;
+    color: white;
+    font-size: 0.6rem;
+    padding: 2px 8px;
+    border-radius: 30px;
+    display: inline-block;
+    margin-right: 4px;
+}
+
+/* ============================================
+   EMPTY & LOADING STATES
+   ============================================ */
+.no-results {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #636e72;
+    font-size: 1.1rem;
+}
+
+.loading {
+    text-align: center;
+    padding: 3rem;
+    color: #636e72;
+}
+
+.loading-more {
+    text-align: center;
+    padding: 1.5rem;
+    color: #636e72;
+    font-size: 0.9rem;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+footer {
+    text-align: center;
+    padding: 2rem 0 1rem;
+    color: #b2bec3;
+    font-size: 0.85rem;
+    border-top: 1px solid #dfe6e9;
+    margin-top: 2rem;
+}
+
+footer a {
+    color: #0984e3;
+    text-decoration: none;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 640px) {
+    header h1 {
+        font-size: 1.6rem;
+    }
+
+    .result-item {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .result-link {
+        text-align: left;
+    }
+
+    .stats {
+        gap: 0.8rem;
+    }
+
+    .stats .stat-box {
+        padding: 0.3rem 1rem;
+    }
+
+    .filters select,
+    .filters .filter-group,
+    .filters .filter-group select {
+        min-width: 100%;
+        flex: 1 1 100%;
+    }
+
+    .filters .filter-group {
+        flex-wrap: wrap;
+    }
+
+    .filters .filter-group select {
+        min-width: 80px;
+    }
+}
