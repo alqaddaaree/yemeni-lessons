@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,7 @@
     <!-- Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
 </head>
+
 <body>
     <div class="container">
 
@@ -45,7 +47,7 @@
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="🔍 ابحث عن درس أو شيخ..." oninput="onSearchInput()">
                 <!-- In the search-box div, after the input -->
-<div id="suggestions" class="suggestions" style="display:none;"></div>
+                <div id="suggestions" class="suggestions" style="display:none;"></div>
 
                 <div class="filters">
                     <select id="sheikhFilter" onchange="applyFilters()">
@@ -159,28 +161,33 @@
                 <h2>📖 دليل استخدام فهرس الدروس</h2>
 
                 <h3>🔍 1. البحث الرئيسي</h3>
-                <p>اكتب أي كلمة في شريط البحث العلوي. يدعم الموقع <strong>البحث الضبابي</strong> (Fuzzy Search) الذي يتسامح مع الأخطاء الإملائية.</p>
+                <p>اكتب أي كلمة في شريط البحث العلوي. يدعم الموقع <strong>البحث الضبابي</strong> (Fuzzy Search) الذي
+                    يتسامح مع الأخطاء الإملائية.</p>
                 <p><em>مثال:</em> اكتب "عقيده" وستجد "عقيدة".</p>
 
                 <h3>🎛️ 2. الفلاتر</h3>
                 <ul>
                     <li><strong>جميع المشايخ</strong> – اختر شيخًا معينًا لعرض دروسه فقط.</li>
-                    <li><strong>جميع التصنيفات</strong> – صفّ حسب الموضوع: فقه، عقيدة، تفسير، حديث، سيرة، لغة، أصول، عام.</li>
+                    <li><strong>جميع التصنيفات</strong> – صفّ حسب الموضوع: فقه، عقيدة، تفسير، حديث، سيرة، لغة، أصول،
+                        عام.</li>
                     <li><strong>🔎 في</strong> – حدد نطاق البحث: الكل، العنوان فقط، أو الشيخ فقط.</li>
                     <li><strong>🎯</strong> – بدّل بين البحث الضبابي والبحث الدقيق الحرفي.</li>
                     <li><strong>📊</strong> – صفّ حسب عدد الدروس: 1-10، 11-50، 51-100، 100+، أو سلسلة.</li>
-                    <li><strong>📌</strong> – رتب النتائج حسب: الأكثر دروساً، الأقل دروساً، الأحدث، الأقدم، أبجديًا، أو الأكثر تطابقًا.</li>
+                    <li><strong>📌</strong> – رتب النتائج حسب: الأكثر دروساً، الأقل دروساً، الأحدث، الأقدم، أبجديًا، أو
+                        الأكثر تطابقًا.</li>
                 </ul>
 
                 <h3>🗑️ 3. مسح الفلاتر</h3>
                 <p>زر <strong>🗑️ مسح</strong> يعيد تعيين جميع الفلاتر ويعرض جميع الدروس.</p>
 
                 <h3>📄 4. عرض النتائج</h3>
-                <p>كل نتيجة تعرض: اسم الشيخ، عنوان الدرس، عدد الدروس (أو "سلسلة" إن لم يكن محددًا)، التصنيف (بلون مميز)، وتاريخ الإضافة إن وجد.</p>
+                <p>كل نتيجة تعرض: اسم الشيخ، عنوان الدرس، عدد الدروس (أو "سلسلة" إن لم يكن محددًا)، التصنيف (بلون مميز)،
+                    وتاريخ الإضافة إن وجد.</p>
                 <p>زر <strong>فتح 📂</strong> ينقلك مباشرة إلى الدرس على تيليجرام.</p>
 
                 <h3>📑 5. الترقيم الصفحي</h3>
-                <p>يتم عرض النتائج على صفحات، كل صفحة تحتوي على <strong>50 درسًا</strong>. استخدم أزرار <strong>السابق</strong> و <strong>التالي</strong> للتنقل بين الصفحات.</p>
+                <p>يتم عرض النتائج على صفحات، كل صفحة تحتوي على <strong>50 درسًا</strong>. استخدم أزرار
+                    <strong>السابق</strong> و <strong>التالي</strong> للتنقل بين الصفحات.</p>
 
                 <h3>📖 6. تصفح الكتب</h3>
                 <p>في تبويب <strong>📖 تصفح الكتب</strong> يمكنك:</p>
@@ -193,16 +200,54 @@
 
                 <h3>🏷️ 7. التصنيفات العلمية</h3>
                 <table>
-                    <thead><tr><th>التصنيف</th><th>اللون</th><th>الأمثلة</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th>التصنيف</th>
+                            <th>اللون</th>
+                            <th>الأمثلة</th>
+                        </tr>
+                    </thead>
                     <tbody>
-                        <tr><td>فقه</td><td>🔵 أزرق</td><td>صلاة، صيام، زكاة، حج، طهارة</td></tr>
-                        <tr><td>عقيدة</td><td>🟣 بنفسجي</td><td>توحيد، إيمان، أسماء وصفات</td></tr>
-                        <tr><td>تفسير</td><td>🟢 أخضر</td><td>سور القرآن، تفسير السعدي</td></tr>
-                        <tr><td>حديث</td><td>🔴 أحمر</td><td>صحيح البخاري، مسلم، الأربعين النووية</td></tr>
-                        <tr><td>سيرة</td><td>🟡 أصفر</td><td>السيرة النبوية، غزوات</td></tr>
-                        <tr><td>لغة</td><td>🔵 فيروزي</td><td>نحو، صرف، بلاغة</td></tr>
-                        <tr><td>أصول</td><td>🩰 وردي</td><td>أصول الفقه، القواعد الفقهية</td></tr>
-                        <tr><td>عام</td><td>⚪ رمادي</td><td>مواد لا تندرج تحت تصنيف محدد</td></tr>
+                        <tr>
+                            <td>فقه</td>
+                            <td>🔵 أزرق</td>
+                            <td>صلاة، صيام، زكاة، حج، طهارة</td>
+                        </tr>
+                        <tr>
+                            <td>عقيدة</td>
+                            <td>🟣 بنفسجي</td>
+                            <td>توحيد، إيمان، أسماء وصفات</td>
+                        </tr>
+                        <tr>
+                            <td>تفسير</td>
+                            <td>🟢 أخضر</td>
+                            <td>سور القرآن، تفسير السعدي</td>
+                        </tr>
+                        <tr>
+                            <td>حديث</td>
+                            <td>🔴 أحمر</td>
+                            <td>صحيح البخاري، مسلم، الأربعين النووية</td>
+                        </tr>
+                        <tr>
+                            <td>سيرة</td>
+                            <td>🟡 أصفر</td>
+                            <td>السيرة النبوية، غزوات</td>
+                        </tr>
+                        <tr>
+                            <td>لغة</td>
+                            <td>🔵 فيروزي</td>
+                            <td>نحو، صرف، بلاغة</td>
+                        </tr>
+                        <tr>
+                            <td>أصول</td>
+                            <td>🩰 وردي</td>
+                            <td>أصول الفقه، القواعد الفقهية</td>
+                        </tr>
+                        <tr>
+                            <td>عام</td>
+                            <td>⚪ رمادي</td>
+                            <td>مواد لا تندرج تحت تصنيف محدد</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -221,13 +266,15 @@
                 </p>
 
                 <h3>🎯 الهدف</h3>
-                <p>توفير واجهة بحث متقدمة وسهلة الاستخدام للوصول إلى آلاف الدروس العلمية المصنفة حسب <strong>اسم الشيخ</strong>، <strong>التصنيف العلمي</strong>، و <strong>عدد الدروس</strong>.</p>
+                <p>توفير واجهة بحث متقدمة وسهلة الاستخدام للوصول إلى آلاف الدروس العلمية المصنفة حسب <strong>اسم
+                        الشيخ</strong>، <strong>التصنيف العلمي</strong>، و <strong>عدد الدروس</strong>.</p>
 
                 <h3>✨ الميزات</h3>
                 <ul>
                     <li><strong>بحث ضبابي</strong> – يتسامح مع الأخطاء الإملائية.</li>
                     <li><strong>فلاتر متعددة</strong> – شيخ، تصنيف، عدد الدروس، نطاق البحث.</li>
-                    <li><strong>تصفح الكتب</strong> – رؤية الكتب مرتبة حسب العلوم، ومعرفة المشايخ الذين شرحوا كل كتاب.</li>
+                    <li><strong>تصفح الكتب</strong> – رؤية الكتب مرتبة حسب العلوم، ومعرفة المشايخ الذين شرحوا كل كتاب.
+                    </li>
                     <li><strong>ترقيم صفحات</strong> – عرض النتائج على صفحات لتسهيل التصفح.</li>
                     <li><strong>تصميم متجاوب</strong> – يعمل على جميع الأجهزة.</li>
                 </ul>
@@ -259,7 +306,8 @@
                 <h3>📝 ملاحظات</h3>
                 <ul>
                     <li>الموقع <strong>لا يتطلب خادمًا</strong> (Serverless)، يعمل بالكامل من جانب المتصفح.</li>
-                    <li>جميع الدروس مستخرجة من قناة <a href="https://t.me/alawe1434" target="_blank">مؤسسة صدى السلفية</a>.</li>
+                    <li>جميع الدروس مستخرجة من قناة <a href="https://t.me/alawe1434" target="_blank">مؤسسة صدى
+                            السلفية</a>.</li>
                     <li>هذا المشروع هو <strong>مبادرة شخصية</strong> لتسهيل الوصول إلى الدروس العلمية.</li>
                     <li>تم تحديث البيانات آخر مرة في: <span id="aboutUpdateDate2">-</span></li>
                 </ul>
@@ -305,6 +353,22 @@
     </div>
 
     <!-- Application Script -->
-    <script src="app.js"></script>
+    <script src="js/01-config.js"></script>
+    <script src="js/02-state.js"></script>
+    <script src="js/03-dom.js"></script>
+    <script src="js/04-category-helpers.js"></script>
+    <script src="js/05-book-index.js"></script>
+    <script src="js/06-filters.js"></script>
+    <script src="js/07-pagination.js"></script>
+    <script src="js/08-data-loader.js"></script>
+    <script src="js/09-tabs.js"></script>
+    <script src="js/10-dark-mode.js"></script>
+    <script src="js/11-clipboard.js"></script>
+    <script src="js/12-suggestions.js"></script>
+    <script src="js/13-url-params.js"></script>
+    <script src="js/14-bookmarks.js"></script>
+    <script src="js/15-category-checkboxes.js"></script>
+    <script src="js/app.js"></script>
 </body>
+
 </html>
