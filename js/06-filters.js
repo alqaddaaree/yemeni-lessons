@@ -129,3 +129,4 @@ function toggleFilters() {
     const icon = btn.querySelector('i');
     if (icon) icon.textContent = filtersVisible ? '−' : '+';
 }
+
