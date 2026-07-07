@@ -2,20 +2,21 @@
     "name": "فهرس الدروس - مؤسسة صدى السلفية",
     "short_name": "فهرس الدروس",
     "description": "فهرس تفاعلي للدروس العلمية الصوتية لمشايخ أهل السنة",
-    "start_url": "/",
+    "start_url": "/yemeni-lessons/",
+    "scope": "/yemeni-lessons/",
     "display": "standalone",
-    "background_color": "#1a1a2e",
-    "theme_color": "#0984e3",
+    "background_color": "#1a2634",
+    "theme_color": "#1a2634",
     "orientation": "portrait",
     "icons": [
         {
-            "src": "icons/icon-192.png",
+            "src": "/yemeni-lessons/icons/icon-192.png",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "any maskable"
         },
         {
-            "src": "icons/icon-512.png",
+            "src": "/yemeni-lessons/icons/icon-512.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "any maskable"

@@ -3,7 +3,7 @@
    ============================================ */
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/sw.js')
+        navigator.serviceWorker.register('/yemeni-lessons/sw.js')
             .then(function(registration) {
                 console.log('[SW] Registered successfully:', registration);
             })
