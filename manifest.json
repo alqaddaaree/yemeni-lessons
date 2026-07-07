@@ -2,7 +2,7 @@
     "name": "فهرس الدروس - مؤسسة صدى السلفية",
     "short_name": "فهرس الدروس",
     "description": "فهرس تفاعلي للدروس العلمية الصوتية لمشايخ أهل السنة",
-    "start_url": "/yemeni-lessons/",
+    "start_url": "/yemeni-lessons/index.html",
     "scope": "/yemeni-lessons/",
     "display": "standalone",
     "background_color": "#1a2634",
